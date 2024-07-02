@@ -1,0 +1,119 @@
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #275598;
+    overflow: hidden; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    color: #ffff;
+  }
+  
+  .login-page {
+    padding: 15px;
+    display: flex;
+    height: 100vh;
+    background-color: #275598;
+  }
+  
+  .login-container {
+    background-color: #275598;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+  padding: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-group-prepend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9d9d9;
+    border-radius: 20px 0 0 20px;
+    padding: 10px;
+  }
+  
+  .input-group-text {
+    background-color: #d9d9d9;
+    border: none;
+    color: #333;
+  }
+  
+  input {
+    border-radius: 20px;
+    height: 40px;
+    width: 260px;
+    padding: 12px;
+    background-color: #d9d9d9;
+    margin-top: 10px;
+    font-size: 25px;
+    font-weight: 700;
+    outline: none;
+    border: none;
+    padding-left: 40px;
+  }
+  
+  button {
+    height: 60px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 30px;
+    width: 60%;
+    background-color: #FBD35A;
+    color: #4961A6;
+    border: none;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 18px;
+  }
+  
+  button:hover {
+    background-color: #ff5757;
+  }
+  
+  .logo-container {
+    background-color: #275598;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+  padding: 0;
+  }
+  
+  .Login-box {
+    width: 450px;
+    height: 350px;
+    background-color: #ffff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo {
+    max-width: 100%;
+  }
