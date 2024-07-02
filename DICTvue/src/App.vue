@@ -1,20 +1,22 @@
 <!-- App.vue -->
+<script setup>
+import Login from './pages/login.vue'; // Adjust path based on your actual file structure
+import { RouterLink, RouterView } from "vue-router";
+// export default {
+//   name: 'App',
+//   components: {
+//     Login
+//   }
+// };
+</script>
 <template>
-    <div id="app">
+    <!-- <div id="app">
       <Login />
-    </div>
-  </template>
+    </div> -->
+    <RouterView />
+</template>
   
-  <script>
-  import Login from './pages/login.vue'; // Adjust path based on your actual file structure
-  
-  export default {
-    name: 'App',
-    components: {
-      Login
-    }
-  };
-  </script>
+
   
   <style>
   /* Add your global styles here */
