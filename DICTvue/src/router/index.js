@@ -1,23 +1,18 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Login from "../pages/login.vue";
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router';
+import Login from '../components/Login.vue';
+import Home from '../components/Home.vue';
+
+const routes = [
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: Login },
+  { path: '/home', component: Home },
+];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "Login",
-      component: Login,
-    },
-    {
-      path: "/admin/",
-      name: "AdminView",
-      component: () => import("../pages/admin.vue"),
-    },
-  ],
-  scrollBehavior(to, from, savedPosition) {
-    return { top: 0 };
-  },
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;
+
