@@ -9,11 +9,11 @@ const router = createRouter({
       name: "Login",
       component: Login,
     },
-    // {
-    //   path: "/admin/",
-    //   name: "AdminView",
-    //   //component: () => import("filedirectory"),
-    // },
+    {
+      path: "/admin/",
+      name: "AdminView",
+      component: () => import("../pages/admin.vue"),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
