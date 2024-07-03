@@ -1,4 +1,3 @@
-<!-- src/views/Login.vue -->
 <template>
   <div id="main">
     <div id="left">
@@ -37,6 +36,8 @@
 <script>
 import { Icon } from "@iconify/vue";
 import logo from "@/assets/Logo.png";
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default {
   name: "Login",
@@ -52,8 +53,32 @@ export default {
     };
   },
   methods: {
-    login() {
-      console.log("Logging in with:", this.username, this.password);
+    async login() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
+        authDomain: "dictapp-21983.firebaseapp.com",
+        projectId: "dictapp-21983",
+        storageBucket: "dictapp-21983.appspot.com",
+        messagingSenderId: "672180765503",
+        appId: "1:672180765503:web:de6516c6516a13707b498a",
+        measurementId: "G-RQJ0PNMW5D"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, this.username, this.password);
+        console.log('Logged in user:', userCredential.user);
+        this.errorMessage = ''; // Clear any previous error messages
+        
+        // Redirect to Projects.vue (assuming it's a route named 'projects')
+        this.$router.push({ path: '/projects' });
+
+      } catch (error) {
+        console.error('Error logging in:', error); // Log the error to the console
+        this.errorMessage = error.message;
+      }
     },
   },
 };
