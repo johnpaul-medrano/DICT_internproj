@@ -21,7 +21,7 @@
   </template>
   
   <script>
-  import { auth, db } from '../firebaseConfig';
+  // import { auth, db } from '../firebaseConfig';
   import './admin.css'; // Import the CSS file
   
   export default {

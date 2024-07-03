@@ -9,6 +9,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/home', component: Home },
   { path: '/Projects', component: Projects},
+  { path: '/admin', component: () => import("../pages/admin.vue")},
 ];
 
 const router = createRouter({
