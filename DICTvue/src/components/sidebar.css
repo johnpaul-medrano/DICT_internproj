@@ -2,7 +2,7 @@
 
 .sidebarbox {
   height: 98vh;
-  width: 23%;
+  width: 20%;
   background: #275598;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,6 @@
 .bottom {
   color: white;
   font-family: "Poppins", sans-serif;
-  font-size: 25px;
 }
 
 .logo {
@@ -31,7 +30,7 @@ ul {
 }
 
 ul li {
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   display: flex;
   padding: 25px 10px 25px 40px;
@@ -76,15 +75,4 @@ li img {
 .sub-menu li:hover {
   background-color: #3a4e77;
   padding-left: 80px;
-}
-
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.5s ease;
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to {
-  height: 0;
-  opacity: 0;
 }

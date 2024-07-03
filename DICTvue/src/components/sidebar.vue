@@ -13,6 +13,7 @@
           <li>SVP</li>
           <li>For Bidding</li>
         </ul>
+
         <li>
           <img :src="icon2" alt="icon" />
           Monitoring
