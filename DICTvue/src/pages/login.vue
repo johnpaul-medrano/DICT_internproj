@@ -1,42 +1,58 @@
-<!-- Login.vue -->
 <template>
-    <div>
-      <h2>Login</h2>
-      <form @submit.prevent="login">
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username">
-        </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password">
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+  <div class="login-page">
+    <div class="login-container">
+      <h1>DICT DOCTRACKER</h1>
+      <div class="Login-box">
+        <form @submit.prevent="handleLogin">
+          <div class="form-group">
+            <input
+              type="text"
+              id="username"
+              v-model="username"
+              placeholder="Username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit">LOGIN</button>
+        </form>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "Login",
-    data() {
-      return {
-        username: '',
-        password: '',
-        errorMessage: ''
-      };
-    },
-    methods: {
-      login() {
-        // Your login logic here
-        console.log('Logging in with:', this.username, this.password);
+
+    <div class="logo-container">
+      <img src="@/assets/logo.png" alt="Logo" class="logo" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Login",
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  methods: {
+    handleLogin() {
+      if (this.username === "admin" && this.password === "password") {
+        alert("Login successful!");
+        this.$router.push("/Projects");
+      } else {
+        alert("Invalid username or password");
       }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  /* Add your custom styles here */
-  </style>
-  
+    },
+  },
+};
+</script>
+
+<style scoped src="./Login.css"></style>
