@@ -3,7 +3,8 @@
     <div id="left">
       <h1>ILCDB PROCUREMENT AND <br />MONITORING SYSTEM</h1>
       <div id="box">
-        <h2>Welcome!</h2>
+        <marquee behavior="" direction="right"><h2>Welcome!</h2></marquee>
+        
         <form @submit.prevent="login">
           <div>
             <input
