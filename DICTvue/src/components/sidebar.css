@@ -1,0 +1,54 @@
+.sidebarbox {
+    height: 98vh;
+    width: 23%;
+    background: #275598;
+    display: flex;
+    flex-direction: column;
+    gap: 10;
+    /* justify-content: center; */
+    /* align-items: center; */
+    padding-top: 1%;
+}
+.bottom{
+    color: white;
+    font-family: "Poppins", "sans-serif";
+    font-size: 25px;
+}
+.logo {
+    width: 300px;
+}
+.logocontainer {
+    display: flex;
+    justify-content: center;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    padding: 25px 10px 25px 40px;
+    align-items: center;
+    gap: 15px;
+}
+
+ul li.active {
+    background-color: #673333;
+}
+
+ul li:hover {
+    background-color: #26497B;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+li img {
+    width: 38px;
+}

@@ -17,6 +17,11 @@ const routes = [
     name: "Projects",
     component: () => import("../pages/projects.vue"),
   },
+  {
+    path: "/mainpage",
+    name: "MainPage",
+    component: () => import("../pages/mainpage.vue"),
+  }
 ];
 
 const router = createRouter({
