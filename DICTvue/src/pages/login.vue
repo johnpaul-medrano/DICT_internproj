@@ -1,55 +1,59 @@
+<!-- src/views/Login.vue -->
 <template>
-  <div class="login-page">
-    <div class="login-container">
-      <h1>DICT DOCTRACKER</h1>
-      <div class="Login-box">
-        <form @submit.prevent="handleLogin">
-          <div class="form-group">
+  <div id="main">
+    <div id="left">
+      <h1>ILCDB PROCUREMENT AND <br />MONITORING SYSTEM</h1>
+      <div id="box">
+        <h2>Welcome!</h2>
+        <form @submit.prevent="login">
+          <div>
             <input
               type="text"
               id="username"
               v-model="username"
               placeholder="Username"
-              required
             />
           </div>
-          <div class="form-group">
+          <div>
             <input
               type="password"
               id="password"
               v-model="password"
               placeholder="Password"
-              required
             />
           </div>
-          <button type="submit">LOGIN</button>
+          <button type="submit">
+            <Icon icon="material-symbols:login" width="25" />
+            Log-in
+          </button>
         </form>
+        <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
       </div>
     </div>
-
-    <div class="logo-container">
-      <img src="@/assets/logo.png" alt="Logo" class="logo" />
-    </div>
+    <img :src="logo" alt="DICT Logo" class="logo" />
   </div>
 </template>
 
 <script>
+import { Icon } from "@iconify/vue";
+import logo from "@/assets/Logo.png";
+
 export default {
   name: "Login",
+  components: {
+    Icon,
+  },
   data() {
     return {
       username: "",
       password: "",
+      errorMessage: "",
+      logo,
     };
   },
   methods: {
-    handleLogin() {
-      if (this.username === "admin" && this.password === "password") {
-        alert("Login successful!");
-        this.$router.push("/Projects");
-      } else {
-        alert("Invalid username or password");
-      }
+    login() {
+      console.log("Logging in with:", this.username, this.password);
     },
   },
 };
