@@ -29,4 +29,4 @@ export default {
 };
 </script>
 
-<style scoped src="./Projects.css"></style>
+<style scoped src="./projects.css"></style>

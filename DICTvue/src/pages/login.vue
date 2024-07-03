@@ -36,9 +36,9 @@
 
 <script>
 import { Icon } from "@iconify/vue";
-import logo from "@/assets/Logo.png";
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import logo from "@/assets/logo.png";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
   name: "Login",
@@ -62,22 +62,25 @@ export default {
         storageBucket: "dictapp-21983.appspot.com",
         messagingSenderId: "672180765503",
         appId: "1:672180765503:web:de6516c6516a13707b498a",
-        measurementId: "G-RQJ0PNMW5D"
+        measurementId: "G-RQJ0PNMW5D",
       };
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
 
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, this.username, this.password);
-        console.log('Logged in user:', userCredential.user);
-        this.errorMessage = ''; // Clear any previous error messages
-        
-        // Redirect to Projects.vue (assuming it's a route named 'projects')
-        this.$router.push({ path: '/projects' });
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          this.username,
+          this.password
+        );
+        console.log("Logged in user:", userCredential.user);
+        this.errorMessage = ""; // Clear any previous error messages
 
+        // Redirect to Projects.vue (assuming it's a route named 'projects')
+        this.$router.push({ path: "/projects" });
       } catch (error) {
-        console.error('Error logging in:', error); // Log the error to the console
+        console.error("Error logging in:", error); // Log the error to the console
         this.errorMessage = error.message;
       }
     },
@@ -85,4 +88,4 @@ export default {
 };
 </script>
 
-<style scoped src="./Login.css"></style>
+<style scoped src="./login.css"></style>
