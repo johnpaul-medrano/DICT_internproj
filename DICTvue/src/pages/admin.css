@@ -1,40 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+#main {
+  background-color: #275598;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .admin {
-    max-width: 400px;
-    margin: auto;
-    padding: 1em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .admin h1 {
-    text-align: center;
-  }
-  .admin form div {
-    margin-bottom: 1em;
-  }
-  .admin label {
-    display: block;
-    margin-bottom: 0.5em;
-  }
-  .admin input {
-    width: 100%;
-    padding: 0.5em;
-    box-sizing: border-box;
-  }
-  .admin button {
-    width: 100%;
-    padding: 0.5em;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .admin button:hover {
-    background-color: #0056b3;
-  }
-  .error {
-    color: red;
-    text-align: center;
-  }
-  
+  background-color: #d9d9d9;
+  width: 600px;
+  height: 700px;
+  margin: auto;
+  /* padding: 20px; */
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+form {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10%;
+  padding-right: 10%;
+  align-items: center;
+  /* background-color: pink; */
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 40px;
+  color: #3a4076;
+}
+
+.admin form div {
+  margin-bottom: 1em;
+}
+.admin label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 20px;
+}
+.admin input {
+  width: 465px;
+  height: 80px;
+  border-radius: 20px;
+  border: 0;
+  background-color: #ccc9c9;
+  font-size: 25px;
+  padding: 30px;
+  margin-bottom: 10px;
+}
+.admin button {
+  background-color: #42498c;
+  width: 180px;
+  height: 60px;
+  border-radius: 25px;
+  color: #dddada;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  margin-top: 15px;
+  gap: 10px;
+}
+.admin button:hover {
+  background-color: #30357f;
+}
+.error {
+  color: red;
+  text-align: center;
+}
