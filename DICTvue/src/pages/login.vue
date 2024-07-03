@@ -4,15 +4,10 @@
       <h1>ILCDB PROCUREMENT AND <br />MONITORING SYSTEM</h1>
       <div id="box">
         <marquee behavior="" direction="right"><h2>Welcome!</h2></marquee>
-        
+
         <form @submit.prevent="login">
           <div>
-            <input
-              type="text"
-              id="username"
-              v-model="username"
-              placeholder="Username"
-            />
+            <input type="text" id="email" v-model="email" placeholder="Email" />
           </div>
           <div>
             <input
