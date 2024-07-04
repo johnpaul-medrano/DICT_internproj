@@ -23,7 +23,7 @@
           <label :for="'unitcost' + index">Unit Cost:</label>
           <input type="number" :id="'unitcost' + index" v-model="item.unitcost" required />
 
-          <label :for="'totalunitcost' + index">Total Unit Cost:</label>
+          <label :for="'totalunitcost' + index">Total UniIIt Cost:</label>
           <span :id="'totalunitcost' + index">{{ item.quantity * item.unitcost }}</span>
 
           <button type="button" @click="removeItem(index)">Remove</button>
