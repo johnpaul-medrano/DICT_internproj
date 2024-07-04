@@ -4,7 +4,9 @@
     <div id="box">
       <h2>PROJECTS</h2>
       <div id="projs">
-        <img :src="workforce" alt="Workforce" />
+        <RouterLink :to="{ name:'MainPage'}">
+          <img :src="workforce" alt="Workforce" />
+        </RouterLink>
         <img :src="spark" alt="Spark" />
         <img :src="tech4ed" alt="Tech4Ed" />
       </div>
@@ -16,6 +18,7 @@
 import workforce from "@/assets/workforce.png";
 import spark from "@/assets/spark.png";
 import tech4ed from "@/assets/tech4ed.png";
+import { RouterLink } from "vue-router";
 
 export default {
   name: "Projects",
