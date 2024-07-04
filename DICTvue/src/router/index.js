@@ -21,6 +21,11 @@ const routes = [
     path: "/mainpage",
     name: "MainPage",
     component: () => import("../pages/mainpage.vue"),
+  },
+  {
+    path: "/prform",
+    name: "prform",
+    component: () => import("../pages/prform.vue"),
   }
 ];
 
