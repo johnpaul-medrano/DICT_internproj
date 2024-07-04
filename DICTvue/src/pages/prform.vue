@@ -36,7 +36,6 @@
   </div>
 </template>
 
-
 <script>
 import { PDFDocument, rgb } from 'pdf-lib';
 import prTemplate from '@/assets/pr-template.pdf'; // Adjust path if necessary
@@ -54,7 +53,6 @@ export default {
             quantity: '',
             unitcost: '',
             totalunitcost: ''
-            
           }
         ],
       }
@@ -83,17 +81,28 @@ export default {
         const firstPage = pages[0];
 
         // Customize PDF fields (adjust coordinates as necessary)
-        firstPage.drawText(this.form.prnum, { x: 300, y: 670, size: 11, color: rgb(0, 0, 0) });
+        firstPage.drawText(this.form.prnum, { x: 300, y: 670, size: 10, color: rgb(0, 0, 0) });
+
+        // Initial y-coordinate for the first item
+        let yOffset = 615;
+        const rowHeight = 12;
 
         this.form.items.forEach((item, index) => {
-          // Adjust the y-coordinate for each item row
-          const yOffset = 620 - index * 40;
-          firstPage.drawText(item.stock, { x: 60, y: 615, size: 11, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.unit, { x: 115, y: 615, size: 11, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.itemdesc, { x: 152, y: 615, size: 11, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.quantity.toString(), { x: 378, y: 615, size: 11, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.unitcost.toString(), { x: 430, y: 615, size: 11, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.totalunitcost.toString(), { x: 480, y: 615, size: 11, color: rgb(0, 0, 0) });
+          // Ensure yOffset doesn't go off the page
+          if (yOffset < 100) {
+            yOffset = 615;
+            // Add logic to create a new page if necessary
+          }
+
+          firstPage.drawText(item.stock, { x: 60, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.unit, { x: 115, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.itemdesc, { x: 152, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.quantity.toString(), { x: 378, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.unitcost.toString(), { x: 430, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.totalunitcost.toString(), { x: 480, y: yOffset, size: 10, color: rgb(0, 0, 0) });
+
+          // Decrease yOffset for the next item
+          yOffset -= rowHeight;
         });
 
         // Serialize the PDFDocument to bytes
@@ -135,7 +144,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .purchase-request-form {
