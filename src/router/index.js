@@ -25,8 +25,8 @@ const routes = [
   {
     path: "/prform",
     name: "prform",
-    component: () => import("../pages/prform.vue"),
-  }
+    component: () => import("../pages/tabs/prform.vue"),
+  },
 ];
 
 const router = createRouter({

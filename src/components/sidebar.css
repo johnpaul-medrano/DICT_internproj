@@ -1,12 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .sidebarbox {
-  height: 98vh;
+  height: 100vh;
   width: 20%;
   background: #275598;
   display: flex;
   flex-direction: column;
   padding-top: 1%;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .bottom {
@@ -75,4 +86,11 @@ li img {
 .sub-menu li:hover {
   background-color: #3a4e77;
   padding-left: 80px;
+}
+
+.main-content {
+  margin-left: 20%;
+  width: 80%;
+  height: 100vh;
+  overflow-y: auto;
 }
