@@ -3,7 +3,7 @@
     <div id="left">
       <h1>ILCDB PROCUREMENT AND <br />MONITORING SYSTEM</h1>
       <div id="box">
-        <marquee behavior="" direction="right"><h2>Welcome!</h2></marquee>
+        <h2>Welcome!</h2>
 
         <form @submit.prevent="login">
           <div>
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       errorMessage: "",
       logo,
@@ -66,7 +66,7 @@ export default {
       try {
         const userCredential = await signInWithEmailAndPassword(
           auth,
-          this.username,
+          this.email,
           this.password
         );
         console.log("Logged in user:", userCredential.user);
