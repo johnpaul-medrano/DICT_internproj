@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
 import Monitoring from "../pages/tabs/monitoring.vue";
-
 const routes = [
   {
     path: "/",
@@ -31,7 +30,7 @@ const routes = [
       {
         path: "monitoring",
         name: "Monitoring",
-        component: Monitoring,
+        component: () => import( "../pages/tabs/monitoring.vue")
       },
       {
         path: "suppliers-database",

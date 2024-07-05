@@ -1,0 +1,61 @@
+/* doctrack.css */
+
+.header {
+    background-color: #003366;
+    padding: 25px;
+    color: #ffffff;
+    text-align: center; /* Center align header content */
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center;
+  }
+  
+  .title-logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .title {
+    margin: 0;
+    font-size: 45px;
+    margin-right: 20px; /* Added margin to separate from the settings icon */
+  }
+  
+  .settings-icon img {
+    width: 78px;
+    height: 78px;
+  }
+  
+  .table-container {
+    margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+  }
+  
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .doc-table th, .doc-table td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .doc-table th {
+    background-color: #003366;
+    color: white;
+  }
+  
+  .doc-table td {
+    background-color: #ffcc00;
+  }
+  
+  .doc-table input, .doc-table select, .doc-table textarea {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+  }
