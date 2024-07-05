@@ -157,9 +157,9 @@ export default {
 
         // Customize PDF fields (adjust coordinates as necessary)
         firstPage.drawText(this.form.prnum, {
-          x: 300,
-          y: 670,
-          size: 10,
+          x: 305,
+          y: 673,
+          size: 12,
           color: rgb(0, 0, 0),
         });
 
@@ -175,13 +175,13 @@ export default {
           }
 
           firstPage.drawText(item.stock, {
-            x: 60,
+            x: 57,
             y: yOffset,
             size: 10,
             color: rgb(0, 0, 0),
           });
           firstPage.drawText(item.unit, {
-            x: 115,
+            x: 109,
             y: yOffset,
             size: 10,
             color: rgb(0, 0, 0),

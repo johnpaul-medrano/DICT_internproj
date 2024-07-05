@@ -87,7 +87,8 @@ input {
 }
 
 .grid-item label {
-  margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 input {
@@ -96,11 +97,12 @@ input {
 }
 
 .total-unit-cost {
+
   display: flex;
   width: 200px;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 10px;
@@ -194,4 +196,9 @@ button img {
 
 #generate:hover {
   background-color: #45a049;
+}
+
+#desc, #unit0, #desc, #stock0,
+#quantity0, #unit0, #unitcost0, #prnum {
+    font-size: 20px;
 }
