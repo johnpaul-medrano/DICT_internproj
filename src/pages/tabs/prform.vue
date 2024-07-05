@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import prTemplate from "@/assets/pr-template.pdf";
 import add from "@/assets/add.png";
 import remove from "@/assets/close.png";
@@ -159,104 +159,100 @@ export default {
       this.form.items.splice(index, 1);
     },
     async handleSubmit() {
-      try {
-        // Load the PDF template
-        const existingPdfBytes = await fetch(prTemplate).then((res) =>
-          res.arrayBuffer()
-        );
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        const pages = pdfDoc.getPages();
-        const firstPage = pages[0];
+  try {
+    const existingPdfBytes = await fetch(prTemplate).then((res) =>
+      res.arrayBuffer()
+    );
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+    const pages = pdfDoc.getPages();
+    const firstPage = pages[0];
 
-        // Customize PDF fields (adjust coordinates as necessary)
-        firstPage.drawText(this.form.prnum, {
-          x: 305,
-          y: 673,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
+    firstPage.drawText(this.form.prnum, {
+      x: 305,
+      y: 673,
+      size: 11,
+      font: timesRomanFont,
+      color: rgb(0, 0, 0),
+    });
 
-        // Initial y-coordinate for the first item
-        let yOffset = 615;
-        const rowHeight = 12;
+    let yOffset = 615;
+    const rowHeight = 12;
 
-        this.form.items.forEach((item, index) => {
-          // Ensure yOffset doesn't go off the page
-          if (yOffset < 100) {
-            yOffset = 615;
-            // Add logic to create a new page if necessary
-          }
-
-          firstPage.drawText(item.stock, {
-            x: 57,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unit, {
-            x: 109,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.itemdesc, {
-            x: 152,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.quantity.toString(), {
-            x: 378,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unitcost.toString(), {
-            x: 430,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText((item.quantity * item.unitcost).toString(), {
-            x: 480,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-
-          // Decrease yOffset for the next item
-          yOffset -= rowHeight;
-        });
-
-        // Draw the total amount
-        firstPage.drawText(`${this.totalAmount}`, {
-          x: 482,
-          y: 286,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
-
-        // Serialize the PDFDocument to bytes
-        const pdfBytes = await pdfDoc.save();
-
-        // Create a Blob from the PDFBytes and create a URL for it
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-
-        // Create a link element, set the URL as the href, and click it to download the file
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "filled_pr.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // Reset the form
-        this.resetForm();
-      } catch (error) {
-        console.error("Error generating PDF:", error);
+    this.form.items.forEach((item) => {
+      if (yOffset < 100) {
+        yOffset = 615;
       }
-    },
+
+      firstPage.drawText(item.stock, {
+        x: 60,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.unit, {
+        x: 115,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.itemdesc, {
+        x: 152,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.quantity.toString(), {
+        x: 378,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.unitcost.toString(), {
+        x: 430,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText((item.quantity * item.unitcost).toString(), {
+        x: 480,
+        y: yOffset,
+        size: 10,
+        font: timesRomanFont,
+        color: rgb(0, 0, 0),
+      });
+
+      yOffset -= rowHeight;
+    });
+
+    firstPage.drawText(`${this.totalAmount}`, {
+      x: 482,
+      y: 286,
+      size: 11,
+      font: timesRomanFont,
+      color: rgb(0, 0, 0),
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "filled_pr.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    this.resetForm();
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
+},
     resetForm() {
       this.form = {
         prnum: "",
