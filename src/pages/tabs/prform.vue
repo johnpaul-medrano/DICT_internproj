@@ -4,96 +4,69 @@
       <h2>Create Purchase Request</h2>
       <form @submit.prevent="handleSubmit">
         <div class="grid-container">
-          <div class="left">
-            <div class="prnum">
-              <div class="cont">
-                <label for="prnum">PR Number:</label>
-                <input type="text" id="prnum" v-model="form.prnum" required />
-              </div>
-            </div>
-            <div
-              v-for="(item, index) in form.items"
-              :key="index"
-              class="grid-item"
-            >
-              <div class="first-row">
-                <div class="cont">
-                  <label :for="'stock' + index">Stock No.:</label>
-                  <input
-                    type="text"
-                    :id="'stock' + index"
-                    v-model="item.stock"
-                    required
-                  />
-                </div>
-                <div class="cont">
-                  <label :for="'unit' + index">Unit:</label>
-                  <input
-                    type="text"
-                    :id="'unit' + index"
-                    v-model="item.unit"
-                    required
-                  />
-                </div>
-              </div>
-
-              <label :for="'itemdesc' + index">Item Description:</label>
-              <input
-                id="desc"
-                type="text"
-                :id="'itemdesc' + index"
-                v-model="item.itemdesc"
-                required
-              />
-              <div class="third-row">
-                <div class="cont">
-                  <label :for="'quantity' + index">Quantity:</label>
-                  <input
-                    type="number"
-                    :id="'quantity' + index"
-                    v-model="item.quantity"
-                    required
-                  />
-                </div>
-                <div class="cont">
-                  <label :for="'unitcost' + index">Unit Cost:</label>
-                  <input
-                    type="number"
-                    :id="'unitcost' + index"
-                    v-model="item.unitcost"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="total-unit-cost">
-                <label :for="'totalunitcost' + index">Total Unit Cost:</label>
-                <span :id="'totalunitcost' + index">{{
-                  item.quantity * item.unitcost
-                }}</span>
-              </div>
-
-              <div class="item-buttons">
-                <button id="remove" type="button" @click="removeItem(index)">
-                  <img :src="remove" alt="" />
-                </button>
-                <button
-                  id="add"
-                  v-if="index === form.items.length - 1"
-                  type="button"
-                  @click="addItem"
-                >
-                  <img :src="add" alt="" />
-                </button>
-              </div>
-            </div>
+          <div class="grid-item">
+            <label for="prnum">PR Number:</label>
+            <input type="text" id="prnum" v-model="form.prnum" required />
           </div>
+          <div
+            v-for="(item, index) in form.items"
+            :key="index"
+            class="grid-item"
+          >
+            <label :for="'stock' + index">Stock No.:</label>
+            <input
+              type="text"
+              :id="'stock' + index"
+              v-model="item.stock"
+              required
+            />
+
+            <label :for="'unit' + index">Unit:</label>
+            <input
+              type="text"
+              :id="'unit' + index"
+              v-model="item.unit"
+              required
+            />
+
+            <label :for="'itemdesc' + index">Item Description:</label>
+            <input
+              type="text"
+              :id="'itemdesc' + index"
+              v-model="item.itemdesc"
+              required
+            />
+
+            <label :for="'quantity' + index">Quantity:</label>
+            <input
+              type="number"
+              :id="'quantity' + index"
+              v-model="item.quantity"
+              required
+            />
+
+            <label :for="'unitcost' + index">Unit Cost:</label>
+            <input
+              type="number"
+              :id="'unitcost' + index"
+              v-model="item.unitcost"
+              required
+            />
+
+            <label :for="'totalunitcost' + index">Total Unit Cost:</label>
+            <input
+              type="number"
+              :id="'totalunitcost' + index"
+              v-model="item.totalunitcost"
+              required
+            />
+
+            <button type="button" @click="removeItem(index)">Remove</button>
+          </div>
+          <button type="button" @click="addItem">Add Item</button>
         </div>
-        <div class="total-amount">
-          <label for="totalAmount">Total Amount:</label>
-          <span id="totalAmount">{{ totalAmount }}</span>
-        </div>
-        <button id="generate" type="submit">Generate PDF</button>
+
+        <button type="submit">Generate PDF</button>
       </form>
     </div>
   </div>
@@ -102,8 +75,6 @@
 <script>
 import { PDFDocument, rgb } from "pdf-lib";
 import prTemplate from "@/assets/pr-template.pdf";
-import add from "@/assets/add.png";
-import remove from "@/assets/close.png";
 
 export default {
   data() {
@@ -117,8 +88,9 @@ export default {
             stock: "",
             unit: "",
             itemdesc: "",
-            quantity: 0,
-            unitcost: 0,
+            quantity: "",
+            unitcost: "",
+            totalunitcost: "",
           },
         ],
       },
@@ -138,8 +110,9 @@ export default {
         stock: "",
         unit: "",
         itemdesc: "",
-        quantity: 0,
-        unitcost: 0,
+        quantity: "",
+        unitcost: "",
+        totalunitcost: "",
       });
     },
     removeItem(index) {
@@ -147,7 +120,6 @@ export default {
     },
     async handleSubmit() {
       try {
-        // Load the PDF template
         const existingPdfBytes = await fetch(prTemplate).then((res) =>
           res.arrayBuffer()
         );
@@ -155,7 +127,6 @@ export default {
         const pages = pdfDoc.getPages();
         const firstPage = pages[0];
 
-        // Customize PDF fields (adjust coordinates as necessary)
         firstPage.drawText(this.form.prnum, {
           x: 300,
           y: 670,
@@ -163,7 +134,6 @@ export default {
           color: rgb(0, 0, 0),
         });
 
-        // Initial y-coordinate for the first item
         let yOffset = 615;
         const rowHeight = 12;
 
@@ -204,33 +174,21 @@ export default {
             size: 10,
             color: rgb(0, 0, 0),
           });
-          firstPage.drawText((item.quantity * item.unitcost).toString(), {
+          firstPage.drawText(item.totalunitcost.toString(), {
             x: 480,
             y: yOffset,
             size: 10,
             color: rgb(0, 0, 0),
           });
 
-          // Decrease yOffset for the next item
           yOffset -= rowHeight;
         });
 
-        // Draw the total amount
-        firstPage.drawText(`Total Amount: ${this.totalAmount}`, {
-          x: 400,
-          y: 100,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
-
-        // Serialize the PDFDocument to bytes
         const pdfBytes = await pdfDoc.save();
 
-        // Create a Blob from the PDFBytes and create a URL for it
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
 
-        // Create a link element, set the URL as the href, and click it to download the file
         const link = document.createElement("a");
         link.href = url;
         link.download = "filled_pr.pdf";
@@ -252,8 +210,9 @@ export default {
             stock: "",
             unit: "",
             itemdesc: "",
-            quantity: 0,
-            unitcost: 0,
+            quantity: "",
+            unitcost: "",
+            totalunitcost: "",
           },
         ],
       };
@@ -262,4 +221,35 @@ export default {
 };
 </script>
 
-<style scoped src="./prform.css"></style>
+<style scoped>
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.purchase-request-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-gap: 10px;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.grid-item label {
+  margin-bottom: 5px;
+}
+</style>
