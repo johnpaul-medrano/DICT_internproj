@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
+import Monitoring from "../pages/tabs/monitoring.vue";
 
 const routes = [
   {
@@ -21,11 +22,33 @@ const routes = [
     path: "/mainpage",
     name: "MainPage",
     component: () => import("../pages/mainpage.vue"),
-  },
-  {
-    path: "/prform",
-    name: "prform",
-    component: () => import("../pages/tabs/prform.vue"),
+    children: [
+      {
+        path: "prform",
+        name: "PrForm",
+        component: () => import("../pages/tabs/prform.vue"),
+      },
+      {
+        path: "monitoring",
+        name: "Monitoring",
+        component: Monitoring,
+      },
+      {
+        path: "suppliers-database",
+        name: "SuppliersDatabase",
+        component: () => import("../pages/tabs/suppliers-database.vue"),
+      },
+      {
+        path: "templates",
+        name: "Templates",
+        component: () => import("../pages/tabs/templates.vue"),
+      },
+      {
+        path: "request",
+        name: "Request",
+        component: () => import("../pages/tabs/request.vue"),
+      },
+    ],
   },
 ];
 

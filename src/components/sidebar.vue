@@ -10,26 +10,49 @@
           Purchase Request
         </li>
         <ul v-if="isSubMenuVisible" class="sub-menu">
-          <li>SVP</li>
-          <li>For Bidding</li>
+          <router-link class="haha" to="/mainpage/prform">
+            <div class="menu">
+              <li>SVP</li>
+            </div>
+          </router-link>
+          <router-link class="haha" to="/mainpage/prform">
+            <div class="menu">
+              <li>For bidding</li>
+            </div>
+          </router-link>
         </ul>
-
-        <li>
-          <img :src="icon2" alt="icon" />
-          Monitoring
-        </li>
-        <li>
-          <img :src="icon3" alt="icon" />
-          Suppliers Database
-        </li>
-        <li>
-          <img :src="icon4" alt="icon" />
-          Templates
-        </li>
-        <li>
-          <img :src="icon5" alt="icon" />
-          Request
-        </li>
+        <div class="menu">
+          <router-link class="lol" to="/mainpage/monitoring">
+            <li>
+              <img :src="icon2" alt="icon" />
+              Monitoring
+            </li>
+          </router-link>
+        </div>
+        <div class="menu">
+          <router-link class="lol" to="/mainpage/suppliers-database">
+            <li>
+              <img :src="icon3" alt="icon" />
+              Suppliers Database
+            </li>
+          </router-link>
+        </div>
+        <div class="menu">
+          <router-link class="lol" to="/mainpage/templates">
+            <li>
+              <img :src="icon4" alt="icon" />
+              Templates
+            </li>
+          </router-link>
+        </div>
+        <div class="menu">
+          <router-link class="lol" to="/mainpage/request">
+            <li>
+              <img :src="icon5" alt="icon" />
+              Request
+            </li>
+          </router-link>
+        </div>
       </ul>
     </div>
   </div>
