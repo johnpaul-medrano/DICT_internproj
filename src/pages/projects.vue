@@ -4,11 +4,15 @@
     <div id="box">
       <h2>PROJECTS</h2>
       <div id="projs">
-        <RouterLink :to="{ name:'MainPage'}">
+        <RouterLink :to="{ name:'MainPage', params: { logo: 'workforce'} }">
           <img :src="workforce" alt="Workforce" />
         </RouterLink>
-        <img :src="spark" alt="Spark" />
-        <img :src="tech4ed" alt="Tech4Ed" />
+        <RouterLink :to="{ name:'MainPage', params: { logo: 'spark'} }">
+          <img :src="spark" alt="Spark" />
+        </RouterLink>
+        <RouterLink :to="{ name:'MainPage', params: { logo: 'tech4ed'} }">
+          <img :src="tech4ed" alt="Tech4Ed" />
+        </RouterLink>
       </div>
     </div>
   </div>

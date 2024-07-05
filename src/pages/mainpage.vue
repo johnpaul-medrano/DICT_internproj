@@ -11,11 +11,24 @@
 
 <script>
 import Sidebar from "../components/sidebar.vue";
+import { mapActions } from 'vuex';
 
 export default {
   components: {
     Sidebar,
   },
+  props: ['logo'],
+  created() {
+    this.updateLogo(this.$route.params.logo);
+  },
+  watch: {
+    $route(to, from) {
+      this.updateLogo(to.params.logo);
+    }
+  },
+  methods: {
+    ...mapActions(['updateLogo'])
+  }
 };
 </script>
 

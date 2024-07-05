@@ -1,7 +1,7 @@
 <template>
   <div class="sidebarbox">
     <div class="logocontainer">
-      <img :src="workforce" alt="ILCDB logo" class="logo" />
+      <img :src="'/src/assets/' + currentLogo +'y.png'" alt="ILCDB logo" class="logo" />
     </div>
     <div class="bottom">
       <ul>
@@ -10,19 +10,19 @@
           Purchase Request
         </li>
         <ul v-if="isSubMenuVisible" class="sub-menu">
-          <router-link class="haha" to="/mainpage/prform">
+          <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
             <div class="menu">
               <li>SVP</li>
             </div>
           </router-link>
-          <router-link class="haha" to="/mainpage/prform">
+          <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
             <div class="menu">
               <li>For bidding</li>
             </div>
           </router-link>
         </ul>
         <div class="menu">
-          <router-link class="lol" to="/mainpage/monitoring">
+          <router-link class="lol" :to="`/mainpage/${ currentLogo }/monitoring`">
             <li>
               <img :src="icon2" alt="icon" />
               Monitoring
@@ -30,7 +30,7 @@
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" to="/mainpage/suppliers-database">
+          <router-link class="lol" :to="`/mainpage/${ currentLogo }/suppliers-database`">
             <li>
               <img :src="icon3" alt="icon" />
               Suppliers Database
@@ -38,7 +38,7 @@
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" to="/mainpage/templates">
+          <router-link class="lol" :to="`/mainpage/${ currentLogo }/templates`">
             <li>
               <img :src="icon4" alt="icon" />
               Templates
@@ -46,7 +46,7 @@
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" to="/mainpage/request">
+          <router-link class="lol" :to="`/mainpage/${ currentLogo }/request`">
             <li>
               <img :src="icon5" alt="icon" />
               Request
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import workforce from "@/assets/workforcey.png";
 import icon1 from "@/assets/purchase-req 1.png";
 import icon2 from "@/assets/monitoring 1.png";
@@ -77,6 +78,9 @@ export default {
       icon5,
       isSubMenuVisible: false,
     };
+  },
+  computed: {
+    ...mapGetters(['currentLogo'])
   },
   methods: {
     toggleSubMenu() {

@@ -18,7 +18,7 @@ const routes = [
     component: () => import("../pages/projects.vue"),
   },
   {
-    path: "/mainpage",
+    path: "/mainpage/:logo",
     name: "MainPage",
     component: () => import("../pages/mainpage.vue"),
     children: [
@@ -26,28 +26,34 @@ const routes = [
         path: "prform",
         name: "PrForm",
         component: () => import("../pages/tabs/prform.vue"),
+        props: true,
       },
       {
         path: "monitoring",
         name: "Monitoring",
-        component: () => import( "../pages/tabs/monitoring.vue")
+        component: () => import( "../pages/tabs/monitoring.vue"),
+        props: true,
       },
       {
         path: "suppliers-database",
         name: "SuppliersDatabase",
         component: () => import("../pages/tabs/suppliers-database.vue"),
+        props: true,
       },
       {
         path: "templates",
         name: "Templates",
         component: () => import("../pages/tabs/templates.vue"),
+        props: true,
       },
       {
         path: "request",
         name: "Request",
         component: () => import("../pages/tabs/request.vue"),
+        props: true,
       },
     ],
+    props: true,
   },
 ];
 
