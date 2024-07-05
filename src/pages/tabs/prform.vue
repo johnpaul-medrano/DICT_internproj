@@ -13,9 +13,9 @@
             </div>
             <div
               v-for="(item, index) in form.items"
-              :key="index"
+              :key="`item-${index}`"
+              :ref="'item' + index"
               class="grid-item"
-              :ref="`item${index}`"
             >
               <div class="first-row">
                 <div class="cont">
@@ -75,7 +75,12 @@
               </div>
 
               <div class="item-buttons">
-                <button id="remove" type="button" @click="removeItem(index)">
+                <button
+                  id="remove"
+                  type="button"
+                  @click="removeItem(index)"
+                  v-if="form.items.length > 1"
+                >
                   <img :src="remove" alt="" />
                 </button>
                 <button
@@ -141,6 +146,13 @@ export default {
         itemdesc: "",
         quantity: 0,
         unitcost: 0,
+      });
+      this.$nextTick(() => {
+        const newItemIndex = this.form.items.length - 1;
+        const newItemRef = this.$refs[`item${newItemIndex}`];
+        if (newItemRef && newItemRef[0]) {
+          newItemRef[0].scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       });
     },
     removeItem(index) {
