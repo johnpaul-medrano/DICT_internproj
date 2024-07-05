@@ -15,6 +15,7 @@
               v-for="(item, index) in form.items"
               :key="index"
               class="grid-item"
+              :ref="`item${index}`"
             >
               <div class="first-row">
                 <div class="cont">

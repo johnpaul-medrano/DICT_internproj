@@ -11,24 +11,24 @@
 
 <script>
 import Sidebar from "../components/sidebar.vue";
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 export default {
   components: {
     Sidebar,
   },
-  props: ['logo'],
+  props: ["logo"],
   created() {
     this.updateLogo(this.$route.params.logo);
   },
   watch: {
     $route(to, from) {
       this.updateLogo(to.params.logo);
-    }
+    },
   },
   methods: {
-    ...mapActions(['updateLogo'])
-  }
+    ...mapActions(["updateLogo"]),
+  },
 };
 </script>
 
@@ -42,8 +42,12 @@ export default {
 
 .container {
   flex: 0.8;
-  height: 100vh;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .left {
