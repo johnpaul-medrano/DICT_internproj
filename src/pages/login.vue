@@ -73,7 +73,7 @@ export default {
         this.errorMessage = ""; // Clear any previous error messages
 
         // Redirect to Projects.vue (assuming it's a route named 'projects')
-        this.$router.push({ path: "/mainpage" });
+        this.$router.push({ path: "/projects" });
       } catch (error) {
         console.error("Error logging in:", error); // Log the error to the console
         this.errorMessage = error.message;
