@@ -216,9 +216,9 @@ export default {
         });
 
         // Draw the total amount
-        firstPage.drawText(`Total Amount: ${this.totalAmount}`, {
-          x: 400,
-          y: 100,
+        firstPage.drawText(`${this.totalAmount}`, {
+          x: 482,
+          y: 286,
           size: 12,
           color: rgb(0, 0, 0),
         });
