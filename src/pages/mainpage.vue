@@ -24,11 +24,13 @@ export default {
   display: flex;
   height: 100vh;
   background-color: #d9d9d9;
+  overflow-y: auto;
 }
 
 .container {
   flex: 0.8;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .left {
