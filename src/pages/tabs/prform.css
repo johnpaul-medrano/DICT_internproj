@@ -5,7 +5,7 @@
 
 .main-content {
   width: 100%;
-  height: 100vh;
+
   display: flex;
   align-items: center;
 }
@@ -13,7 +13,7 @@
 .purchase-request-form {
   min-width: 850px;
   max-width: 850px;
-  margin: 0 auto;
+  margin: 50px auto 50px auto;
   padding: 15px 30px 15px 30px;
   border: 1px solid #ccc;
   border-radius: 20px;
