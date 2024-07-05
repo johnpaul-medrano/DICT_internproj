@@ -26,17 +26,12 @@
           <label :for="'totalunitcost' + index">Total Unit Cost:</label>
           <span :id="'totalunitcost' + index">{{ item.quantity * item.unitcost }}</span>
 
-          <button type="button" @click="removeItem(index)">Remove</button>
+          <button class="remove-btn" type="button" @click="removeItem(index)">Remove</button>
         </div>
-        <button type="button" @click="addItem">Add Item</button>
+        <button class="add-btn" type="button" @click="addItem">Add Item</button>
       </div>
 
-      <div class="total-amount">
-        <label for="totalAmount">Total Amount:</label>
-        <span id="totalAmount">{{ totalAmount }}</span>
-      </div>
-
-      <button type="submit">Generate PDF</button>
+      <button class="submit-btn" type="submit">Generate PDF</button>
     </form>
   </div>
 </template>
@@ -155,33 +150,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.purchase-request-form {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  grid-gap: 10px;
-}
-
-.grid-item {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-}
-
-.grid-item label {
-  margin-bottom: 5px;
-}
-
-.total-amount {
-  margin-top: 20px;
-}
-</style>
+<style scope src="./prform.css"></style>

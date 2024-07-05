@@ -1,27 +1,37 @@
 <template>
   <div class="main">
-    <sidebar />
-    <div class="main-content">
-      <prform />
+    <div class="left">
+      <sidebar />
+    </div>
+    <div class="container">
+      <router-view class="main-content"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import sidebar from "../components/sidebar.vue";
-import prform from "./tabs/prform.vue";
+import Sidebar from "../components/sidebar.vue";
 
 export default {
   components: {
-    sidebar,
-    prform,
+    Sidebar,
   },
 };
 </script>
 
 <style scoped>
-.container {
+.main {
   display: flex;
   height: 100vh;
+  background-color: #d9d9d9;
+}
+
+.container {
+  flex: 0.8;
+  height: 100vh;
+}
+
+.left {
+  flex: 0.2;
 }
 </style>
