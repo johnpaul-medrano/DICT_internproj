@@ -39,11 +39,31 @@ input {
   border: 0;
   background-color: #d7d7d7;
   padding: 0px 15px 0px 15px;
+  font-size: 20px;
 }
 
 .grid-container {
   display: flex;
   flex-direction: column;
+}
+@keyframes fade-in{
+
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out{
+
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .grid-item {
@@ -54,6 +74,12 @@ input {
   border: 2px solid rgb(189, 189, 190);
   padding: 20px;
   border-radius: 15px;
+  opacity: 1;
+  animation: fade-in 1s;
+}
+
+.grid-item.collapsing{
+  animation: fade-out .5s;
 }
 
 .prnum {
@@ -152,6 +178,7 @@ input {
   background-color: white;
   color: #275598;
   border: 2px dashed #275598;
+  
 }
 
 #remove:hover {
@@ -196,9 +223,4 @@ button img {
 
 #generate:hover {
   background-color: #45a049;
-}
-
-#desc, #unit0, #desc, #stock0,
-#quantity0, #unit0, #unitcost0, #prnum {
-    font-size: 20px;
 }

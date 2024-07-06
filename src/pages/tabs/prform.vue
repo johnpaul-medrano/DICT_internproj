@@ -156,7 +156,13 @@ export default {
       });
     },
     removeItem(index) {
-      this.form.items.splice(index, 1);
+      const itemElement = this.$refs[`item${index}`][0];
+      if (itemElement) {
+        itemElement.classList.add("collapsing");
+        setTimeout(() => {
+          this.form.items.splice(index, 1);
+        }, 300);
+      }
     },
     async handleSubmit() {
   try {
