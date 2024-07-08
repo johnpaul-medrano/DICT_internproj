@@ -1,12 +1,12 @@
 <template>
-    <ulo />
+    
     <div class="main">
     <div class="left">
       <sidebar />
       
     </div>
     
-    <div class="container">
+    <div class="container"><ulo />
       <router-view class="main-content"></router-view>
     </div>
   </div>
