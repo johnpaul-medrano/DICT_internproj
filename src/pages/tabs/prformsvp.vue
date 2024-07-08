@@ -12,7 +12,7 @@
 
   <div class="main-content">
     <div class="purchase-request-form">
-      <h2>Create Purchase Request</h2>
+      <h2>Create Purchase Request - SVP</h2>
       <form @submit.prevent="handleSubmit">
         <div class="grid-container">
           <div class="left">
@@ -176,100 +176,100 @@ export default {
       }
     },
     async handleSubmit() {
-  try {
-    const existingPdfBytes = await fetch(prTemplate).then((res) =>
-      res.arrayBuffer()
-    );
-    const pdfDoc = await PDFDocument.load(existingPdfBytes);
-    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
-    const pages = pdfDoc.getPages();
-    const firstPage = pages[0];
+      try {
+        const existingPdfBytes = await fetch(prTemplate).then((res) =>
+          res.arrayBuffer()
+        );
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+        const pages = pdfDoc.getPages();
+        const firstPage = pages[0];
 
-    firstPage.drawText(this.form.prnum, {
-      x: 305,
-      y: 673,
-      size: 11,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
+        firstPage.drawText(this.form.prnum, {
+          x: 305,
+          y: 673,
+          size: 11,
+          font: timesRomanFont,
+          color: rgb(0, 0, 0),
+        });
 
-    let yOffset = 615;
-    const rowHeight = 12;
+        let yOffset = 615;
+        const rowHeight = 12;
 
-    this.form.items.forEach((item) => {
-      if (yOffset < 100) {
-        yOffset = 615;
+        this.form.items.forEach((item) => {
+          if (yOffset < 100) {
+            yOffset = 615;
+          }
+
+          firstPage.drawText(item.stock, {
+            x: 60,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.unit, {
+            x: 115,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.itemdesc, {
+            x: 152,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.quantity.toString(), {
+            x: 378,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.unitcost.toString(), {
+            x: 430,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText((item.quantity * item.unitcost).toString(), {
+            x: 480,
+            y: yOffset,
+            size: 10,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0),
+          });
+
+          yOffset -= rowHeight;
+        });
+
+        firstPage.drawText(`${this.totalAmount}`, {
+          x: 482,
+          y: 286,
+          size: 11,
+          font: timesRomanFont,
+          color: rgb(0, 0, 0),
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "filled_pr.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        this.resetForm();
+      } catch (error) {
+        console.error("Error generating PDF:", error);
       }
-
-      firstPage.drawText(item.stock, {
-        x: 60,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText(item.unit, {
-        x: 115,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText(item.itemdesc, {
-        x: 152,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText(item.quantity.toString(), {
-        x: 378,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText(item.unitcost.toString(), {
-        x: 430,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-      firstPage.drawText((item.quantity * item.unitcost).toString(), {
-        x: 480,
-        y: yOffset,
-        size: 10,
-        font: timesRomanFont,
-        color: rgb(0, 0, 0),
-      });
-
-      yOffset -= rowHeight;
-    });
-
-    firstPage.drawText(`${this.totalAmount}`, {
-      x: 482,
-      y: 286,
-      size: 11,
-      font: timesRomanFont,
-      color: rgb(0, 0, 0),
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "filled_pr.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    this.resetForm();
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-  }
-},
+    },
     resetForm() {
       this.form = {
         prnum: "",
