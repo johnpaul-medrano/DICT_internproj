@@ -12,12 +12,12 @@
         <ul v-if="isSubMenuVisible" class="sub-menu">
           <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
             <div class="menu">
-              <li>SVP</li>
+              <li>Small Value Procurement</li>
             </div>
           </router-link>
           <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
             <div class="menu">
-              <li>For bidding</li>
+              <li>For Bidding</li>
             </div>
           </router-link>
         </ul>

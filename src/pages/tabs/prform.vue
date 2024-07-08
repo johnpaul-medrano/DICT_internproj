@@ -1,4 +1,15 @@
 <template>
+
+        <header class="header">
+        <div class="header-content">
+          <div class="title-logo-container">
+            <div class="settings-icon">
+              <img src="@/assets/logo.png" alt="Settings Icon"/>
+            </div>
+          </div>
+        </div>
+        </header>
+
   <div class="main-content">
     <div class="purchase-request-form">
       <h2>Create Purchase Request</h2>
