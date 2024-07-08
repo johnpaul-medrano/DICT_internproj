@@ -1,15 +1,6 @@
 <template>
     <div>
-      <header class="header">
-        <div class="header-content">
-          <div class="title-logo-container">
-            <h1 class="title">DICT DOCTRACKER</h1>
-            <div class="settings-icon">
-              <img src="@/assets/logo.png" alt="Settings Icon"/>
-            </div>
-          </div>
-        </div>
-      </header>
+
   
       <div class="table-container">
         <table class="doc-table">

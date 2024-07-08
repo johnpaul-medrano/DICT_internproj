@@ -26,7 +26,7 @@
                 active: isActive('/mainpage/' + currentLogo + '/prformsvp'),
               }"
             >
-              SVP
+              Small Value Procurement
             </li>
           </router-link>
           <router-link

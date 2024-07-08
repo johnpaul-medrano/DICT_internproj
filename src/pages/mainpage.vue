@@ -1,8 +1,11 @@
 <template>
-  <div class="main">
+    <ulo />
+    <div class="main">
     <div class="left">
       <sidebar />
+      
     </div>
+    
     <div class="container">
       <router-view class="main-content"></router-view>
     </div>
@@ -10,12 +13,14 @@
 </template>
 
 <script>
+import ulo from "../components/Ulo.vue"
 import Sidebar from "../components/sidebar.vue";
 import { mapActions } from "vuex";
 
 export default {
   components: {
     Sidebar,
+    ulo,
   },
   props: ["logo"],
   created() {

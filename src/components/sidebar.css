@@ -75,11 +75,11 @@ ul .lol {
 }
 
 ul li.active {
-  background-color: #274a7b;
+  background-color: #26497b75;
 }
 
 ul li:hover {
-  background-color: #26497bd5;
+  background-color: #26497b75;
  padding-left: 70px;
 }
 
@@ -107,11 +107,11 @@ li img {
 }
 
 .sub-menu li.active {
-  background-color: #1e3b63;
+  background-color: #26497b75;
 }
 
 .sub-menu li:hover {
-  background-color: #3a4e77;
+  background-color: #26497b75;
   padding-left: 80px;
 }
 
