@@ -30,9 +30,12 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
-.haha {
+.haha,
+.lol,
+.sub-menu-link {
   text-decoration: none;
   color: #ffffff;
 }
@@ -53,12 +56,10 @@ ul li {
 }
 
 .menu .lol li {
-  text-decoration: none;
   color: white;
 }
 
 .menu .lol {
-  text-decoration: none;
   color: white;
 }
 
@@ -73,7 +74,7 @@ ul .lol {
 }
 
 ul li.active {
-  background-color: #673333;
+  background-color: #274a7b;
 }
 
 ul li:hover {
@@ -104,6 +105,10 @@ li img {
   transition: background-color 0.3s, padding-left 0.3s;
 }
 
+.sub-menu li.active {
+  background-color: #1e3b63;
+}
+
 .sub-menu li:hover {
   background-color: #3a4e77;
   padding-left: 80px;
@@ -114,4 +119,11 @@ li img {
   width: 80%;
   height: 100vh;
   overflow-y: auto;
+}
+
+.lol,
+.sub-menu-link,
+.lol.router-link-active,
+.sub-menu-link.router-link-active {
+  text-decoration: none;
 }

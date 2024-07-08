@@ -23,15 +23,21 @@ const routes = [
     component: () => import("../pages/mainpage.vue"),
     children: [
       {
-        path: "prform",
-        name: "PrForm",
-        component: () => import("../pages/tabs/prform.vue"),
+        path: "prformSVP",
+        name: "PrFormSVP",
+        component: () => import("../pages/tabs/prformsvp.vue"),
+        props: true,
+      },
+      {
+        path: "prformFB",
+        name: "PrFormFB",
+        component: () => import("../pages/tabs/prformfb.vue"),
         props: true,
       },
       {
         path: "monitoring",
         name: "Monitoring",
-        component: () => import( "../pages/tabs/monitoring.vue"),
+        component: () => import("../pages/tabs/monitoring.vue"),
         props: true,
       },
       {

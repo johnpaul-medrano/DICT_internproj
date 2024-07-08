@@ -1,53 +1,95 @@
 <template>
   <div class="sidebarbox">
     <div class="logocontainer">
-      <img :src="'/src/assets/' + currentLogo +'y.png'" alt="ILCDB logo" class="logo" />
+      <img
+        :src="'/src/assets/' + currentLogo + 'y.png'"
+        alt="ILCDB logo"
+        class="logo"
+      />
     </div>
     <div class="bottom">
       <ul>
-        <li @click="toggleSubMenu">
+        <li
+          @click="toggleSubMenu"
+          :class="{ active: isActive('/mainpage/' + currentLogo + '/prform') }"
+        >
           <img :src="icon1" alt="icon" />
           Purchase Request
         </li>
         <ul v-if="isSubMenuVisible" class="sub-menu">
-          <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
-            <div class="menu">
-              <li>SVP</li>
-            </div>
+          <router-link
+            :to="`/mainpage/${currentLogo}/prformsvp`"
+            class="sub-menu-link"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/prformsvp'),
+              }"
+            >
+              SVP
+            </li>
           </router-link>
-          <router-link class="haha" :to="`/mainpage/${ currentLogo }/prform`">
-            <div class="menu">
-              <li>For bidding</li>
-            </div>
+          <router-link
+            :to="`/mainpage/${currentLogo}/prformfb`"
+            class="sub-menu-link"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/prformfb'),
+              }"
+            >
+              For Bidding
+            </li>
           </router-link>
         </ul>
         <div class="menu">
-          <router-link class="lol" :to="`/mainpage/${ currentLogo }/monitoring`">
-            <li>
+          <router-link :to="`/mainpage/${currentLogo}/monitoring`" class="lol">
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/monitoring'),
+              }"
+            >
               <img :src="icon2" alt="icon" />
               Monitoring
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" :to="`/mainpage/${ currentLogo }/suppliers-database`">
-            <li>
+          <router-link
+            :to="`/mainpage/${currentLogo}/suppliers-database`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive(
+                  '/mainpage/' + currentLogo + '/suppliers-database'
+                ),
+              }"
+            >
               <img :src="icon3" alt="icon" />
               Suppliers Database
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" :to="`/mainpage/${ currentLogo }/templates`">
-            <li>
+          <router-link :to="`/mainpage/${currentLogo}/templates`" class="lol">
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/templates'),
+              }"
+            >
               <img :src="icon4" alt="icon" />
               Templates
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link class="lol" :to="`/mainpage/${ currentLogo }/request`">
-            <li>
+          <router-link :to="`/mainpage/${currentLogo}/request`" class="lol">
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/request'),
+              }"
+            >
               <img :src="icon5" alt="icon" />
               Request
             </li>
@@ -80,11 +122,21 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['currentLogo'])
+    ...mapGetters(["currentLogo"]),
+  },
+  watch: {
+    $route(to) {
+      if (!to.path.startsWith(`/mainpage/${this.currentLogo}/prform`)) {
+        this.isSubMenuVisible = false;
+      }
+    },
   },
   methods: {
     toggleSubMenu() {
       this.isSubMenuVisible = !this.isSubMenuVisible;
+    },
+    isActive(route) {
+      return this.$route.path.startsWith(route);
     },
   },
 };
