@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
 import { auth } from "../firebaseConfig";
-import { getCurrentUser } from "@/utils";
 
 const routes = [
   {
@@ -80,15 +79,15 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const currentUser = await getCurrentUser();
+// router.beforeEach(async (to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//   const currentUser = await getCurrentUser();
 
-  if (requiresAuth && !currentUser) {
-    next({ name: 'Login' });
-  } else {
-    next();
-  }
-});
+//   if (requiresAuth && !currentUser) {
+//     next({ name: 'Login' });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;
