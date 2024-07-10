@@ -1,5 +1,4 @@
 <template>
-
   <div class="main-content">
     <div class="purchase-request-form">
       <h2>Create Purchase Request - SVP</h2>
@@ -12,90 +11,54 @@
                 <input type="text" id="prnum" v-model="form.prnum" required />
               </div>
             </div>
-            <div
-              v-for="(item, index) in form.items"
-              :key="`item-${index}`"
-              :ref="'item' + index"
-              class="grid-item"
-            >
-              <div class="first-row">
-                <div class="cont">
-                  <label :for="'stock' + index">Stock No.:</label>
-                  <input
-                    type="text"
-                    :id="'stock' + index"
-                    v-model="item.stock"
-                    required
-                  />
-                </div>
-                <div class="cont">
-                  <label :for="'unit' + index">Unit:</label>
-                  <input
-                    type="text"
-                    :id="'unit' + index"
-                    v-model="item.unit"
-                    required
-                  />
-                </div>
-              </div>
 
-              <label :for="'itemdesc' + index">Item Description:</label>
-              <input
-                id="desc"
-                type="text"
-                :id="'itemdesc' + index"
-                v-model="item.itemdesc"
-                required
-              />
-              <div class="third-row">
-                <div class="cont">
-                  <label :for="'quantity' + index">Quantity:</label>
-                  <input
-                    type="number"
-                    :id="'quantity' + index"
-                    v-model="item.quantity"
-                    required
-                  />
-                </div>
-                <div class="cont">
-                  <label :for="'unitcost' + index">Unit Cost:</label>
-                  <input
-                    type="number"
-                    :id="'unitcost' + index"
-                    v-model="item.unitcost"
-                    required
-                  />
-                </div>
-              </div>
+            <div class="cont">
+              <label for="subaro">Sub ARO No.:</label>
+              <input type="text" id="subaro" v-model="form.subaro" required />
+            </div>
+          </div>
 
-              <div class="total-unit-cost">
-                <label :for="'totalunitcost' + index">Total Unit Cost:</label>
-                <span :id="'totalunitcost' + index">{{
-                  item.quantity * item.unitcost
-                }}</span>
+          <div v-for="(item, index) in form.items" :key="`item-${index}`" :ref="'item' + index" class="grid-item">
+            <div class="first-row">
+              <div class="cont">
+                <label :for="'stock' + index">Stock No.:</label>
+                <input type="text" :id="'stock' + index" v-model="item.stock" required />
               </div>
+              <div class="cont">
+                <label :for="'unit' + index">Unit:</label>
+                <input type="text" :id="'unit' + index" v-model="item.unit" required />
+              </div>
+            </div>
 
-              <div class="item-buttons">
-                <button
-                  id="remove"
-                  type="button"
-                  @click="removeItem(index)"
-                  v-if="form.items.length > 1"
-                >
-                  <img :src="remove" alt="" />
-                </button>
-                <button
-                  id="add"
-                  v-if="index === form.items.length - 1"
-                  type="button"
-                  @click="addItem"
-                >
-                  <img :src="add" alt="" />
-                </button>
+            <label :for="'itemdesc' + index">Item Description:</label>
+            <input id="desc" type="text" :id="'itemdesc' + index" v-model="item.itemdesc" required />
+            <div class="third-row">
+              <div class="cont">
+                <label :for="'quantity' + index">Quantity:</label>
+                <input type="number" :id="'quantity' + index" v-model="item.quantity" required />
               </div>
+              <div class="cont">
+                <label :for="'unitcost' + index">Unit Cost:</label>
+                <input type="number" :id="'unitcost' + index" v-model="item.unitcost" required />
+              </div>
+            </div>
+
+            <div class="total-unit-cost">
+              <label :for="'totalunitcost' + index">Total Unit Cost:</label>
+              <span :id="'totalunitcost' + index">{{ item.quantity * item.unitcost }}</span>
+            </div>
+
+            <div class="item-buttons">
+              <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
+                <img :src="remove" alt="" />
+              </button>
+              <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
+                <img :src="add" alt="" />
+              </button>
             </div>
           </div>
         </div>
+
         <div class="total-amount">
           <label for="totalAmount">Total Amount:</label>
           <span id="totalAmount">{{ totalAmount }}</span>
@@ -119,6 +82,7 @@ export default {
       remove,
       form: {
         prnum: "",
+        subaro: "",
         items: [
           {
             stock: "",
@@ -183,6 +147,13 @@ export default {
           color: rgb(0, 0, 0),
         });
 
+        firstPage.drawText(this.form.subaro, {
+          x: 205,
+          y: 407,
+          size: 11,
+          font: timesRomanFont,
+          color: rgb(0, 0, 0),
+        });
         let yOffset = 615;
         const rowHeight = 12;
 
@@ -263,6 +234,7 @@ export default {
     resetForm() {
       this.form = {
         prnum: "",
+        subaro: "",
         items: [
           {
             stock: "",
