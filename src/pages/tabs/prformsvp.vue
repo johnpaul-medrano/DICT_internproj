@@ -5,16 +5,15 @@
       <form @submit.prevent="handleSubmit">
         <div class="grid-container">
           <div class="left">
-            <div class="prnum">
+            <div class="prnum-container">
               <div class="cont">
                 <label for="prnum">PR Number:</label>
                 <input type="text" id="prnum" v-model="form.prnum" required />
               </div>
-            </div>
-
-            <div class="cont">
-              <label for="subaro">Sub ARO No.:</label>
-              <input type="text" id="subaro" v-model="form.subaro" required />
+              <div class="cont">
+                <label for="subaro">SUB ARO No.:</label>
+                <input type="text" id="subaro" v-model="form.subaro" required />
+              </div>
             </div>
           </div>
 

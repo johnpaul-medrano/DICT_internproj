@@ -1,20 +1,19 @@
 <template>
   <div class="main-content">
     <div class="purchase-request-form">
-      <h2>Create Purchase Request - For Bidding</h2>
+      <h2>Create Purchase Request - SVP</h2>
       <form @submit.prevent="handleSubmit">
         <div class="grid-container">
           <div class="left">
-            <div class="prnum">
+            <div class="prnum-container">
               <div class="cont">
                 <label for="prnum">PR Number:</label>
                 <input type="text" id="prnum" v-model="form.prnum" required />
               </div>
-            </div>
-
-            <div class="cont">
-              <label for="subaro">Sub ARO No.:</label>
-              <input type="text" id="subaro" v-model="form.subaro" required />
+              <div class="cont">
+                <label for="subaro">SUB ARO No.:</label>
+                <input type="text" id="subaro" v-model="form.subaro" required />
+              </div>
             </div>
           </div>
 
@@ -63,7 +62,7 @@
           <label for="totalAmount">Total Amount:</label>
           <span id="totalAmount">{{ totalAmount }}</span>
         </div>
-        <button id="generate" type="submit">Generate</button>
+        <button id="generate" type="submit">GENERATE</button>
       </form>
     </div>
   </div>

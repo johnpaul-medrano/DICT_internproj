@@ -2,6 +2,12 @@
   font-family: "Poppins", "sans-serif";
   color: rgb(37, 37, 90);
 }
+Label {
+  padding-left: 5px;
+  margin-bottom: 5px;
+}
+
+
 
 .header {
   background-color: #275598;
@@ -15,7 +21,7 @@
 }
 
 .title-logo-container {
-  display:block;
+  display: block;
 }
 
 .settings-icon img {
@@ -65,31 +71,32 @@ input {
   display: flex;
   flex-direction: column;
 }
-@keyframes fade-in{
 
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.prnum-container {
+  display: flex;
+  gap: 130px;
+  margin: 20px;
+  margin-bottom: 25px;
 }
 
-@keyframes fade-out{
+#subaro {
+  padding-left: 20px;
+}
 
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+.cont {
+  display: flex;
+  flex-direction: column;
+}
+
+.cont input {
+  width: 300px;
+  height: 60px;
 }
 
 .grid-item {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: 20px;
   border: 2px solid rgb(189, 189, 190);
   padding: 20px;
   border-radius: 15px;
@@ -97,13 +104,8 @@ input {
   animation: fade-in 1s;
 }
 
-.grid-item.collapsing{
-  animation: fade-out .3s;
-}
-
-.prnum {
-  margin-left: 15px;
-  margin-bottom: 20px;
+.grid-item.collapsing {
+  animation: fade-out 0.3s;
 }
 
 .first-row {
@@ -114,11 +116,6 @@ input {
 .third-row {
   display: flex;
   gap: 20px;
-}
-
-.cont {
-  display: flex;
-  flex-direction: column;
 }
 
 .cont input {
@@ -132,17 +129,11 @@ input {
 }
 
 .grid-item label {
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-
-input {
-  width: 400px;
-  height: 60px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 .total-unit-cost {
-
   display: flex;
   width: 200px;
   justify-content: flex-start;
@@ -154,6 +145,7 @@ input {
   gap: 10px;
   border: 1px dashed rgb(47, 47, 87);
 }
+
 .total-unit-cost label {
   margin: 0;
 }
@@ -197,7 +189,6 @@ input {
   background-color: white;
   color: #275598;
   border: 2px dashed #275598;
-  
 }
 
 #remove:hover {
@@ -245,4 +236,22 @@ button img {
 
 #generate:hover {
   background-color: #45a049;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
