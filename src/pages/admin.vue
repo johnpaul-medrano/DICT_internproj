@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default {
   data() {
@@ -34,38 +34,21 @@ export default {
       username: "",
       password: "",
       error: null,
-      auth: null, // Initialize auth as null
-      db: null, // Initialize db as null
     };
-  },
-  created() {
-    const firebaseConfig = {
-      apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
-      authDomain: "dictapp-21983.firebaseapp.com",
-      projectId: "dictapp-21983",
-      storageBucket: "dictapp-21983.appspot.com",
-      messagingSenderId: "672180765503",
-      appId: "1:672180765503:web:de6516c6516a13707b498a",
-      measurementId: "G-RQJ0PNMW5D",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    this.auth = getAuth(app);
-    this.db = getFirestore(app);
   },
   methods: {
     async createUser() {
       try {
         // Create user with email and password
         const userCredential = await createUserWithEmailAndPassword(
-          this.auth,
+          auth,
           this.email,
           this.password
         );
         const user = userCredential.user;
 
         // Store additional user data in Firestore
-        await setDoc(doc(this.db, "users", user.uid), {
+        await setDoc(doc(db, "users", user.uid), {
           email: this.email,
           username: this.username,
           createdAt: new Date(),

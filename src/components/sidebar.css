@@ -10,6 +10,9 @@
   position: fixed;
   left: 0;
   top: 0;
+  -webkit-box-shadow: 0.5px 1.5px 30.5px 9px #b6b6b6;
+  -moz-box-shadow: 0.5px 1.5px 30.5px 9px #b6b6b6;
+  box-shadow: 0.5px 1.5px 30.5px 9px #b6b6b6;
 }
 
 .bottom {
@@ -76,12 +79,11 @@ ul .lol {
 
 ul li.active {
   background-color: #26497b75;
-  padding-left: 100px
 }
 
 ul li:hover {
   background-color: #26497b75;
- padding-left: 100px;
+  padding-left: 70px;
 }
 
 ul li a {
@@ -113,7 +115,7 @@ li img {
 
 .sub-menu li:hover {
   background-color: #26497b75;
-  padding-left: 100px;
+  padding-left: 80px;
 }
 
 .main-content {

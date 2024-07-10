@@ -1,29 +1,42 @@
-.header {
-    background-color: #003366;
-    padding: 25px;
-    color: #ffffff;
-    text-align: center; 
+* {
+  font-family: "Poppins", "sans-serif";
+}
 
-  }
-  
-  .header-content {
-    display: flex;
-    justify-content: center; /* Center items horizontally */
-    align-items: center;
-  }
-  
-  .title-logo-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .title {
-    margin: 0;
-    font-size: 45px;
-    margin-right: 20px; /* Added margin to separate from the settings icon */
-  }
-  
-  .settings-icon img {
-    width: 78px;
-    height:78px;
-  }
+.header {
+  background-color: #003366;
+  padding: 10px 0px 10px 0px;
+  color: #ffffff;
+  text-align: center;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  width: 80%;
+  z-index: 1000;
+  -webkit-box-shadow: 3px 3px 30px 1.5px #939393;
+  -moz-box-shadow: 3px 3px 30px 1.5px #939393;
+  box-shadow: 3px 3px 30px 1.5px #939393;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 35px;
+  margin-right: 20px;
+}
+
+.settings-icon img {
+  width: 50px;
+}

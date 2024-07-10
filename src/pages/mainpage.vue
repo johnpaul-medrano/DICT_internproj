@@ -1,19 +1,18 @@
 <template>
-    
-    <div class="main">
+  <div class="main">
     <div class="left">
       <sidebar />
-      
     </div>
-    
-    <div class="container"><ulo />
+
+    <div class="container">
+      <ulo />
       <router-view class="main-content"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import ulo from "../components/Ulo.vue"
+import ulo from "../components/Ulo.vue";
 import Sidebar from "../components/sidebar.vue";
 import { mapActions } from "vuex";
 
@@ -49,6 +48,7 @@ export default {
   flex: 0.8;
   overflow-y: auto;
   scrollbar-width: none;
+  margin-top: 80px;
 }
 
 .container::-webkit-scrollbar {
