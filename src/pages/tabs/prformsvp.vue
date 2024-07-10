@@ -2,7 +2,7 @@
   <div class="main-content">
     <div class="purchase-request-form">
       <h2>Create Purchase Request - SVP</h2>
-      <form @submit.prevent="handleSubmit">
+      <form @submit.prevent="handleUpload">
         <div class="grid-container">
           <div class="left">
             <div class="prnum-container">
@@ -62,7 +62,7 @@
           <label for="totalAmount">Total Amount:</label>
           <span id="totalAmount">{{ totalAmount }}</span>
         </div>
-        <button id="generate" type="submit">GENERATE</button>
+        <button id="upload" type="submit">UPLOAD</button>
       </form>
     </div>
   </div>
@@ -73,6 +73,23 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import prTemplate from "@/assets/pr-template.pdf";
 import add from "@/assets/add.png";
 import remove from "@/assets/close.png";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
+  authDomain: "dictapp-21983.firebaseapp.com",
+  projectId: "dictapp-21983",
+  storageBucket: "dictapp-21983.appspot.com",
+  messagingSenderId: "672180765503",
+  appId: "1:672180765503:web:de6516c6516a13707b498a",
+  measurementId: "G-RQJ0PNMW5D"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+const db = getFirestore(app);
 
 export default {
   data() {
@@ -216,18 +233,36 @@ export default {
         });
 
         const pdfBytes = await pdfDoc.save();
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "filled_pr.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        this.resetForm();
+        return pdfBytes;
       } catch (error) {
         console.error("Error generating PDF:", error);
+        throw error;
+      }
+    },
+    async handleUpload() {
+      try {
+        const pdfBytes = await this.handleSubmit();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+
+        // Upload PDF to Firebase Storage
+        const pdfRef = ref(storage, `purchase_requests/${Date.now()}.pdf`);
+        const uploadTaskSnapshot = await uploadBytes(pdfRef, blob);
+
+        // Get the PDF download URL
+        const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
+
+        // Save the download URL to Firestore
+        await addDoc(collection(db, 'purchase_requests'), {
+          prnum: this.form.prnum,
+          subaro: this.form.subaro,
+          downloadURL,
+          timestamp: serverTimestamp(),
+        });
+
+        console.log("PDF uploaded successfully and URL saved to Firestore");
+        this.resetForm();
+      } catch (error) {
+        console.error("Error uploading PDF:", error);
       }
     },
     resetForm() {
