@@ -99,7 +99,7 @@
           <label for="totalAmount">Total Amount:</label>
           <span id="totalAmount">{{ totalAmount }}</span>
         </div>
-        <button id="generate" type="submit">Generate PDF</button>
+        <button id="generate" type="submit">Generate</button>
       </form>
     </div>
   </div>

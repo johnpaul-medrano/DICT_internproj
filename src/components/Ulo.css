@@ -1,8 +1,9 @@
 .header {
-    background-color: #003366;
+    background-color: #275598;
     padding: 25px;
     color: #ffffff;
-    text-align: center; /* Center align header content */
+    text-align: center; 
+
   }
   
   .header-content {
@@ -18,11 +19,11 @@
   
   .title {
     margin: 0;
-    font-size: 45px;
+    font-size: 20px;
     margin-right: 20px; /* Added margin to separate from the settings icon */
   }
   
   .settings-icon img {
-    width: 78px;
-    height: 78px;
+    width: 10x;
+    height:10px;
   }
