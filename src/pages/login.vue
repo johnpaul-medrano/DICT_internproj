@@ -32,8 +32,8 @@
 <script>
 import { Icon } from "@iconify/vue";
 import logo from "@/assets/logo.png";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
   name: "Login",
@@ -50,19 +50,6 @@ export default {
   },
   methods: {
     async login() {
-      const firebaseConfig = {
-        apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
-        authDomain: "dictapp-21983.firebaseapp.com",
-        projectId: "dictapp-21983",
-        storageBucket: "dictapp-21983.appspot.com",
-        messagingSenderId: "672180765503",
-        appId: "1:672180765503:web:de6516c6516a13707b498a",
-        measurementId: "G-RQJ0PNMW5D",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-
       try {
         const userCredential = await signInWithEmailAndPassword(
           auth,
