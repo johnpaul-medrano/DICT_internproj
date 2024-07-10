@@ -30,15 +30,28 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { Icon } from "@iconify/vue";
+import { toast } from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 import logo from "@/assets/logo.png";
 import { auth } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+
+const toastId = ref('')
 
 export default {
   name: "Login",
   components: {
     Icon,
+  },
+  setup(){
+    toast.info("Please Login to the System", {
+      "position": "top-center",
+      "transition": "flip",
+      "hideProgressBar": true,
+      autoClose: 500,
+    })
   },
   data() {
     return {
@@ -63,7 +76,14 @@ export default {
         this.$router.push({ path: "/projects" });
       } catch (error) {
         console.error("Error logging in:", error); // Log the error to the console
-        this.errorMessage = error.message;
+        if (!toast.isActive(toastId.value)){
+          toastId.value = toast.error("Account does not exist", {
+            "position": "top-center",
+            "transition": "flip",
+            "hideProgressBar": true,
+            autoClose: 500, 
+          })
+        }
       }
     },
   },
