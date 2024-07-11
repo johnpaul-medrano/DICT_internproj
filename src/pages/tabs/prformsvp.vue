@@ -17,41 +17,84 @@
             </div>
           </div>
 
-          <div v-for="(item, index) in form.items" :key="`item-${index}`" :ref="'item' + index" class="grid-item">
+          <div
+            v-for="(item, index) in form.items"
+            :key="`item-${index}`"
+            :ref="'item' + index"
+            class="grid-item"
+          >
             <div class="first-row">
               <div class="cont">
                 <label :for="'stock' + index">Stock No.:</label>
-                <input type="text" :id="'stock' + index" v-model="item.stock" required />
+                <input
+                  type="text"
+                  :id="'stock' + index"
+                  v-model="item.stock"
+                  required
+                />
               </div>
               <div class="cont">
                 <label :for="'unit' + index">Unit:</label>
-                <input type="text" :id="'unit' + index" v-model="item.unit" required />
+                <input
+                  type="text"
+                  :id="'unit' + index"
+                  v-model="item.unit"
+                  required
+                />
               </div>
             </div>
 
             <label :for="'itemdesc' + index">Item Description:</label>
-            <input id="desc" type="text" :id="'itemdesc' + index" v-model="item.itemdesc" required />
+            <input
+              id="desc"
+              type="text"
+              :id="'itemdesc' + index"
+              v-model="item.itemdesc"
+              required
+            />
             <div class="third-row">
               <div class="cont">
                 <label :for="'quantity' + index">Quantity:</label>
-                <input type="number" :id="'quantity' + index" v-model="item.quantity" required />
+                <input
+                  type="number"
+                  :id="'quantity' + index"
+                  v-model="item.quantity"
+                  required
+                />
               </div>
               <div class="cont">
                 <label :for="'unitcost' + index">Unit Cost:</label>
-                <input type="number" :id="'unitcost' + index" v-model="item.unitcost" required />
+                <input
+                  type="number"
+                  :id="'unitcost' + index"
+                  v-model="item.unitcost"
+                  required
+                />
               </div>
             </div>
 
             <div class="total-unit-cost">
               <label :for="'totalunitcost' + index">Total Unit Cost:</label>
-              <span :id="'totalunitcost' + index">{{ item.quantity * item.unitcost }}</span>
+              <span :id="'totalunitcost' + index">{{
+                item.quantity * item.unitcost
+              }}</span>
             </div>
 
             <div class="item-buttons">
-              <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
+              <button
+                id="remove"
+                type="button"
+                @click="removeItem(index)"
+                v-if="form.items.length > 1"
+              >
                 <img :src="remove" alt="" />
               </button>
-              <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
+              <button
+                id="add"
+                v-if="index === form.items.length - 1"
+                type="button"
+                @click="addItem"
+              >
                 <img :src="add" alt="" />
               </button>
             </div>
@@ -76,6 +119,8 @@ import remove from "@/assets/close.png";
 import { storage, db } from "@/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
@@ -131,7 +176,7 @@ export default {
         }, 300);
       }
     },
-    async handleSubmit() {
+    async generatePDF() {
       try {
         const existingPdfBytes = await fetch(prTemplate).then((res) =>
           res.arrayBuffer()
@@ -156,6 +201,7 @@ export default {
           font: timesRomanFont,
           color: rgb(0, 0, 0),
         });
+
         let yOffset = 615;
         const rowHeight = 12;
 
@@ -226,8 +272,14 @@ export default {
       }
     },
     async handleUpload() {
+      const loadingToastId = toast.loading("Uploading PDF...", {
+        position: "bottom-right",
+        transition: "flip",
+        hideProgressBar: true,
+      });
+
       try {
-        const pdfBytes = await this.handleSubmit();
+        const pdfBytes = await this.generatePDF();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
         // Upload PDF to Firebase Storage
@@ -238,19 +290,35 @@ export default {
         const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
         // Save the download URL to Firestore
-        await addDoc(collection(db, 'purchase_requests'), {
+        addDoc(collection(db, "purchase_requests"), {
           prnum: this.form.prnum,
           subaro: this.form.subaro,
           downloadURL,
           timestamp: serverTimestamp(),
         });
 
-        console.log("PDF uploaded successfully and URL saved to Firestore");
+        toast.update(loadingToastId, {
+          position: "bottom-right",
+          render: "PDF uploaded successfully",
+          type: toast.TYPE.SUCCESS,
+          autoClose: 2000,
+          isLoading: false,
+        });
+
         this.resetForm();
       } catch (error) {
         console.error("Error uploading PDF:", error);
+
+        toast.update(loadingToastId, {
+          position: "bottom-right",
+          render: "Error uploading PDF",
+          type: toast.TYPE.ERROR,
+          autoClose: 2000,
+          isLoading: false,
+        });
       }
     },
+
     resetForm() {
       this.form = {
         prnum: "",
