@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -20,3 +20,25 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 export { auth, db, storage };
+
+export function getCurrentUser() {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+            auth,
+            (user) => {
+                unsubscribe();
+                resolve(user);
+            },
+            reject
+        );
+    });
+}
+
+export async function logout() {
+    try {
+        await signOut(auth);
+        console.log("User signed out successfully");
+    } catch (error) {
+        console.error("Error signing out:", error);
+    }
+}

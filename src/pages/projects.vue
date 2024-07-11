@@ -13,6 +13,7 @@
         <RouterLink :to="{ name:'MainPage', params: { logo: 'tech4ed'} }">
           <img :src="tech4ed" alt="Tech4Ed" />
         </RouterLink>
+        <button @click="signOut">Sign out</button>
       </div>
     </div>
   </div>
@@ -23,6 +24,9 @@ import workforce from "@/assets/workforce.png";
 import spark from "@/assets/spark.png";
 import tech4ed from "@/assets/tech4ed.png";
 import { RouterLink } from "vue-router";
+import { logout } from "@/firebaseConfig";
+import { useRouter } from "vue-router";
+
 
 export default {
   name: "Projects",
@@ -31,6 +35,18 @@ export default {
       workforce,
       spark,
       tech4ed,
+    };
+  },
+  setup() {
+    const router = useRouter();
+    
+    async function signOut() {
+      await logout();
+      router.push('/');
+    }
+
+    return {
+      signOut,
     };
   },
 };

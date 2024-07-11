@@ -1,13 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
-import { auth } from "../firebaseConfig";
+import { getCurrentUser } from "@/firebaseConfig";
 
 const routes = [
   {
     path: "/",
     name: "Login",
     component: Login,
-    meta: { requiresAuth: true },
   },
   {
     path: "/admin",
@@ -79,15 +78,12 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   const currentUser = await getCurrentUser();
-
-//   if (requiresAuth && !currentUser) {
-//     next({ name: 'Login' });
-//   } else {
-//     next();
-//   }
-// });
+//Router config for RouteGuard in Login to disable change of url for unauthorized access
+router.beforeEach(async (to) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if (requiresAuth && !await getCurrentUser()) {
+    return '/'
+  }
+})
 
 export default router;
