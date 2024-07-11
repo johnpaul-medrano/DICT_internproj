@@ -73,23 +73,9 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import prTemplate from "@/assets/pr-template.pdf";
 import add from "@/assets/add.png";
 import remove from "@/assets/close.png";
-import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
-  authDomain: "dictapp-21983.firebaseapp.com",
-  projectId: "dictapp-21983",
-  storageBucket: "dictapp-21983.appspot.com",
-  messagingSenderId: "672180765503",
-  appId: "1:672180765503:web:de6516c6516a13707b498a",
-  measurementId: "G-RQJ0PNMW5D"
-};
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const db = getFirestore(app);
+import { storage, db } from "@/firebaseConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default {
   data() {
