@@ -218,7 +218,7 @@ button img {
   font-weight: bold;
 }
 
-#generate {
+#generate, #upload {
   margin-top: 20px;
   align-self: center;
   padding: 10px 10px;
@@ -232,7 +232,7 @@ button img {
   font-size: 20px;
 }
 
-#generate:hover {
+#generate:hover, #upload:hover {
   background-color: #224b89;
 }
 
