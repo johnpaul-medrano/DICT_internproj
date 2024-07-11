@@ -1,7 +1,72 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { createStore } from 'vuex';
+import { db, storage } from "@/firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
+import { ref, listAll, getDownloadURL } from "firebase/storage";
+import workforceLogo from '@/assets/workforcey.png';
+import sparkLogo from '@/assets/sparky.png';
+import tech4edLogo from '@/assets/tech4edy.png';
 import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
 import { getCurrentUser } from "@/firebaseConfig";
 
+// Vuex Store
+const store = createStore({
+  state: {
+    logo: {
+      workforce: workforceLogo,
+      spark: sparkLogo,
+      tech4ed: tech4edLogo,
+    },
+    currentLogo: '',
+    tableData: [],
+  },
+  mutations: {
+    setLogo(state, logo) {
+      state.logo = logo;
+    },
+    SET_TABLE_DATA(state, payload) {
+      state.tableData = payload;
+    },
+  },
+  actions: {
+    updateLogo({ commit }, logo) {
+      commit('setLogo', logo);
+    },
+    async fetchInitialTableData({ commit }) {
+      try {
+        const listRef = ref(storage, 'purchase_requests/');
+        const res = await listAll(listRef);
+        const files = await Promise.all(res.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { prnum: itemRef.name, downloadURL: url };
+        }));
+        console.log('Fetched initial data:', files);
+        commit('SET_TABLE_DATA', files);
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      }
+    },
+    listenToTableData({ commit }) {
+      const purchaseRequestsRef = collection(db, "purchase_requests");
+      onSnapshot(purchaseRequestsRef, (snapshot) => {
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log('Updated data:', data);
+        commit('SET_TABLE_DATA', data);
+      }, (error) => {
+        console.error('Error listening to data:', error);
+      });
+    },
+  },
+  getters: {
+    currentLogo: (state) => state.logo,
+    tableData: (state) => state.tableData,
+  },
+});
+
+// Vue Router
 const routes = [
   {
     path: "/",
@@ -78,7 +143,7 @@ const router = createRouter({
   routes,
 });
 
-//Router config for RouteGuard in Login to disable change of url for unauthorized access
+// Router config for RouteGuard in Login to disable change of URL for unauthorized access
 router.beforeEach(async (to) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   if (requiresAuth && !(await getCurrentUser())) {
@@ -86,4 +151,4 @@ router.beforeEach(async (to) => {
   }
 });
 
-export default router;
+export { router, store };

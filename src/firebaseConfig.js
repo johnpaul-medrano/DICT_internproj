@@ -22,23 +22,25 @@ const storage = getStorage(app);
 export { auth, db, storage };
 
 export function getCurrentUser() {
-    return new Promise((resolve, reject) => {
-        const unsubscribe = onAuthStateChanged(
-            auth,
-            (user) => {
-                unsubscribe();
-                resolve(user);
-            },
-            reject
-        );
-    });
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject
+    );
+  });
 }
 
 export async function logout() {
-    try {
-        await signOut(auth);
-        console.log("User signed out successfully");
-    } catch (error) {
-        console.error("Error signing out:", error);
-    }
+  try {
+    await signOut(auth);
+    console.log("User signed out successfully");
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
 }
+
+

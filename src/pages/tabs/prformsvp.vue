@@ -290,9 +290,11 @@ export default {
         const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
         // Save the download URL to Firestore
-        addDoc(collection(db, "purchase_requests"), {
+        await addDoc(collection(db, "purchase_requests"), {
           prnum: this.form.prnum,
           subaro: this.form.subaro,
+          description: this.form.items.map((item) => item.itemdesc).join(", "),
+          status: "Completed",
           downloadURL,
           timestamp: serverTimestamp(),
         });
@@ -318,7 +320,6 @@ export default {
         });
       }
     },
-
     resetForm() {
       this.form = {
         prnum: "",
