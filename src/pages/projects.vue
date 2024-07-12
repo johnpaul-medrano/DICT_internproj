@@ -13,8 +13,9 @@
         <RouterLink :to="{ name:'MainPage', params: { logo: 'tech4ed'} }">
           <img :src="tech4ed" alt="Tech4Ed" />
         </RouterLink>
-        <button @click="signOut">Sign out</button>
+
       </div>
+      <button id="button-signout" @click="signOut">SIGN OUT</button>
     </div>
   </div>
 </template>
