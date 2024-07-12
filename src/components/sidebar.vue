@@ -5,6 +5,7 @@
         :src="'/src/assets/' + currentLogo + 'y.png'"
         alt="ILCDB logo"
         class="logo"
+        @click="navigateToProjects"
       />
     </div>
     <div class="bottom">
@@ -137,6 +138,9 @@ export default {
     },
     isActive(route) {
       return this.$route.path.startsWith(route);
+    },
+    navigateToProjects() {
+      this.$router.push({ name: "Projects" });
     },
   },
 };

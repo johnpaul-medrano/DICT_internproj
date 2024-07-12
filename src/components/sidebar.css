@@ -27,7 +27,15 @@
 
 .logocontainer {
   display: flex;
+  border-radius: 15px;
   justify-content: center;
+  margin: 0px 20px 0px 20px;
+  transition: background-color 0.3s;
+}
+
+.logocontainer:hover {
+  background-color: #22477f;
+  cursor: pointer;
 }
 
 ul {

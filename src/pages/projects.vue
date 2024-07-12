@@ -4,18 +4,19 @@
     <div id="box">
       <h2>PROJECTS</h2>
       <div id="projs">
-        <RouterLink :to="{ name:'MainPage', params: { logo: 'workforce'} }">
+        <RouterLink :to="{ name: 'MainPage', params: { logo: 'workforce' } }">
           <img :src="workforce" alt="Workforce" />
         </RouterLink>
-        <RouterLink :to="{ name:'MainPage', params: { logo: 'spark'} }">
+        <RouterLink :to="{ name: 'MainPage', params: { logo: 'spark' } }">
           <img :src="spark" alt="Spark" />
         </RouterLink>
-        <RouterLink :to="{ name:'MainPage', params: { logo: 'tech4ed'} }">
+        <RouterLink :to="{ name: 'MainPage', params: { logo: 'tech4ed' } }">
           <img :src="tech4ed" alt="Tech4Ed" />
         </RouterLink>
-
       </div>
-      <button id="button-signout" @click="signOut">SIGN OUT</button>
+      <button id="button-signout" @click="signOut">
+        <Icon icon="material-symbols:logout" width="25" />SIGN OUT
+      </button>
     </div>
   </div>
 </template>
@@ -24,13 +25,17 @@
 import workforce from "@/assets/workforce.png";
 import spark from "@/assets/spark.png";
 import tech4ed from "@/assets/tech4ed.png";
+import { Icon } from "@iconify/vue";
+
 import { RouterLink } from "vue-router";
 import { logout } from "@/firebaseConfig";
 import { useRouter } from "vue-router";
 
-
 export default {
   name: "Projects",
+  components: {
+    Icon,
+  },
   data() {
     return {
       workforce,
@@ -40,10 +45,10 @@ export default {
   },
   setup() {
     const router = useRouter();
-    
+
     async function signOut() {
       await logout();
-      router.push('/');
+      router.push("/");
     }
 
     return {

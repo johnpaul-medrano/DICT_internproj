@@ -283,14 +283,14 @@ export default {
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
         // Upload PDF to Firebase Storage
-        const pdfRef = ref(storage, `purchase_requests/${this.form.prnum}.pdf`)
+        const pdfRef = ref(storage, `purchase_requests/${this.form.prnum}.pdf`);
         const uploadTaskSnapshot = await uploadBytes(pdfRef, blob);
 
         // Get the PDF download URL
         const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
         // Save the download URL to Firestore
-        await addDoc(collection(db, "purchase_requests"), {
+        addDoc(collection(db, "purchase_requests"), {
           prnum: this.form.prnum,
           subaro: this.form.subaro,
           description: this.form.items.map((item) => item.itemdesc).join(", "),

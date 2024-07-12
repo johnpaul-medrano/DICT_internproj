@@ -100,6 +100,7 @@ input {
   border-radius: 15px;
   opacity: 1;
   animation: fade-in 1s;
+  margin-bottom: 5px;
 }
 
 .grid-item.collapsing {
@@ -218,7 +219,8 @@ button img {
   font-weight: bold;
 }
 
-#generate, #upload {
+#generate,
+#upload {
   margin-top: 20px;
   align-self: center;
   padding: 10px 10px;
@@ -232,7 +234,8 @@ button img {
   font-size: 20px;
 }
 
-#generate:hover, #upload:hover {
+#generate:hover,
+#upload:hover {
   background-color: #224b89;
 }
 

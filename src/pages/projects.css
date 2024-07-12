@@ -55,21 +55,23 @@ img:focus {
   cursor: pointer;
 }
 
-#button-signout{
-  margin-top: 20px;
-  align-self: center;
-  padding: 10px 10px;
-  border-radius: 20px;
-  background-color: #275598;
-  color: white;
+#button-signout {
+  background-color: #42498c;
+  width: 180px;
+  height: 60px;
+  border-radius: 25px;
+  color: #dddada;
+  font-size: 20px;
+  font-weight: 500;
   border: none;
   cursor: pointer;
-  margin-bottom: 10px;
-  width: 20%;
-  font-size: 20px;
-  font-weight: 750;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 #button-signout:hover {
-  background-color: rgb(179, 12, 12);
+  background-color: #30357f;
 }
