@@ -246,7 +246,7 @@ export default {
             color: rgb(0, 0, 0),
           });
           firstPage.drawText((item.quantity * item.unitcost).toString(), {
-            x: 480,
+            x: 485,
             y: yOffset,
             size: 10,
             font: timesRomanFont,
@@ -283,7 +283,7 @@ export default {
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
         // Upload PDF to Firebase Storage
-        const pdfRef = ref(storage, `purchase_requests/${Date.now()}.pdf`);
+        const pdfRef = ref(storage, `purchase_requests/${this.form.prnum}.pdf`)
         const uploadTaskSnapshot = await uploadBytes(pdfRef, blob);
 
         // Get the PDF download URL
