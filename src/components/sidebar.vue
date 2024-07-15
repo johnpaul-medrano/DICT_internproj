@@ -125,7 +125,7 @@ export default {
   computed: {
     ...mapGetters(["currentLogo"]),
   },
-  watch: {
+  watch: { 
     $route(to) {
       if (!to.path.startsWith(`/mainpage/${this.currentLogo}/prform`)) {
         this.isSubMenuVisible = false;
