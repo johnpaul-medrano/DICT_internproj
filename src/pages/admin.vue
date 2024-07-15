@@ -15,6 +15,17 @@
           <label for="password">Password:</label>
           <input type="password" v-model="password" required />
         </div>
+        <div>
+          <label for="role">Role:</label>
+          <select v-model="role" required>
+            <option value="" disabled>Select role</option>
+            <option value="ILCDB">ILCDB</option>
+            <option value="TOD Head">TOD Head</option>
+            <option value="Budget Division">Budget Division</option>
+            <option value="RD">RD</option>
+            <option value="Supply Office">Supply Office</option>
+          </select>
+        </div>
         <button type="submit">Create User</button>
       </form>
       <div v-if="error" class="error">{{ error }}</div>
@@ -33,6 +44,7 @@ export default {
       email: "",
       username: "",
       password: "",
+      role: "",
       error: null,
     };
   },
@@ -51,6 +63,7 @@ export default {
         await setDoc(doc(db, "users", user.uid), {
           email: this.email,
           username: this.username,
+          role: this.role,
           createdAt: new Date(),
         });
 
@@ -58,6 +71,7 @@ export default {
         this.email = "";
         this.username = "";
         this.password = "";
+        this.role = "";
         this.error = null;
 
         // Inform user of successful account creation

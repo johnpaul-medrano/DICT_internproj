@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-
 * {
   margin: 0;
   padding: 0;
@@ -19,9 +17,8 @@
 .admin {
   background-color: #d9d9d9;
   width: 600px;
-  height: 700px;
+  height: 850px;
   margin: auto;
-  /* padding: 20px; */
   border: 1px solid #ccc;
   border-radius: 20px;
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.75);
@@ -37,7 +34,6 @@ form {
   padding-left: 10%;
   padding-right: 10%;
   align-items: center;
-  /* background-color: pink; */
 }
 
 h1 {
@@ -50,21 +46,24 @@ h1 {
 .admin form div {
   margin-bottom: 1em;
 }
+
 .admin label {
   display: block;
   margin-bottom: 0.5em;
   font-size: 20px;
 }
-.admin input {
+
+.admin input, .admin select {
   width: 465px;
   height: 80px;
   border-radius: 20px;
   border: 0;
   background-color: #ccc9c9;
   font-size: 25px;
-  padding: 30px;
+  padding: 20px;
   margin-bottom: 10px;
 }
+
 .admin button {
   background-color: #42498c;
   width: 180px;
@@ -78,9 +77,11 @@ h1 {
   margin-top: 15px;
   gap: 10px;
 }
+
 .admin button:hover {
   background-color: #30357f;
 }
+
 .error {
   color: red;
   text-align: center;

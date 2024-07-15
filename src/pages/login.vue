@@ -12,8 +12,8 @@
           <div>
             <input
               type="password"
-              id="password"
-              v-model="password"
+              id="password" 
+              v-model="password" 
               placeholder="Password"
             />
           </div>
@@ -35,10 +35,9 @@ import { Icon } from "@iconify/vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import logo from "@/assets/logo.png";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
-const toastId = ref("");
+import { doc, getDoc } from "firebase/firestore";
 
 export default {
   name: "Login",
@@ -75,16 +74,34 @@ export default {
           this.password
         );
         console.log("Logged in user:", userCredential.user);
-        this.errorMessage = ""; // Clear any previous error messages
+        this.errorMessage = ""; 
 
-        toast.update(loaderToastId, {
-          render: "Login successful",
-          type: toast.TYPE.SUCCESS,
-          autoClose: 2000,
-          isLoading: false,
-        });
+        // Fetch user role from Firestore
+        const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const userRole = userData.role; 
 
-        this.$router.push({ path: "/projects" });
+          toast.update(loaderToastId, {
+            render: "Login successful",
+            type: toast.TYPE.SUCCESS,
+            autoClose: 2000,
+            isLoading: false,
+          });
+
+          // Save role to local storage or state
+          localStorage.setItem("userRole", userRole);
+
+          // Redirect based on role
+          this.redirectUser(userRole);
+        } else {
+          toast.update(loaderToastId, {
+            render: "User role not found",
+            type: toast.TYPE.ERROR,
+            autoClose: 2000,
+            isLoading: false,
+          });
+        }
       } catch (error) {
         console.error("Error logging in:", error); // Log the error to the console
         toast.update(loaderToastId, {
@@ -93,6 +110,27 @@ export default {
           autoClose: 2000,
           isLoading: false,
         });
+      }
+    },
+    redirectUser(role) {
+      switch (role) {
+        case "ILCDB":
+          this.$router.push({ path: "/projects" });
+          break;
+        case "TOD Head":
+          this.$router.push({ path: "/projects" });
+          break;
+        case "Budget Division":
+          this.$router.push({ path: "/projects" });
+          break;
+        case "RD":
+          this.$router.push({ path: "/projects" });
+          break;
+        case "Supply Office":
+          this.$router.push({ path: "/projects" });
+          break;
+        default:
+          this.$router.push({ path: "/" });
       }
     },
   },
