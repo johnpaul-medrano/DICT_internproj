@@ -21,7 +21,7 @@
               <select v-model="row.remark" @change="addRemark($event, row)">
                 <option value="">Select Remark</option>
                 <option>Form Generated</option>
-                <option>Received by TOD</option>  
+                <option>Received by TOD</option>
                 <option>Received by Budget Division</option>
                 <option>Received by RD</option>
                 <option>Received by SO</option>
@@ -34,15 +34,23 @@
     <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="refreshPage">
-        <option v-for="page in totalPages" :key="page" :value="page">{{ page }}</option>
+        <option v-for="page in totalPages" :key="page" :value="page">
+          {{ page }}
+        </option>
       </select>
     </div>
   </div>
 </template>
 
-
 <script>
-import { onSnapshot, collection, query, orderBy, updateDoc, doc } from "firebase/firestore";
+import {
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebaseConfig";
 import { toast } from "vue3-toastify";
@@ -71,24 +79,46 @@ export default {
     },
   },
   async mounted() {
+    console.log("Component mounted, fetching data...");
     this.fetchInitialTableData();
   },
   methods: {
     fetchInitialTableData() {
-      const collections = ["purchase_requests", "TOD_tab", "Budget_tab", "RD_tab"];
+      const collections = [
+        "purchase_requests",
+        "TOD_tab",
+        "Budget_tab",
+        "RD_tab",
+      ];
+      const allDocs = [];
+
       collections.forEach((collectionName) => {
-        const q = query(collection(db, collectionName), orderBy("timestamp", "desc"));
-        onSnapshot(q, (snapshot) => {
-          const data = [];
-          snapshot.forEach(doc => {
-            data.push({ id: doc.id, collectionName, ...doc.data() });
-          });
-          this.tableData = [...this.tableData, ...data];
-        });
+        const q = query(
+          collection(db, collectionName),
+          orderBy("timestamp", "desc")
+        );
+        onSnapshot(
+          q,
+          (snapshot) => {
+            const data = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              collectionName,
+              ...doc.data(),
+            }));
+
+            console.log(`Data from ${collectionName}:`, data); // Log data for debugging
+
+            allDocs.push(...data);
+            this.tableData = allDocs; // Update tableData
+          },
+          (error) => {
+            console.error(`Error fetching data from ${collectionName}:`, error);
+          }
+        );
       });
     },
     getStatus(downloadURL) {
-      return downloadURL ? 'Completed' : 'Waiting for Attachment';
+      return downloadURL ? "Completed" : "Waiting for Attachment";
     },
     refreshPage() {
       location.reload();
@@ -99,9 +129,9 @@ export default {
         try {
           // Update the specific document in the relevant collection
           await updateDoc(doc(db, row.collectionName, row.id), {
-            remark: remark
+            remark: remark,
           });
-          
+
           toast.success("Remark added successfully", {
             position: "bottom-right",
             autoClose: 2000,
@@ -114,7 +144,6 @@ export default {
           console.error("Error adding remark:", error);
           toast.error("Error adding remark", {
             position: "bottom-right",
-
           });
         }
       }
@@ -131,37 +160,37 @@ export default {
         try {
           const storageRef = ref(storage, `Budget_tab/${row.id}.pdf`);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
-          const downloadURL = await
+          const downloadURL = await getDownloadURL(storageRef); // Retrieve the download URL
+
           await updateDoc(doc(db, "Budget_tab", row.id), {
-        nextStepPdf: downloadURL,
-        timestamp: new Date(),
-      });
+            nextStepPdf: downloadURL,
+            timestamp: new Date(),
+          });
 
-      toast.update(loadingToastId, {
-        position: "bottom-right",
-        render: "PDF uploaded successfully",
-        type: toast.TYPE.SUCCESS,
-        isLoading: false,
-      });
+          toast.update(loadingToastId, {
+            position: "bottom-right",
+            render: "PDF uploaded successfully",
+            type: toast.TYPE.SUCCESS,
+            isLoading: false,
+          });
 
-      setTimeout(() => {
-        this.refreshPage();
-      }, 2000); // Delay refresh to allow toast to be displayed
+          setTimeout(() => {
+            this.refreshPage();
+          }, 2000);
+        } catch (error) {
+          console.error("Error uploading PDF:", error);
 
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
-
-      toast.update(loadingToastId, {
-        position: "bottom-right",
-        render: "Error uploading PDF",
-        type: toast.TYPE.ERROR,
-        autoClose: 2000,
-        isLoading: false,
-      });
-    }
-  }
-},
-},
+          toast.update(loadingToastId, {
+            position: "bottom-right",
+            render: "Error uploading PDF",
+            type: toast.TYPE.ERROR,
+            autoClose: 2000,
+            isLoading: false,
+          });
+        }
+      }
+    },
+  },
 };
 </script>
 
