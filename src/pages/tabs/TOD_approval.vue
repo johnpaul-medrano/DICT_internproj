@@ -1,72 +1,73 @@
 <template>
-  <div>
-    <div class="table-container">
-      <table class="doc-table">
-        <thead>
-          <tr>
-            <th>PR Number</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th>Remarks</th>
-            <th>Next Step</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, index) in paginatedTableData" :key="index">
-            <td>{{ row.prnum }}</td>
-            <td>{{ row.description }}</td>
-            <td>{{ getStatus(row.downloadURL) }}</td>
-            <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td>Attendance Submitted</td>
-            <td>
-              <div class="file-input-container">
-                <input
-                  type="file"
-                  :ref="'fileInput' + index"
-                  @change="(event) => handleFileChange(event, index)"
-                  :disabled="fileInputDisabled[index]"
-                />
-                <button
-                  v-if="!fileInputDisabled[index] && !chosenFiles[index]"
-                  @click="() => openFileInput(index)"
-                >
-                  Choose File
-                </button>
-                <button
-                  v-if="chosenFiles[index] && !fileInputDisabled[index]"
-                  class="confirm-upload-button"
-                  @click="() => confirmUpload(row, index)"
-                >
-                  Confirm Upload
-                </button>
-                <button
-                  v-if="chosenFiles[index] && !fileInputDisabled[index]"
-                  class="clear-file-button"
-                  @click="() => clearFile(index)"
-                >
-                  Clear File
-                </button>
-                <span v-if="uploadComplete[index]" class="checkmark">✔️</span>
-                <span v-if="chosenFiles[index]" class="chosen-file-name">{{
-                  chosenFiles[index].name
-                }}</span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div>
+      <div class="table-container">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>PR Number</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th>Remarks</th>
+              <th>Next Step</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in paginatedTableData" :key="index">
+              <td>{{ row.prnum }}</td>
+              <td>{{ row.description }}</td>
+              <td>{{ getStatus(row.downloadURL) }}</td>
+              <td><a :href="row.PDF" target="_blank">View PDF</a></td>
+              <td>Purcahse Request Received</td>
+              <td>
+                <div class="file-input-container">
+                  <input
+                    type="file"
+                    :ref="'fileInput' + index"
+                    @change="(event) => handleFileChange(event, index)"
+                    :disabled="fileInputDisabled[index]"
+                  />
+                  <button
+                    v-if="!fileInputDisabled[index] && !chosenFiles[index]"
+                    @click="() => openFileInput(index)"
+                  >
+                    Choose File
+                  </button>
+                  <button
+                    v-if="chosenFiles[index] && !fileInputDisabled[index]"
+                    class="confirm-upload-button"
+                    @click="() => confirmUpload(row, index)"
+                  >
+                    Confirm Upload
+                  </button>
+                  <button
+                    v-if="chosenFiles[index] && !fileInputDisabled[index]"
+                    class="clear-file-button"
+                    @click="() => clearFile(index)"
+                  >
+                    Clear File
+                  </button>
+                  <span v-if="uploadComplete[index]" class="checkmark">✔️</span>
+                  <span v-if="chosenFiles[index]" class="chosen-file-name">{{
+                    chosenFiles[index].name
+                  }}</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-container">
+        <label for="pageSelect">Choose Page: </label>
+        <select id="pageSelect" v-model="currentPage" @change="updatePage">
+          <option v-for="page in totalPages" :key="page" :value="page">
+            {{ page }}
+          </option>
+        </select>
+      </div>
     </div>
-    <div class="pagination-container">
-      <label for="pageSelect">Choose Page: </label>
-      <select id="pageSelect" v-model="currentPage" @change="updatePage">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
-    </div>
-  </div>
-</template>
+  </template>
+  
 
 <script>
 import {
@@ -171,8 +172,8 @@ export default {
           await addDoc(collection(db, "TOD_tab"), {
             prnum: row.prnum,
             description: row.description,
-            status: "Budget Division Monitoring",
             PDF: downloadURL,
+            remarks: "Sent to Budget Division",
             timestamp: new Date(), // Optional timestamp
           });
 
