@@ -14,7 +14,7 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: () => import("../pages/admin.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: "/projects",
@@ -98,8 +98,17 @@ const router = createRouter({
 // Router config for RouteGuard in Login to disable change of URL for unauthorized access
 router.beforeEach(async (to) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+
   if (requiresAuth && !(await getCurrentUser())) {
     return "/";
+  }
+
+  if (requiresAdmin) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "Admin") {
+      return "/projects";
+    }
   }
 });
 
