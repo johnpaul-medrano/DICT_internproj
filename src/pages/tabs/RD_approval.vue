@@ -19,7 +19,7 @@
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td>TOD request Received</td>
+            <td>Budget division request Received</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
             <!-- Display Upload Time -->
             <td>
