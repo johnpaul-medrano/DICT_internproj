@@ -21,10 +21,11 @@
               <select v-model="row.remark" @change="addRemark($event, row)">
                 <option value="">Select Remark</option>
                 <option>Form Generated</option>
-                <option>Received by TOD</option>
+                <option>Received by TOD</option>  
                 <option>Received by Budget Division</option>
                 <option>Received by RD</option>
                 <option>Received by SO</option>
+                <option>ERROR DOCS</option>
               </select>
             </td>
           </tr>
@@ -34,23 +35,15 @@
     <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="refreshPage">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
+        <option v-for="page in totalPages" :key="page" :value="page">{{ page }}</option>
       </select>
     </div>
   </div>
 </template>
 
+
 <script>
-import {
-  onSnapshot,
-  collection,
-  query,
-  orderBy,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebaseConfig";
 import { toast } from "vue3-toastify";
@@ -79,49 +72,35 @@ export default {
     },
   },
   async mounted() {
-    console.log("Component mounted, fetching data...");
     this.fetchInitialTableData();
   },
   methods: {
     fetchInitialTableData() {
-      const collections = [
-        "purchase_requests",
-        "TOD_tab",
-        "Budget_tab",
-        "RD_tab",
-      ];
-      const allDocs = [];
-
+      const collections = ["purchase_requests", "TOD_tab", "Budget_tab", "RD_tab"];
       collections.forEach((collectionName) => {
-        const q = query(
-          collection(db, collectionName),
-          orderBy("timestamp", "desc")
-        );
-        onSnapshot(
-          q,
-          (snapshot) => {
-            const data = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              collectionName,
-              ...doc.data(),
-            }));
-
-            console.log(`Data from ${collectionName}:`, data); // Log data for debugging
-
-            allDocs.push(...data);
-            this.tableData = allDocs; // Update tableData
-          },
-          (error) => {
-            console.error(`Error fetching data from ${collectionName}:`, error);
-          }
-        );
+        const q = query(collection(db, collectionName), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+          const data = [];
+          snapshot.forEach(doc => {
+            data.push({ id: doc.id, collectionName, ...doc.data() });
+          });
+          this.tableData = this.removeDuplicates([...this.tableData, ...data]);
+        });
+      });
+    },
+    removeDuplicates(array) {
+      const seen = new Set();
+      return array.filter(item => {
+        const duplicate = seen.has(item.id);
+        seen.add(item.id);
+        return !duplicate;
       });
     },
     getStatus(downloadURL) {
-      return downloadURL ? "Completed" : "Waiting for Attachment";
+      return downloadURL ? 'Completed' : 'Waiting for Attachment';
     },
-    refreshPage() {
-      location.reload();
+    updatePage() {
+      this.currentPage = parseInt(this.currentPage);
     },
     async addRemark(event, row) {
       const remark = event.target.value;
@@ -129,21 +108,27 @@ export default {
         try {
           // Update the specific document in the relevant collection
           await updateDoc(doc(db, row.collectionName, row.id), {
-            remark: remark,
+            remark
           });
-
+          
           toast.success("Remark added successfully", {
             position: "bottom-right",
             autoClose: 2000,
           });
 
-          setTimeout(() => {
-            this.refreshPage();
-          }, 2000); // Delay refresh to allow toast to be displayed
+          // Update the local data without causing duplicates
+          this.tableData = this.tableData.map(item => {
+            if (item.id === row.id) {
+              return { ...item, remark };
+            }
+            return item;
+          });
+
         } catch (error) {
           console.error("Error adding remark:", error);
           toast.error("Error adding remark", {
             position: "bottom-right",
+            autoClose: 2000,
           });
         }
       }
@@ -160,7 +145,7 @@ export default {
         try {
           const storageRef = ref(storage, `Budget_tab/${row.id}.pdf`);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
-          const downloadURL = await getDownloadURL(storageRef); // Retrieve the download URL
+          const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
           await updateDoc(doc(db, "Budget_tab", row.id), {
             nextStepPdf: downloadURL,
@@ -174,9 +159,14 @@ export default {
             isLoading: false,
           });
 
-          setTimeout(() => {
-            this.refreshPage();
-          }, 2000);
+          // Update the local data without causing duplicates
+          this.tableData = this.tableData.map(item => {
+            if (item.id === row.id) {
+              return { ...item, nextStepPdf: downloadURL };
+            }
+            return item;
+          });
+
         } catch (error) {
           console.error("Error uploading PDF:", error);
 
