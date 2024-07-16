@@ -48,6 +48,11 @@ img {
   gap: 10px;
 }
 
+#signout:hover {
+  cursor: pointer;
+  background-color: #103050;
+}
+
 #invidiv {
   width: 120px;
 }
