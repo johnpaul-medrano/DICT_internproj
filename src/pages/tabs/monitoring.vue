@@ -16,11 +16,10 @@
           <tr v-for="(row, index) in paginatedTableData" :key="index">
             <td>{{ row.prnum }}</td>
             <td>{{ row.description }}</td>
-            <td>{{ getStatus(row.downloadURL) }}</td>
-            <td><a :href="row.downloadURL" target="_blank">View PDF</a></td>
+            <td>{{ getStatus(row.PDF) }}</td>
+            <td><a :href="row.PDF" target="_blank">View PDF</a></td>
             <td>Attendance Submitted</td>
-            <td>
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -68,13 +67,16 @@ export default {
   },
   methods: {
     fetchInitialTableData() {
-      const q = query(collection(db, "purchase_requests"), orderBy("timestamp", "desc"));
-      onSnapshot(q, (snapshot) => {
-        const data = [];
-        snapshot.forEach(doc => {
-          data.push({ id: doc.id, ...doc.data() });
+      const collections = ["purchase_requests", "TOD_tab", "Budget_tab"];
+      collections.forEach((collectionName) => {
+        const q = query(collection(db, collectionName), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+          const data = [];
+          snapshot.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() });
+          });
+          this.tableData = [...this.tableData, ...data];
         });
-        this.tableData = data;
       });
     },
     getStatus(downloadURL) {
@@ -97,18 +99,16 @@ export default {
         });
 
         try {
-          // Upload PDF file to Firebase Storage
           const storageRef = ref(storage, `Budget_tab/${row.id}.pdf`);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
-          // Add document to 'Budget_tab' collection in Firestore
           await addDoc(collection(db, "Budget_tab"), {
             prnum: row.prnum,
             description: row.description,
             status: "Budget Division Monitoring",
             nextStepPdf: downloadURL,
-            timestamp: new Date(), // Optional timestamp
+            timestamp: new Date(),
           });
 
           toast.update(loadingToastId, {
@@ -119,7 +119,6 @@ export default {
             isLoading: false,
           });
 
-          // Optionally update local tableData or fetch updated data from Firestore
         } catch (error) {
           console.error("Error uploading PDF:", error);
 

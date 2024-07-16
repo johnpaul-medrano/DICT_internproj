@@ -17,11 +17,11 @@
               <td>{{ row.prnum }}</td>
               <td>{{ row.description }}</td>
               <td>{{ getStatus(row.downloadURL) }}</td>
-              <td><a :href="row.downloadURL" target="_blank">View PDF</a></td>
+              <td><a :href="row.PDF" target="_blank">View PDF</a></td>
               <td>Attendance Submitted</td>
               <td>
                 <button @click="openFileInput(row)">Upload Next Step PDF</button>
-                <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: flex;" />
+                <input type="file" ref="fileInput" @change="PDF($event, row)" style="display: flex;" />
               </td>
             </tr>
           </tbody>
@@ -89,7 +89,7 @@
         this.currentRowData = row;
         this.$refs.fileInput.click();
       },
-      async uploadNextStepPdf(event, row) {
+      async PDF(event, row) {
         const file = event.target.files[0];
         if (file) {
           const loadingToastId = toast.loading("Uploading PDF...", {
@@ -109,7 +109,7 @@
               prnum: row.prnum,
               description: row.description,
               status: "Budget Division Monitoring",
-              nextStepPdf: downloadURL,
+              PDF: downloadURL,
               timestamp: new Date(), // Optional timestamp
             });
   
