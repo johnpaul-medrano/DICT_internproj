@@ -53,7 +53,6 @@
           <input type="number" v-model="item.price3" required>
         </label>
       </div>
-      <button type="button" @click="addItem">Add Item</button>
       <button type="submit">Generate PDF</button>
     </form>
   </div>
@@ -69,39 +68,30 @@ export default {
       form: {
         items: [
           {
-            particulars: 'title',
-            controlNo: '011',
+            particulars: '',
+            controlNo: '',
             itemNo: 1,
             qty: 1,
             unit: 'piece',
-            articleService: 'van rental',
-            supplier1: 'bdo',
-            supplier2: 'dswd',
-            supplier3: 'bpi',
-            price1: 2500,
-            price2: 1500,
-            price3: 1200,
+            articleService: '',
+            supplier1: '',
+            supplier2: '',
+            supplier3: '',
+            price1: 0,
+            price2: 0,
+            price3: 0,
           },
         ],
       },
     };
   },
   methods: {
-    addItem() {
-      this.form.items.push({
-        particulars: '',
-        controlNo: '',
-        itemNo: this.form.items.length + 1,
-        qty: 1,
-        unit: '',
-        articleService: '',
-        supplier1: '',
-        supplier2: '',
-        supplier3: '',
-        price1: 0,
-        price2: 0,
-        price3: 0,
-      });
+    
+    getLowestPriceSupplier(item) {
+      const prices = [item.price1, item.price2, item.price3];
+      const suppliers = [item.supplier1, item.supplier2, item.supplier3];
+      const minPriceIndex = prices.indexOf(Math.min(...prices));
+      return suppliers[minPriceIndex];
     },
     async generatePdf() {
       try {
@@ -131,6 +121,8 @@ export default {
             console.warn(`yOffset=${yOffset} is out of bounds, skipping item ${index + 1}`);
             return;
           }
+
+          // Draw the form data
           firstPage.drawText(item.particulars, { x: 510, y: 510, size: 20, color: rgb(0, 0, 0) });
           firstPage.drawText(item.controlNo, { x: 80, y: 502, size: 10, color: rgb(0, 0, 0) });
           firstPage.drawText(String(item.itemNo), { x: 30, y: 435, size: 10, color: rgb(0, 0, 0) });
@@ -146,6 +138,10 @@ export default {
           firstPage.drawText(String(item.price1), { x: 610, y: 335, size: 10, color: rgb(0, 0, 0) });
           firstPage.drawText(String(item.price2), { x: 750, y: 335, size: 10, color: rgb(0, 0, 0) });
           firstPage.drawText(String(item.price3), { x: 900, y: 335, size: 10, color: rgb(0, 0, 0) });
+
+          // Draw the lowest price supplier
+          const lowestPriceSupplier = this.getLowestPriceSupplier(item);
+          firstPage.drawText(` ${lowestPriceSupplier}`, { x: 50, y: 297, size: 12, color: rgb(0, 0, 0) });
 
           yOffset -= yOffsetStep; // Move to the next row
           console.log(`Item ${index + 1} drawn at y=${yOffset}`);
