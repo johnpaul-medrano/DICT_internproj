@@ -1,72 +1,76 @@
 <template>
-  <div>
-    <div class="table-container">
-      <table class="doc-table">
-        <thead>
-          <tr>
-            <th>PR Number</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th>Remarks</th>
-            <th>Next Step</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, index) in paginatedTableData" :key="index">
-            <td>{{ row.prnum }}</td>
-            <td>{{ row.description }}</td>
-            <td>{{ getStatus(row.downloadURL) }}</td>
-            <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td>Attendance Submitted</td>
-            <td>
-              <div class="file-input-container">
-                <input
-                  type="file"
-                  :ref="'fileInput' + index"
-                  @change="(event) => handleFileChange(event, index)"
-                  :disabled="fileInputDisabled[index]"
-                />
-                <button
-                  v-if="!fileInputDisabled[index] && !chosenFiles[index]"
-                  @click="() => openFileInput(index)"
-                >
-                  Choose File
-                </button>
-                <button
-                  v-if="chosenFiles[index] && !fileInputDisabled[index]"
-                  class="confirm-upload-button"
-                  @click="() => confirmUpload(row, index)"
-                >
-                  Confirm Upload
-                </button>
-                <button
-                  v-if="chosenFiles[index] && !fileInputDisabled[index]"
-                  class="clear-file-button"
-                  @click="() => clearFile(index)"
-                >
-                  Clear File
-                </button>
-                <span v-if="uploadComplete[index]" class="checkmark">✔️</span>
-                <span v-if="chosenFiles[index]" class="chosen-file-name">{{
-                  chosenFiles[index].name
-                }}</span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div>
+      <div class="table-container">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>PR Number</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th>Remarks</th>
+              <th>Upload Time</th> 
+              <th>Next Step</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in paginatedTableData" :key="index">
+              <td>{{ row.prnum }}</td>
+              <td>{{ row.description }}</td>
+              <td>{{ getStatus(row.PDF) }}</td>
+              <td><a :href="row.PDF" target="_blank">View PDF</a></td>
+              <td>Purchase Request Received</td>
+              <td>{{ formatTimestamp(row.timestamp) }}</td> <!-- Display Upload Time -->
+              <td>
+                <div class="file-input-container">
+                  <input
+                    type="file"
+                    :ref="'fileInput' + index"
+                    @change="(event) => handleFileChange(event, index)"
+                    :disabled="fileInputDisabled[index]"
+                  />
+                  <button
+                    v-if="!fileInputDisabled[index] && !chosenFiles[index]"
+                    @click="() => openFileInput(index)"
+                  >
+                    Choose File
+                  </button>
+                  <button
+                    v-if="chosenFiles[index] && !fileInputDisabled[index]"
+                    class="confirm-upload-button"
+                    @click="() => confirmUpload(row, index)"
+                  >
+                    Confirm Upload
+                  </button>
+                  <button
+                    v-if="chosenFiles[index] && !fileInputDisabled[index]"
+                    class="clear-file-button"
+                    @click="() => clearFile(index)"
+                  >
+                    Clear File
+                  </button>
+                  <span v-if="uploadComplete[index]" class="checkmark">✔️</span>
+                  <span v-if="chosenFiles[index]" class="chosen-file-name">{{
+                    chosenFiles[index].name
+                  }}</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-container">
+        <label for="pageSelect">Choose Page: </label>
+        <select id="pageSelect" v-model="currentPage" @change="updatePage">
+          <option v-for="page in totalPages" :key="page" :value="page">
+            {{ page }}
+          </option>
+        </select>
+      </div>
     </div>
-    <div class="pagination-container">
-      <label for="pageSelect">Choose Page: </label>
-      <select id="pageSelect" v-model="currentPage" @change="updatePage">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
-    </div>
-  </div>
-</template>
+  </template>
+  
 
 <script>
 import {
@@ -87,8 +91,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 20,
       tableData: [],
-      fileInputDisabled: [], // Track disabled state of file inputs
-      uploadComplete: [], // Track upload completion for each row
+      fileInputDisabled: [], // Track disabled state of file
       chosenFiles: [], // Track chosen files for each row
     };
   },
@@ -167,13 +170,15 @@ export default {
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
+          const timestamp = new Date(); // Get the current timestamp
+
           // Add document to 'TOD_tab' collection in Firestore
           await addDoc(collection(db, "TOD_tab"), {
             prnum: row.prnum,
             description: row.description,
-            status: "Budget Division Monitoring",
             PDF: downloadURL,
-            timestamp: new Date(), // Optional timestamp
+            remarks: "Sent to Budget Division",
+            timestamp: timestamp, // Save the timestamp
           });
 
           toast.update(loadingToastId, {
@@ -202,6 +207,11 @@ export default {
           });
         }
       }
+    },
+    formatTimestamp(timestamp) {
+      if (!timestamp) return 'No Upload';
+      const date = new Date(timestamp.seconds * 1000); // Firestore timestamp is in seconds
+      return date.toLocaleString(); // Customize this format as needed
     },
   },
 };

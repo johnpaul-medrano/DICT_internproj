@@ -8,7 +8,8 @@
             <th>Description</th>
             <th>Status</th>
             <th>Action</th>
-            <th>Remarks</th>
+            <th id="remarks">Remarks</th>
+            <th>Upload Time</th> 
           </tr>
         </thead>
         <tbody>
@@ -17,45 +18,31 @@
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td id="remarks">
-              <select v-model="row.remark" @change="addRemark($event, row)">
-                <option value="">Select Remark</option>
-                <option>Form Generated</option>
-                <option>Received by TOD</option>  
-                <option>Received by Budget Division</option>
-                <option>Received by RD</option>
-                <option>Received by SO</option>
-                <option>ERROR DOCS</option>
-              </select>
-            </td>
+            <td>{{ row.remarks || 'No Remark' }}</td>
+            <td>{{ formatTimestamp(row.timestamp) }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
-      <select id="pageSelect" v-model="currentPage" @change="refreshPage">
+      <select id="pageSelect" v-model="currentPage" @change="updatePage">
         <option v-for="page in totalPages" :key="page" :value="page">{{ page }}</option>
       </select>
     </div>
   </div>
 </template>
 
-
 <script>
-import { onSnapshot, collection, query, orderBy, updateDoc, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "@/firebaseConfig";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
 
 export default {
   data() {
     return {
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 15,
       tableData: [],
-      currentRowData: null,
     };
   },
   computed: {
@@ -102,86 +89,87 @@ export default {
     updatePage() {
       this.currentPage = parseInt(this.currentPage);
     },
-    async addRemark(event, row) {
-      const remark = event.target.value;
-      if (remark) {
-        try {
-          // Update the specific document in the relevant collection
-          await updateDoc(doc(db, row.collectionName, row.id), {
-            remark
-          });
-          
-          toast.success("Remark added successfully", {
-            position: "bottom-right",
-            autoClose: 2000,
-          });
-
-          // Update the local data without causing duplicates
-          this.tableData = this.tableData.map(item => {
-            if (item.id === row.id) {
-              return { ...item, remark };
-            }
-            return item;
-          });
-
-        } catch (error) {
-          console.error("Error adding remark:", error);
-          toast.error("Error adding remark", {
-            position: "bottom-right",
-            autoClose: 2000,
-          });
-        }
-      }
-    },
-    async uploadNextStepPdf(event, row) {
-      const file = event.target.files[0];
-      if (file) {
-        const loadingToastId = toast.loading("Uploading PDF...", {
-          position: "bottom-right",
-          transition: "flip",
-          hideProgressBar: true,
-        });
-
-        try {
-          const storageRef = ref(storage, `Budget_tab/${row.id}.pdf`);
-          const uploadTaskSnapshot = await uploadBytes(storageRef, file);
-          const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
-
-          await updateDoc(doc(db, "Budget_tab", row.id), {
-            nextStepPdf: downloadURL,
-            timestamp: new Date(),
-          });
-
-          toast.update(loadingToastId, {
-            position: "bottom-right",
-            render: "PDF uploaded successfully",
-            type: toast.TYPE.SUCCESS,
-            isLoading: false,
-          });
-
-          // Update the local data without causing duplicates
-          this.tableData = this.tableData.map(item => {
-            if (item.id === row.id) {
-              return { ...item, nextStepPdf: downloadURL };
-            }
-            return item;
-          });
-
-        } catch (error) {
-          console.error("Error uploading PDF:", error);
-
-          toast.update(loadingToastId, {
-            position: "bottom-right",
-            render: "Error uploading PDF",
-            type: toast.TYPE.ERROR,
-            autoClose: 2000,
-            isLoading: false,
-          });
-        }
-      }
+    formatTimestamp(timestamp) {
+      if (!timestamp) return 'No Upload';
+      const date = timestamp.toDate(); // Convert Firestore timestamp to JS Date
+      return date.toLocaleString(); // Customize this format as needed
     },
   },
 };
 </script>
 
-<style src="./monitoring.css"></style>
+<style >
+* {
+  font-family: "Poppins", "sans-serif";
+}
+
+
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+}
+
+table {
+  padding: 50px;
+}
+
+.doc-table {
+  border-collapse: collapse;
+  width: 90%;
+}
+
+.doc-table th,
+.doc-table td {
+  border: 1px solid #cccccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.doc-table th {
+  background-color: #003366;
+  color: white;
+  font-weight: 400;
+}
+
+.doc-table td {
+  padding-left: 20px;
+  background-color: #dedede;
+}
+
+.doc-table input,
+.doc-table select,
+.doc-table textarea {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 0.5px solid rgb(186, 185, 185);
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination-container label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.pagination-container select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+}
+
+#remarks {
+  width: 20%;
+}
+
+
+</style>
