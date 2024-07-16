@@ -12,8 +12,8 @@
           <div>
             <input
               type="password"
-              id="password" 
-              v-model="password" 
+              id="password"
+              v-model="password"
               placeholder="Password"
             />
           </div>
@@ -74,23 +74,25 @@ export default {
           this.password
         );
         console.log("Logged in user:", userCredential.user);
-        this.errorMessage = ""; 
+        this.errorMessage = "";
 
-        // Fetch user role from Firestore
+        // Fetch user role and username from Firestore
         const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          const userRole = userData.role; 
+          const userRole = userData.role;
+          const username = userData.username;
 
           toast.update(loaderToastId, {
-            render: "Login successful",
+            render: `Welcome ${userRole}: ${username}`,
             type: toast.TYPE.SUCCESS,
             autoClose: 2000,
             isLoading: false,
           });
 
-          // Save role to local storage or state
+          // Save role and username to local storage or state
           localStorage.setItem("userRole", userRole);
+          localStorage.setItem("username", username);
 
           // Redirect based on role
           this.redirectUser(userRole);
@@ -103,7 +105,7 @@ export default {
           });
         }
       } catch (error) {
-        console.error("Error logging in:", error); // Log the error to the console
+        console.error("Error logging in:", error);
         toast.update(loaderToastId, {
           render: "Account does not exist",
           type: toast.TYPE.ERROR,
