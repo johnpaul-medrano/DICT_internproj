@@ -294,7 +294,7 @@ export default {
           prnum: this.form.prnum,
           subaro: this.form.subaro,
           description: this.form.items.map((item) => item.itemdesc).join(", "),
-          status: "Completed",
+          status: "Generated",
           PDF:downloadURL,
           timestamp: serverTimestamp(),
         });
