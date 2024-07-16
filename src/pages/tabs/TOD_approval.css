@@ -79,12 +79,45 @@ table {
   cursor: not-allowed;
 }
 
-.doc-table .confirm-upload-button {
-  background-color: #28a745;
+.chosen-file-name {
+  margin-right: 15px;
 }
 
-.doc-table .confirm-upload-button:disabled {
-  background-color: #6c757d;
+.doc-table .confirm-upload-button {
+  background-color: green;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-table .clear-file-button {
+  background-color: red;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-upload-button img {
+  width: 15px;
+}
+.confirm-upload-button:hover {
+  background-color: rgb(2, 107, 2);
+}
+
+.clear-file-button img {
+  width: 11px;
+}
+
+.clear-file-button:hover {
+  background-color: rgb(152, 4, 4);
 }
 
 .doc-table .checkmark {
@@ -102,6 +135,10 @@ table {
 
 .doc-table .file-input-container button {
   margin-right: 10px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .doc-table .file-input-container input[type="file"] {
