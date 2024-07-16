@@ -37,6 +37,8 @@
 import { auth, db } from "@/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
@@ -49,9 +51,43 @@ export default {
     };
   },
   methods: {
+    validatePassword(password) {
+      const errors = [];
+
+      if (!/[A-Z]/.test(password)) {
+        errors.push("• At least one uppercase letter");
+      }
+      if (!/\d/.test(password)) {
+        errors.push("• At least one number");
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        errors.push("• At least one special character");
+      }
+      if (password.length < 8) {
+        errors.push("• At least 8 characters long");
+      }
+
+      return errors.length > 0
+        ? `Password must contain:\n\n${errors.join("\n")}`
+        : null;
+    },
     async createUser() {
+      const passwordError = this.validatePassword(this.password);
+      if (passwordError) {
+        toast.error(passwordError, {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
+        return;
+      }
+
+      const loadingToastId = toast.loading("Creating user account...", {
+        position: "bottom-right",
+        transition: "flip",
+        hideProgressBar: true,
+      });
+
       try {
-        // Create user with email and password
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           this.email,
@@ -59,7 +95,6 @@ export default {
         );
         const user = userCredential.user;
 
-        // Store additional user data in Firestore
         await setDoc(doc(db, "users", user.uid), {
           email: this.email,
           username: this.username,
@@ -74,11 +109,26 @@ export default {
         this.role = "";
         this.error = null;
 
-        // Inform user of successful account creation
-        alert("User created successfully!");
+        // Update the toast message to success
+        toast.update(loadingToastId, {
+          position: "bottom-right",
+          render: "User created successfully!",
+          type: toast.TYPE.SUCCESS,
+          autoClose: 2000,
+          isLoading: false,
+        });
       } catch (error) {
         // Handle errors
         this.error = error.message;
+
+        // Update the toast message to error
+        toast.update(loadingToastId, {
+          position: "bottom-right",
+          render: `Error creating user: ${error.message}`,
+          type: toast.TYPE.ERROR,
+          autoClose: 2000,
+          isLoading: false,
+        });
       }
     },
   },
