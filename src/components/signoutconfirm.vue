@@ -1,7 +1,6 @@
 <template>
   <div v-if="isVisible" class="modal">
     <div class="modal-content">
-      <span class="close" @click="closeModal">&times;</span>
       <p>Are you sure you want to sign out?</p>
       <button class="confirm-button" @click="confirmSignOut">Yes</button>
       <button class="cancel-button" @click="closeModal">No</button>
@@ -50,7 +49,7 @@ export default {
   width: 400px;
   height: 160px;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 50px;
 }
 
 .close {
@@ -75,8 +74,9 @@ export default {
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 15px;
   margin: 10px;
+  width: 30%;
 }
 
 .confirm-button:hover,
@@ -96,5 +96,6 @@ p {
   color: black;
   margin-top: 40px;
   margin-bottom: 30px;
+  font-size: 18px;
 }
 </style>
