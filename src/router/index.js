@@ -91,6 +91,13 @@ const routes = [
         props: true,
         meta: { requiresAuth: true },
       },
+      {
+        path: "abstract",
+        name: "Abstarct",
+        component: () => import("../pages/tabs/abstract.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
       
     ],
     props: true,
