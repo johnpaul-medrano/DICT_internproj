@@ -99,7 +99,7 @@ export default {
         try {
           // Update the specific document in the relevant collection
           await updateDoc(doc(db, row.collectionName, row.id), {
-            remark: remark
+            remark
           });
           
           toast.success("Remark added successfully", {
