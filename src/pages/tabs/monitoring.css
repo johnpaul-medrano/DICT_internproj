@@ -62,3 +62,8 @@ table {
   border-radius: 5px;
   border: 1px solid #cccccc;
 }
+
+#remarks {
+  width: 20%;
+
+}

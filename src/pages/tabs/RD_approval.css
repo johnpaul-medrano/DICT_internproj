@@ -1,0 +1,65 @@
+* {
+    font-family: "Poppins", "sans-serif";
+  }
+  
+  .table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  table {
+    padding: 50px;
+  }
+  
+  .doc-table {
+    border-collapse: collapse;
+    width: 90%;
+  }
+  .doc-table th,
+  .doc-table td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .doc-table th {
+    background-color: #003366;
+    color: white;
+    font-weight: 400;
+  }
+  
+  .doc-table td {
+    background-color: #dedede;
+  }
+  
+  .doc-table input,
+  .doc-table select,
+  .doc-table textarea {
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 0.5px solid rgb(186, 185, 185);
+  }
+  
+  .pagination-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pagination-container label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .pagination-container select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
+  }
+  

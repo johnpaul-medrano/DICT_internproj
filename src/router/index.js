@@ -64,6 +64,13 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "RD_approval",
+        name: "rd_Approval",
+        component: () => import("../pages/tabs/RD_approval.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
+      {
         path: "suppliers-database",
         name: "SuppliersDatabase",
         component: () => import("../pages/tabs/suppliers-database.vue"),

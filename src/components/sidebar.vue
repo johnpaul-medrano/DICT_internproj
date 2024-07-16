@@ -9,7 +9,15 @@
       />
     </div>
     <div class="bottom">
-      <ul>
+      <ul>        
+        <div class="menu">
+          <router-link v-if="canAccess('For Approval C')" :to="`/mainpage/${currentLogo}/RD_approval`" class="lol">
+            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/RD_approval') }">
+              <img :src="icon6" alt="icon" />
+              For Approval
+            </li>
+          </router-link>
+        </div>
         <div class="menu">
           <router-link v-if="canAccess('For Approval')" :to="`/mainpage/${currentLogo}/TOD_approval`" class="lol">
             <li :class="{ active: isActive('/mainpage/' + currentLogo + '/TOD_approval') }">
@@ -119,7 +127,7 @@ export default {
         "ILCDB": ["Purchase Request", "Monitoring", "Database", "Templates", "Request", ],
         "TOD Head": ["For Approval","Monitoring"],
         "Budget Division": ["For Approval B","Monitoring"],
-        "RD": ["For Approval","Monitoring"],
+        "RD": ["For Approval C","Monitoring"],
         "Supply Office": ["Monitoring"]
       };
       return roleFeatures[this.userRole].includes(feature);
