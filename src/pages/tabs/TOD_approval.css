@@ -1,65 +1,109 @@
 * {
-    font-family: "Poppins", "sans-serif";
-  }
-  
-  .table-container {
-    margin-top: 20px;
-    overflow-x: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  
-  table {
-    padding: 50px;
-  }
-  
-  .doc-table {
-    border-collapse: collapse;
-    width: 90%;
-  }
-  .doc-table th,
-  .doc-table td {
-    border: 1px solid #cccccc;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .doc-table th {
-    background-color: #003366;
-    color: white;
-    font-weight: 400;
-  }
-  
-  .doc-table td {
-    background-color: #dedede;
-  }
-  
-  .doc-table input,
-  .doc-table select,
-  .doc-table textarea {
-    width: 100%;
-    height: 50px;
-    padding: 5px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: 0.5px solid rgb(186, 185, 185);
-  }
-  
-  .pagination-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .pagination-container label {
-    margin-right: 10px;
-    font-weight: bold;
-  }
-  
-  .pagination-container select {
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #cccccc;
-  }
-  
+  font-family: "Poppins", "sans-serif";
+}
+
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+table {
+  padding: 50px;
+}
+
+.doc-table {
+  border-collapse: collapse;
+  width: 90%;
+}
+
+.doc-table th,
+.doc-table td {
+  border: 1px solid #cccccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.doc-table th {
+  background-color: #003366;
+  color: white;
+  font-weight: 400;
+}
+
+.doc-table td {
+  background-color: #dedede;
+}
+
+.doc-table input,
+.doc-table select,
+.doc-table textarea {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 0.5px solid rgb(186, 185, 185);
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination-container label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.pagination-container select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+}
+
+/* New Styles */
+.doc-table button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.doc-table button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.doc-table .confirm-upload-button {
+  background-color: #28a745;
+}
+
+.doc-table .confirm-upload-button:disabled {
+  background-color: #6c757d;
+}
+
+.doc-table .checkmark {
+  color: green;
+  font-size: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.doc-table .file-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-table .file-input-container button {
+  margin-right: 10px;
+}
+
+.doc-table .file-input-container input[type="file"] {
+  display: none;
+}
