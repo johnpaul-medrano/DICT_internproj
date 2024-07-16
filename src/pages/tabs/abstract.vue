@@ -1,60 +1,77 @@
 <template>
   <div>
-    <h1>Abstract Form</h1>
-    <form @submit.prevent="generatePdf">
-      <div v-for="(item, index) in form.items" :key="index">
-        <h3>Item {{ index + 1 }}</h3>
-        <label>
-          Particulars:
-          <input v-model="item.particulars" required>
-        </label>
-        <label>
-          Control No.:
-          <input v-model="item.controlNo" required>
-        </label>
-        <label>
-          Item No.:
-          <input type="number" v-model="item.itemNo" required>
-        </label>
-        <label>
-          Quantity:
-          <input type="number" v-model="item.qty" required>
-        </label>
-        <label>
-          Unit:
-          <input v-model="item.unit" required>
-        </label>
-        <label>
-          Article/Service:
-          <input v-model="item.articleService" required>
-        </label>
-        <label>
-          Supplier 1:
-          <input v-model="item.supplier1" required>
-        </label>
-        <label>
-          Supplier 2:
-          <input v-model="item.supplier2" required>
-        </label>
-        <label>
-          Supplier 3:
-          <input v-model="item.supplier3" required>
-        </label>
-        <label>
-          Price 1:
-          <input type="number" v-model="item.price1" required>
-        </label>
-        <label>
-          Price 2:
-          <input type="number" v-model="item.price2" required>
-        </label>
-        <label>
-          Price 3:
-          <input type="number" v-model="item.price3" required>
-        </label>
+    <div class="abstract-main-content">
+      <div class="abstract-form-container">
+        <form @submit.prevent="generatePdf">
+          <h2>Purchase Request Form</h2>
+          <div class="abstract-grid-container">
+            <div v-for="(item, index) in form.items" :key="index" class="abstract-grid-item">
+              <div class="first-row">
+                <label>
+                  Particulars:
+                  <input v-model="item.particulars" required>
+                </label>
+                <label>
+                  Control No.:
+                  <input v-model="item.controlNo" required>
+                </label>
+              </div>
+              <div class="third-row">
+                <label>
+                  Item No.:
+                  <input type="number" v-model="item.itemNo" required>
+                </label>
+                <label>
+                  Quantity:
+                  <input type="number" v-model="item.qty" required>
+                </label>
+              </div>
+              <label>
+                Unit:
+                <input v-model="item.unit" required>
+              </label>
+              <label>
+                Article/Service:
+                <input v-model="item.articleService" required>
+              </label>
+              <label>
+                Supplier 1:
+                <input v-model="item.supplier1" required>                
+                <label>
+                  Price 1:
+                  <input type="number" v-model="item.price1" required>
+                </label>
+              </label>
+              <label>
+                Supplier 2:
+                <input v-model="item.supplier2" required>        
+                 <label>
+                  Price 2:
+                  <input type="number" v-model="item.price2" required>
+                </label>
+              </label>
+              <label>
+                Supplier 3:
+                <input v-model="item.supplier3" required>
+                <label>
+                  Price 3:
+                  <input type="number" v-model="item.price3" required>
+                </label>
+              </label>
+              <div class="abstract-total-unit-cost">
+                <label>Lowest Price Supplier:</label>
+                <span>{{ getLowestPriceSupplier(item) }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="abstract-total-amount">
+            <label>Total Amount:</label>
+            <span>{{ totalAmount }}</span>
+          </div>
+          <button id="generate" type="submit">Generate PDF</button>
+        </form>
       </div>
-      <button type="submit">Generate PDF</button>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -166,20 +183,4 @@ export default {
 };
 </script>
 
-<style scoped>
-form {
-  display: grid;
-  gap: 1em;
-}
-label {
-  display: block;
-  margin-bottom: 0.5em;
-}
-input {
-  width: 100%;
-  padding: 0.5em;
-}
-button {
-  padding: 0.5em 1em;
-}
-</style>
+<style scoped src="./abstract.css"></style>

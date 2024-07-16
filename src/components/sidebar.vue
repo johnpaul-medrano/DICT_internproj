@@ -9,7 +9,15 @@
       />
     </div>
     <div class="bottom">
-      <ul>        
+      <ul>                
+        <div class="menu">
+          <router-link v-if="canAccess('Abstract')" :to="`/mainpage/${currentLogo}/abstract`" class="lol">
+            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/abstract') }">
+              <img :src="icon6" alt="icon" />
+              Abstract
+            </li>
+          </router-link>
+        </div>
         <div class="menu">
           <router-link v-if="canAccess('For Approval C')" :to="`/mainpage/${currentLogo}/RD_approval`" class="lol">
             <li :class="{ active: isActive('/mainpage/' + currentLogo + '/RD_approval') }">
@@ -128,7 +136,7 @@ export default {
         "TOD Head": ["For Approval","Monitoring"],
         "Budget Division": ["For Approval B","Monitoring"],
         "RD": ["For Approval C","Monitoring"],
-        "Supply Office": ["Monitoring"]
+        "Supply Office": ["Monitoring", "Abstract"]
       };
       return roleFeatures[this.userRole].includes(feature);
     },
