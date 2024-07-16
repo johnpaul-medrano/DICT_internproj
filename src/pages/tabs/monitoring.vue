@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      itemsPerPage: 20,
+      itemsPerPage: 10,
       tableData: [],
       currentRowData: null,
     };
