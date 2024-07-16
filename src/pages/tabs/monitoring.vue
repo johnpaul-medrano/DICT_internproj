@@ -9,6 +9,7 @@
             <th>Status</th>
             <th>Action</th>
             <th id="remarks">Remarks</th>
+            <th>Upload Time</th> 
           </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
             <td>{{ getStatus(row.PDF) }}</td>
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
             <td>{{ row.remarks || 'No Remark' }}</td>
+            <td>{{ formatTimestamp(row.timestamp) }}</td>
           </tr>
         </tbody>
       </table>
@@ -31,7 +33,6 @@
   </div>
 </template>
 
-
 <script>
 import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
@@ -40,7 +41,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 15,
       tableData: [],
     };
   },
@@ -88,6 +89,11 @@ export default {
     updatePage() {
       this.currentPage = parseInt(this.currentPage);
     },
+    formatTimestamp(timestamp) {
+      if (!timestamp) return 'No Upload';
+      const date = timestamp.toDate(); // Convert Firestore timestamp to JS Date
+      return date.toLocaleString(); // Customize this format as needed
+    },
   },
 };
 </script>
@@ -96,7 +102,6 @@ export default {
 * {
   font-family: "Poppins", "sans-serif";
 }
-
 
 
 .table-container {
@@ -121,7 +126,7 @@ table {
 .doc-table td {
   border: 1px solid #cccccc;
   padding: 10px;
-  align-items: left;
+  text-align: center;
 }
 
 .doc-table th {

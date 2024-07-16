@@ -9,16 +9,19 @@
               <th>Status</th>
               <th>Action</th>
               <th>Remarks</th>
+              <th>Upload Time</th> 
               <th>Next Step</th>
+              
             </tr>
           </thead>
           <tbody>
             <tr v-for="(row, index) in paginatedTableData" :key="index">
               <td>{{ row.prnum }}</td>
               <td>{{ row.description }}</td>
-              <td>{{ getStatus(row.downloadURL) }}</td>
+              <td>{{ getStatus(row.PDF) }}</td>
               <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-              <td>Purcahse Request Received</td>
+              <td>Purchase Request Received</td>
+              <td>{{ formatTimestamp(row.timestamp) }}</td> <!-- Display Upload Time -->
               <td>
                 <div class="file-input-container">
                   <input
@@ -88,8 +91,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 20,
       tableData: [],
-      fileInputDisabled: [], // Track disabled state of file inputs
-      uploadComplete: [], // Track upload completion for each row
+      fileInputDisabled: [], // Track disabled state of file
       chosenFiles: [], // Track chosen files for each row
     };
   },
@@ -168,13 +170,15 @@ export default {
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
+          const timestamp = new Date(); // Get the current timestamp
+
           // Add document to 'TOD_tab' collection in Firestore
           await addDoc(collection(db, "TOD_tab"), {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
             remarks: "Sent to Budget Division",
-            timestamp: new Date(), // Optional timestamp
+            timestamp: timestamp, // Save the timestamp
           });
 
           toast.update(loadingToastId, {
@@ -203,6 +207,11 @@ export default {
           });
         }
       }
+    },
+    formatTimestamp(timestamp) {
+      if (!timestamp) return 'No Upload';
+      const date = new Date(timestamp.seconds * 1000); // Firestore timestamp is in seconds
+      return date.toLocaleString(); // Customize this format as needed
     },
   },
 };
