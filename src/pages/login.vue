@@ -131,6 +131,9 @@ export default {
         case "Supply Office":
           this.$router.push({ path: "/projects" });
           break;
+        case "Admin":
+          this.$router.push({ path: "/admin"});
+          break;
         default:
           this.$router.push({ path: "/" });
       }

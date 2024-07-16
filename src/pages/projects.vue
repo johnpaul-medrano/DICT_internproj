@@ -1,4 +1,3 @@
-<!-- src/views/Projects.vue -->
 <template>
   <div class="main">
     <div id="box">
@@ -14,10 +13,15 @@
           <img :src="tech4ed" alt="Tech4Ed" />
         </RouterLink>
       </div>
-      <button id="button-signout" @click="signOut">
+      <button id="button-signout" @click="showModal = true">
         <Icon icon="material-symbols:logout" width="25" />SIGN OUT
       </button>
     </div>
+    <SignOutModal
+      :isVisible="showModal"
+      @close="showModal = false"
+      @confirm="signOut"
+    />
   </div>
 </template>
 
@@ -26,15 +30,17 @@ import workforce from "@/assets/workforce.png";
 import spark from "@/assets/spark.png";
 import tech4ed from "@/assets/tech4ed.png";
 import { Icon } from "@iconify/vue";
-
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { logout } from "@/firebaseConfig";
 import { useRouter } from "vue-router";
+import SignOutModal from "@/components/signoutconfirm.vue";
 
 export default {
   name: "Projects",
   components: {
     Icon,
+    SignOutModal,
   },
   data() {
     return {
@@ -45,13 +51,16 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const showModal = ref(false);
 
     async function signOut() {
       await logout();
       router.push("/");
+      showModal.value = false;
     }
 
     return {
+      showModal,
       signOut,
     };
   },

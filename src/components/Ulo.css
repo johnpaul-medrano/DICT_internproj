@@ -10,7 +10,7 @@
   height: 60px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   position: fixed;
   top: 0;
   width: 80%;
@@ -20,23 +20,39 @@
   box-shadow: 3px 3px 30px 1.5px #939393;
 }
 
-.header-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .title-logo-container {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
 .title {
-  margin: 0;
   font-size: 35px;
-  margin-right: 20px;
 }
 
-.settings-icon img {
+img {
   width: 50px;
+}
+
+#signout {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 120px;
+  color: rgb(215, 215, 225);
+  margin-right: 10px;
+  gap: 10px;
+}
+
+#signout:hover {
+  cursor: pointer;
+  background-color: #103050;
+}
+
+#invidiv {
+  width: 120px;
 }
