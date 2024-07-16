@@ -18,6 +18,14 @@
             </li>
           </router-link>
         </div>
+        <div class="menu">
+          <router-link v-if="canAccess('For Approval B')" :to="`/mainpage/${currentLogo}/budget_approval`" class="lol">
+            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/budget_approval') }">
+              <img :src="icon6" alt="icon" />
+              For Approval 
+            </li>
+          </router-link>
+        </div>
         <!-- Purchase Request, visible to ILCDB -->
         <li v-if="canAccess('Purchase Request')" @click="toggleSubMenu" :class="{ active: isActive('/mainpage/' + currentLogo + '/prform') }">
           <img :src="icon1" alt="icon" />
@@ -110,7 +118,7 @@ export default {
       const roleFeatures = {
         "ILCDB": ["Purchase Request", "Monitoring", "Database", "Templates", "Request", ],
         "TOD Head": ["For Approval","Monitoring"],
-        "Budget Division": ["For Approval","Monitoring"],
+        "Budget Division": ["For Approval B","Monitoring"],
         "RD": ["For Approval","Monitoring"],
         "Supply Office": ["Monitoring"]
       };

@@ -113,6 +113,13 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "budget_approval",
+        name: "Budget_Approval",
+        component: () => import("../pages/tabs/budget_approval.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
+      {
         path: "suppliers-database",
         name: "SuppliersDatabase",
         component: () => import("../pages/tabs/suppliers-database.vue"),
@@ -133,6 +140,7 @@ const routes = [
         props: true,
         meta: { requiresAuth: true },
       },
+      
     ],
     props: true,
   },

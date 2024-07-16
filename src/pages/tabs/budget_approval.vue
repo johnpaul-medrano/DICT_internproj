@@ -17,11 +17,11 @@
             <td>{{ row.prnum }}</td>
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.downloadURL) }}</td>
-            <td><a :href="row.downloadURL" target="_blank">View PDF</a></td>
+            <td><a :href="row.nextStepPdf" target="_blank">View PDF</a></td>
             <td>Attendance Submitted</td>
             <td>
               <button @click="openFileInput(row)">Upload Next Step PDF</button>
-              <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: flex;" />
+              <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: none;" />
             </td>
           </tr>
         </tbody>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { onSnapshot, collection, query, orderBy, addDoc } from "firebase/firestore";
+import { onSnapshot, collection, query, orderBy, updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebaseConfig";
 import { toast } from "vue3-toastify";
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     fetchInitialTableData() {
-      const q = query(collection(db, "purchase_requests"), orderBy("timestamp", "desc"));
+      const q = query(collection(db, "Budget_tab"), orderBy("timestamp", "desc"));
       onSnapshot(q, (snapshot) => {
         const data = [];
         snapshot.forEach(doc => {
@@ -99,18 +99,13 @@ export default {
         });
 
         try {
-          // Upload PDF file to Firebase Storage
-          const storageRef = ref(storage, `Budget_tab/${row.id}.pdf`);
+          const storageRef = ref(storage, `next_step_pdfs/${row.id}.pdf`);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
-          // Add document to 'Budget_tab' collection in Firestore
-          await addDoc(collection(db, "Budget_tab"), {
-            prnum: row.prnum,
-            description: row.description,
-            status: "Budget Division Monitoring",
+          await updateDoc(doc(db, "Budget_tab", row.id), {
             nextStepPdf: downloadURL,
-            timestamp: new Date(), // Optional timestamp
+            status: "Budget Approval Review",
           });
 
           toast.update(loadingToastId, {

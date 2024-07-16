@@ -46,3 +46,19 @@ table {
   border-radius: 10px;
   border: 0.5px solid rgb(186, 185, 185);
 }
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination-container label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.pagination-container select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+}
