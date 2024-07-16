@@ -11,8 +11,8 @@
     <div class="bottom">
       <ul>
         <div class="menu">
-          <router-link v-if="canAccess('For Approval')" :to="`/mainpage/${currentLogo}/monitoring`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/monitoring') }">
+          <router-link v-if="canAccess('For Approval')" :to="`/mainpage/${currentLogo}/TOD_approval`" class="lol">
+            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/TOD_approval') }">
               <img :src="icon6" alt="icon" />
               For Approval
             </li>

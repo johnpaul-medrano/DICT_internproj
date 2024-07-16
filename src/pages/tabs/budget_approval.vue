@@ -21,7 +21,7 @@
             <td>Attendance Submitted</td>
             <td>
               <button @click="openFileInput(row)">Upload Next Step PDF</button>
-              <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: none;" />
+              <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: flex;" />
             </td>
           </tr>
         </tbody>
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     fetchInitialTableData() {
-      const q = query(collection(db, "Budget_tab"), orderBy("timestamp", "desc"));
+      const q = query(collection(db, "TOD_tab"), orderBy("timestamp", "desc"));
       onSnapshot(q, (snapshot) => {
         const data = [];
         snapshot.forEach(doc => {

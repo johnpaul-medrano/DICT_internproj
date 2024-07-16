@@ -120,6 +120,13 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "TOD_approval",
+        name: "tod_Approval",
+        component: () => import("../pages/tabs/TOD_approval.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
+      {
         path: "suppliers-database",
         name: "SuppliersDatabase",
         component: () => import("../pages/tabs/suppliers-database.vue"),

@@ -20,8 +20,6 @@
             <td><a :href="row.downloadURL" target="_blank">View PDF</a></td>
             <td>Attendance Submitted</td>
             <td>
-              <button @click="openFileInput(row)">Upload Next Step PDF</button>
-              <input type="file" ref="fileInput" @change="uploadNextStepPdf($event, row)" style="display: flex;" />
             </td>
           </tr>
         </tbody>
