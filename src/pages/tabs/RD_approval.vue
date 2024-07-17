@@ -19,7 +19,7 @@
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td>Budget division request Received</td>
+            <td>Purchase Request Received</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
             <!-- Display Upload Time -->
             <td>
@@ -43,15 +43,14 @@
                   Choose File
                 </button>
 
-                <span v-if="uploadComplete[index]" class="done-text">
-                  ✔️ Done
-                </span>
+                <span v-if="uploadComplete[index]" class="done-text"
+                  >✔️ Done</span
+                >
                 <span
                   v-if="chosenFiles[index] && !row.completed"
                   class="chosen-file-name"
+                  >{{ chosenFiles[index].name }}</span
                 >
-                  {{ chosenFiles[index].name }}
-                </span>
                 <button
                   v-if="
                     chosenFiles[index] &&
@@ -120,7 +119,7 @@ export default {
       tableData: [],
       fileInputDisabled: [], // Track disabled state of file inputs
       uploadComplete: [], // Track upload completion for each row
-      chosenFiles: [], // Track chosen files for each row
+      chosenFiles: [], // Track chosen files for each row\
       check,
       cross,
     };
@@ -138,16 +137,23 @@ export default {
     totalPages() {
       return Math.ceil(this.sortedTableData.length / this.itemsPerPage);
     },
+    project() {
+      return this.$route.params.logo; // Get the selected project from the route parameter
+    },
   },
   async mounted() {
     this.fetchInitialTableData();
   },
   methods: {
     fetchInitialTableData() {
+      // Define the Firestore collection path based on the selected project
+      const collectionPath = `${this.project}/${this.project}_data/Budget_tab`;
       const q = query(
-        collection(db, "Budget_tab"),
+        collection(db, collectionPath),
         orderBy("timestamp", "desc")
       );
+
+      // Fetch the data from the Firestore collection
       onSnapshot(q, (snapshot) => {
         const data = [];
         snapshot.forEach((doc) => {
@@ -197,23 +203,27 @@ export default {
         });
 
         try {
-          // Upload PDF file to Firebase Storage
-          const storageRef = ref(storage, `RD_tab/${row.id}.pdf`);
+          // Construct paths dynamically based on the logo prop
+          const storagePath = `${this.project}/${this.project}_data/RD_tab/${row.id}.pdf`;
+          const storageRef = ref(storage, storagePath);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
           const timestamp = new Date(); // Get the current timestamp
 
-          await addDoc(collection(db, "RD_tab"), {
+          // Add document to 'TOD_tab' collection in Firestore
+          const collectionPath = `${this.project}/${this.project}_data/RD_tab`;
+          await addDoc(collection(db, collectionPath), {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
-            remarks: "Sent to Supply Office",
+            remarks: "Sent to SO",
             timestamp: timestamp,
           });
 
-          // Update 'Budget_tab' collection to mark the request as completed
-          await updateDoc(doc(db, "Budget_tab", row.id), {
+          // Update 'purchase_requests' collection to mark the request as completed
+          const purchaseRequestPath = `${this.project}/${this.project}_data/Budget_tab/${row.id}`;
+          await updateDoc(doc(db, purchaseRequestPath), {
             completed: true,
             downloadURL: downloadURL,
           });

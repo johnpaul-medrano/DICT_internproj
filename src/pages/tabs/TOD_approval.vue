@@ -137,16 +137,23 @@ export default {
     totalPages() {
       return Math.ceil(this.sortedTableData.length / this.itemsPerPage);
     },
+    project() {
+      return this.$route.params.logo; // Get the selected project from the route parameter
+    },
   },
   async mounted() {
     this.fetchInitialTableData();
   },
   methods: {
     fetchInitialTableData() {
+      // Define the Firestore collection path based on the selected project
+      const collectionPath = `${this.project}/${this.project}_data/purchase_requests`;
       const q = query(
-        collection(db, "purchase_requests"),
+        collection(db, collectionPath),
         orderBy("timestamp", "desc")
       );
+
+      // Fetch the data from the Firestore collection
       onSnapshot(q, (snapshot) => {
         const data = [];
         snapshot.forEach((doc) => {
@@ -196,15 +203,17 @@ export default {
         });
 
         try {
-          // Upload PDF file to Firebase Storage
-          const storageRef = ref(storage, `TOD_tab/${row.id}.pdf`);
+          // Construct paths dynamically based on the logo prop
+          const storagePath = `${this.project}/${this.project}_data/TOD_tab/${row.id}.pdf`;
+          const storageRef = ref(storage, storagePath);
           const uploadTaskSnapshot = await uploadBytes(storageRef, file);
           const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
           const timestamp = new Date(); // Get the current timestamp
 
           // Add document to 'TOD_tab' collection in Firestore
-          await addDoc(collection(db, "TOD_tab"), {
+          const collectionPath = `${this.project}/${this.project}_data/TOD_tab`;
+          await addDoc(collection(db, collectionPath), {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
@@ -213,7 +222,8 @@ export default {
           });
 
           // Update 'purchase_requests' collection to mark the request as completed
-          await updateDoc(doc(db, "purchase_requests", row.id), {
+          const purchaseRequestPath = `${this.project}/${this.project}_data/purchase_requests/${row.id}`;
+          await updateDoc(doc(db, purchaseRequestPath), {
             completed: true,
             downloadURL: downloadURL,
           });

@@ -149,6 +149,9 @@ export default {
         0
       );
     },
+    project() {
+      return this.$route.params.logo; // Get the selected project from the route parameter
+    },
   },
   methods: {
     addItem() {
@@ -282,7 +285,8 @@ export default {
         const pdfBytes = await this.generatePDF();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
-        // Upload PDF to Firebase Storage
+        // Define the correct Firestore collection path
+        const collectionPath = `${this.project}/${this.project}_data/purchase_requests`;
         const pdfRef = ref(storage, `purchase_requests/${this.form.prnum}.pdf`);
         const uploadTaskSnapshot = await uploadBytes(pdfRef, blob);
 
@@ -290,13 +294,13 @@ export default {
         const downloadURL = await getDownloadURL(uploadTaskSnapshot.ref);
 
         // Save the download URL to Firestore
-        addDoc(collection(db, "purchase_requests"), {
+        await addDoc(collection(db, collectionPath), {
           prnum: this.form.prnum,
           subaro: this.form.subaro,
           description: this.form.items.map((item) => item.itemdesc).join(", "),
           status: "Generated",
           remarks: "Sent To OTD HEAD",
-          PDF:downloadURL,
+          PDF: downloadURL,
           timestamp: serverTimestamp(),
         });
 
