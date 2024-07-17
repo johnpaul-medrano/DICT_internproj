@@ -27,6 +27,14 @@
           </router-link>
         </div>
         <div class="menu">
+          <router-link v-if="canAccess('PO Status')" :to="`/mainpage/${currentLogo}/postatus`" class="lol">
+            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/postatus') }">
+              <img :src="icon6" alt="icon" />
+              PO Status
+            </li>
+          </router-link>
+        </div>
+        <div class="menu">
           <router-link v-if="canAccess('For Approval C')" :to="`/mainpage/${currentLogo}/RD_approval`" class="lol">
             <li :class="{ active: isActive('/mainpage/' + currentLogo + '/RD_approval') }">
               <img :src="icon6" alt="icon" />
@@ -144,7 +152,7 @@ export default {
         "TOD Head": ["For Approval","Monitoring"],
         "Budget Division": ["For Approval B","Monitoring"],
         "RD": ["For Approval C","Monitoring"],
-        "Supply Office": ["Monitoring", "Abstract", "Purchase Order"]
+        "Supply Office": ["Monitoring", "Abstract", "Purchase Order", "PO Status"]
       };
       return roleFeatures[this.userRole].includes(feature);
     },

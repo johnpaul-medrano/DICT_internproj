@@ -105,6 +105,13 @@ const routes = [
         props: true,
         meta: { requiresAuth: true },
       },
+      {
+        path: "postatus",
+        name: "postatus",
+        component: () => import("../pages/tabs/PO_Status.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
       
     ],
     props: true,
