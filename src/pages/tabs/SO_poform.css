@@ -1,6 +1,5 @@
 * {
   font-family: "Poppins", "sans-serif";
-  color: rgb(37, 37, 90);
 }
 
 label {
@@ -37,8 +36,8 @@ label {
 .purchase-request-form {
   min-width: 850px;
   max-width: 850px;
-  margin: 20px auto;
-  padding: 15px 30px;
+  margin: 20px auto;  
+  padding: 30px 30px;
   border: 1px solid #ccc;
   border-radius: 40px;
   background-color: #e9e9e9;
@@ -66,20 +65,32 @@ input {
   font-size: 20px;
 }
 
+
+#tin,#poNo,#modeOfProcurement{
+  width: 200px;
+}
+
 .grid-container {
   display: flex;
   flex-direction: column;
 }
-
-.prnum-container {
+.prnum3-container{
   display: flex;
-  gap: 20px;
+  gap: 10px;
   margin: 20px;
   margin-bottom: 25px;
+  margin-left: 30px;
+}
+.prnum-container {
+  display: flex;
+  gap: 50px;
+  margin: 20px;
+  margin-bottom: 25px;
+  margin-left: 30px;
 }
 
 #subaro {
-  padding-left: 20px;
+  padding-left: 40px;
 }
 
 .cont {
@@ -97,7 +108,9 @@ input {
   flex-direction: column;
   position: relative;
   border: 2px solid rgb(189, 189, 190);
-  padding: 20px;
+  padding-left: 40px;
+  padding-top: 30px;
+  padding-bottom: 20px;
   border-radius: 15px;
   opacity: 1;
   animation: fade-in 1s;
@@ -110,16 +123,16 @@ input {
 
 .first-row {
   display: flex;
-  gap: 20px;
+  gap: 40px;
 }
 
 .third-row {
   display: flex;
-  gap: 20px;
+  gap: 40px;
 }
 
-.cont input {
-  width: 300px;
+#description0, #address{
+  width: 670px;
   height: 60px;
 }
 
@@ -210,6 +223,7 @@ button img {
   gap: 10px;
   border: 1px dashed rgb(47, 47, 87);
   margin-bottom: 10px;
+  width: 300px;
 }
 
 .total-amount label {
@@ -265,11 +279,10 @@ button img {
       max-width: 700px;
   }
   
-  .prnum-container,
   .first-row,
   .third-row {
-      flex-direction: column;
-      gap: 10px;
+    flex-direction: column;
+      gap: 30px;
   }
   
   .cont input,
@@ -284,16 +297,11 @@ button img {
       max-width: 500px;
   }
   
+  .prnum3-container,
   .prnum-container,
   .first-row,
   .third-row {
       flex-direction: column;
-      gap: 10px;
-  }
-  
-  .cont input,
-  #desc {
-      width: 100%;
   }
   
   .item-buttons {
@@ -315,13 +323,12 @@ button img {
       font-size: 25px;
   }
   
+  .prnum3-container,
   .prnum-container,
   .first-row,
   .third-row {
       flex-direction: column;
-      gap: 5px;
       margin: 10px;
-      margin-bottom: 10px;
   }
   
   .cont input,

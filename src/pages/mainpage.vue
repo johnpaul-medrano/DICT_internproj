@@ -42,13 +42,14 @@ export default {
   height: 100vh;
   background-color: #d9d9d9;
   overflow-y: auto;
+  margin-top: 100px;
 }
 
 .container {
   flex: 0.8;
   overflow-y: auto;
   scrollbar-width: none;
-  margin-top: 100px;
+  margin-top: 40px;
 }
 
 .container::-webkit-scrollbar {
