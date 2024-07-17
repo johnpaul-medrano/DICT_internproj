@@ -96,6 +96,9 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  left: 92%;
+  bottom: 93%;
   height: 40px;
   width: 120px;
   color: rgb(215, 215, 225);
