@@ -33,14 +33,14 @@ const routes = [
         name: "PrFormSVP",
         component: () => import("../pages/tabs/prformsvp.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresILCDB: true },
       },
       {
         path: "prformFB",
         name: "PrFormFB",
         component: () => import("../pages/tabs/prformfb.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresILCDB: true },
       },
       {
         path: "monitoring",
@@ -54,63 +54,63 @@ const routes = [
         name: "Budget_Approval",
         component: () => import("../pages/tabs/budget_approval.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresBUDGET: true },
       },
       {
         path: "TOD_approval",
         name: "tod_Approval",
         component: () => import("../pages/tabs/TOD_approval.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresTOD: true },
       },
       {
         path: "RD_approval",
         name: "rd_Approval",
         component: () => import("../pages/tabs/RD_approval.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresRD: true },
       },
       {
         path: "suppliers-database",
         name: "SuppliersDatabase",
         component: () => import("../pages/tabs/suppliers-database.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresILCDB: true },
       },
       {
         path: "templates",
         name: "Templates",
         component: () => import("../pages/tabs/templates.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresILCDB: true },
       },
       {
         path: "request",
         name: "Request",
         component: () => import("../pages/tabs/request.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresILCDB: true },
       },
       {
         path: "abstract",
         name: "Abstarct",
         component: () => import("../pages/tabs/abstract.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresSO: true },
       },
       {
         path: "poform",
         name: "PoForm",
         component: () => import("../pages/tabs/SO_poform.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresSO: true },
       },
       {
         path: "postatus",
         name: "postatus",
         component: () => import("../pages/tabs/PO_Status.vue"),
         props: true,
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, requiresSO: true },
       },
       
     ],
@@ -127,14 +127,57 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+  const requiresILCDB = to.matched.some((record) => record.meta.requiresILCDB);
+  const requiresTOD = to.matched.some((record) => record.meta.requiresTOD);
+  const requiresBUDGET = to.matched.some((record) => record.meta.requiresBUDGET);
+  const requiresRD = to.matched.some((record) => record.meta.requiresRD);
+  const requiresSO = to.matched.some((record) => record.meta.requiresSO);
 
+  //Login Route Guard
   if (requiresAuth && !(await getCurrentUser())) {
     return "/";
   }
 
+  //Admin Route Guard
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "Admin") {
+      return "/projects";
+    }
+  }
+
+  //Role Route Guards
+  if (requiresILCDB) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "ILCDB") {
+      return "/projects";
+    }
+  }
+
+  if (requiresTOD) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "TOD Head") {
+      return "/projects";
+    }
+  }
+
+  if (requiresBUDGET) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "Budget Division") {
+      return "/projects";
+    }
+  }
+
+  if (requiresRD) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "RD") {
+      return "/projects";
+    }
+  }
+
+  if (requiresSO) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "Supply Office") {
       return "/projects";
     }
   }
