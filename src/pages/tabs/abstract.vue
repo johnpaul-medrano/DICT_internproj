@@ -3,61 +3,75 @@
     <div class="abstract-main-content">
       <div class="abstract-form-container">
         <form @submit.prevent="generatePdf">
-          <h2>Purchase Request Form</h2>
+          <h2>Abstract</h2>
+
           <div class="abstract-grid-container">
-            <div v-for="(item, index) in form.items" :key="index" class="abstract-grid-item">
-              <div class="first-row">
-                <label>
-                  Particulars:
-                  <input v-model="item.particulars" required>
-                </label>
-                <label>
-                  Control No.:
-                  <input v-model="item.controlNo" required>
-                </label>
+            <div class="first-row">
+              <div class="input-cont">
+                <label> Particulars:</label>
+                <input id="particulars" v-model="particulars" required />
               </div>
+              <div class="input-cont">
+                <label> Control No.:</label>
+                <input v-model="controlNo" required />
+              </div>
+            </div>
+            <div
+              v-for="(item, index) in form.items"
+              :key="index"
+              class="abstract-grid-item"
+            >
               <div class="third-row">
-                <label>
-                  Item No.:
-                  <input type="number" v-model="item.itemNo" required>
-                </label>
-                <label>
-                  Quantity:
-                  <input type="number" v-model="item.qty" required>
-                </label>
+                <div class="input-cont">
+                  <label> Item No.:</label>
+                  <input type="number" v-model="item.itemNo" required />
+                </div>
+                <div class="input-cont">
+                  <label> Quantity:</label>
+                  <input type="number" v-model="item.qty" required />
+                </div>
+                <div class="input-cont">
+                  <label> Unit:</label>
+                  <input v-model="item.unit" required />
+                </div>
               </div>
-              <label>
-                Unit:
-                <input v-model="item.unit" required>
-              </label>
-              <label>
-                Article/Service:
-                <input v-model="item.articleService" required>
-              </label>
-              <label>
-                Supplier 1:
-                <input v-model="item.supplier1" required>                
-                <label>
-                  Price 1:
-                  <input type="number" v-model="item.price1" required>
-                </label>
-              </label>
-              <label>
-                Supplier 2:
-                <input v-model="item.supplier2" required>        
-                 <label>
-                  Price 2:
-                  <input type="number" v-model="item.price2" required>
-                </label>
-              </label>
-              <label>
-                Supplier 3:
-                <input v-model="item.supplier3" required>
-                <label>
-                  Price 3:
-                  <input type="number" v-model="item.price3" required>
-                </label>
-              </label>
+
+              <div class="input-cont">
+                <label> Article/Service:</label>
+                <input v-model="item.articleService" id="article" required />
+              </div>
+              <div class="suppliers-cont">
+                <div class="combi">
+                  <div class="input-cont">
+                    <label>Supplier 1:</label>
+                    <input v-model="item.supplier1" required />
+                  </div>
+                  <div class="input-cont">
+                    <label>Price 1:</label>
+                    <input type="number" v-model="item.price1" required />
+                  </div>
+                </div>
+                <div class="combi">
+                  <div class="input-cont">
+                    <label>Supplier 1:</label>
+                    <input v-model="item.supplier2" required />
+                  </div>
+                  <div class="input-cont">
+                    <label>Price 1:</label>
+                    <input type="number" v-model="item.price2" required />
+                  </div>
+                </div>
+                <div class="combi">
+                  <div class="input-cont">
+                    <label>Supplier 1:</label>
+                    <input v-model="item.supplier3" required />
+                  </div>
+                  <div class="input-cont">
+                    <label>Price 1:</label>
+                    <input type="number" v-model="item.price3" required />
+                  </div>
+                </div>
+              </div>
               <div class="abstract-total-unit-cost">
                 <label>Lowest Price Supplier:</label>
                 <span>{{ getLowestPriceSupplier(item) }}</span>
@@ -76,8 +90,8 @@
 </template>
 
 <script>
-import { PDFDocument, rgb } from 'pdf-lib';
-import pdfTemplate from '@/assets/abstract.pdf'; // Ensure your template is in the assets folder
+import { PDFDocument, rgb } from "pdf-lib";
+import pdfTemplate from "@/assets/abstract.pdf"; // Ensure your template is in the assets folder
 
 export default {
   data() {
@@ -85,15 +99,15 @@ export default {
       form: {
         items: [
           {
-            particulars: '',
-            controlNo: '',
+            particulars: "",
+            controlNo: "",
             itemNo: 1,
             qty: 1,
-            unit: 'piece',
-            articleService: '',
-            supplier1: '',
-            supplier2: '',
-            supplier3: '',
+            unit: "piece",
+            articleService: "",
+            supplier1: "",
+            supplier2: "",
+            supplier3: "",
             price1: 0,
             price2: 0,
             price3: 0,
@@ -103,7 +117,6 @@ export default {
     };
   },
   methods: {
-    
     getLowestPriceSupplier(item) {
       const prices = [item.price1, item.price2, item.price3];
       const suppliers = [item.supplier1, item.supplier2, item.supplier3];
@@ -112,15 +125,15 @@ export default {
     },
     async generatePdf() {
       try {
-        console.log('Fetching the PDF template...');
+        console.log("Fetching the PDF template...");
         const response = await fetch(pdfTemplate);
-        if (!response.ok) throw new Error('Failed to fetch PDF template');
+        if (!response.ok) throw new Error("Failed to fetch PDF template");
         const existingPdfBytes = await response.arrayBuffer();
-        console.log('PDF template fetched successfully');
+        console.log("PDF template fetched successfully");
 
-        console.log('Loading the existing PDF...');
+        console.log("Loading the existing PDF...");
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        console.log('PDF document loaded successfully');
+        console.log("PDF document loaded successfully");
 
         const pages = pdfDoc.getPages();
         const firstPage = pages[0];
@@ -135,51 +148,132 @@ export default {
         this.form.items.forEach((item, index) => {
           console.log(`Processing item ${index + 1}`);
           if (yOffset < 0) {
-            console.warn(`yOffset=${yOffset} is out of bounds, skipping item ${index + 1}`);
+            console.warn(
+              `yOffset=${yOffset} is out of bounds, skipping item ${index + 1}`
+            );
             return;
           }
 
           // Draw the form data
-          firstPage.drawText(item.particulars, { x: 510, y: 510, size: 20, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.controlNo, { x: 80, y: 502, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.itemNo), { x: 30, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.qty), { x: 60, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.unit, { x: 95, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.articleService, { x: 150, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.supplier1, { x: 610, y: 470, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.supplier2, { x: 750, y: 470, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(item.supplier3, { x: 900, y: 470, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price1), { x: 610, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price2), { x: 750, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price3), { x: 900, y: 435, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price1), { x: 610, y: 335, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price2), { x: 750, y: 335, size: 10, color: rgb(0, 0, 0) });
-          firstPage.drawText(String(item.price3), { x: 900, y: 335, size: 10, color: rgb(0, 0, 0) });
+          firstPage.drawText(item.particulars, {
+            x: 510,
+            y: 510,
+            size: 20,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.controlNo, {
+            x: 80,
+            y: 502,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.itemNo), {
+            x: 30,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.qty), {
+            x: 60,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.unit, {
+            x: 95,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.articleService, {
+            x: 150,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.supplier1, {
+            x: 610,
+            y: 470,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.supplier2, {
+            x: 750,
+            y: 470,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.supplier3, {
+            x: 900,
+            y: 470,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price1), {
+            x: 610,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price2), {
+            x: 750,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price3), {
+            x: 900,
+            y: 435,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price1), {
+            x: 610,
+            y: 335,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price2), {
+            x: 750,
+            y: 335,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price3), {
+            x: 900,
+            y: 335,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
 
           // Draw the lowest price supplier
           const lowestPriceSupplier = this.getLowestPriceSupplier(item);
-          firstPage.drawText(` ${lowestPriceSupplier}`, { x: 50, y: 297, size: 12, color: rgb(0, 0, 0) });
+          firstPage.drawText(` ${lowestPriceSupplier}`, {
+            x: 50,
+            y: 297,
+            size: 12,
+            color: rgb(0, 0, 0),
+          });
 
           yOffset -= yOffsetStep; // Move to the next row
           console.log(`Item ${index + 1} drawn at y=${yOffset}`);
         });
 
-        console.log('Saving the modified PDF...');
+        console.log("Saving the modified PDF...");
         const pdfBytes = await pdfDoc.save();
-        console.log('PDF document saved successfully');
+        console.log("PDF document saved successfully");
 
         // Create a Blob and open the new PDF in a new window
-        console.log('Creating a Blob from the PDF bytes...');
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        console.log("Creating a Blob from the PDF bytes...");
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
-        console.log('Opening the PDF in a new window...');
+        console.log("Opening the PDF in a new window...");
         window.open(url);
-
       } catch (error) {
-        console.error('Error generating PDF:', error);
+        console.error("Error generating PDF:", error);
       }
     },
-  }
+  },
 };
 </script>
 

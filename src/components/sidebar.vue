@@ -9,76 +9,155 @@
       />
     </div>
     <div class="bottom">
-      <ul>                
+      <ul>
         <div class="menu">
-          <router-link v-if="canAccess('Abstract')" :to="`/mainpage/${currentLogo}/abstract`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/abstract') }">
-              <img :src="icon6" alt="icon" />
+          <router-link
+            v-if="canAccess('Abstract')"
+            :to="`/mainpage/${currentLogo}/abstract`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/abstract'),
+              }"
+            >
+              <img :src="icon7" alt="icon" />
               Abstract
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link v-if="canAccess('Purchase Order')" :to="`/mainpage/${currentLogo}/poform`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/poform') }">
-              <img :src="icon6" alt="icon" />
+          <router-link
+            v-if="canAccess('Purchase Order')"
+            :to="`/mainpage/${currentLogo}/poform`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/poform'),
+              }"
+            >
+              <img :src="icon8" alt="icon" />
               Purchase Order
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link v-if="canAccess('PO Status')" :to="`/mainpage/${currentLogo}/postatus`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/postatus') }">
-              <img :src="icon6" alt="icon" />
+          <router-link
+            v-if="canAccess('PO Status')"
+            :to="`/mainpage/${currentLogo}/postatus`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/postatus'),
+              }"
+            >
+              <img :src="icon9" alt="icon" />
               PO Status
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link v-if="canAccess('For Approval C')" :to="`/mainpage/${currentLogo}/RD_approval`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/RD_approval') }">
+          <router-link
+            v-if="canAccess('For Approval C')"
+            :to="`/mainpage/${currentLogo}/RD_approval`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/RD_approval'),
+              }"
+            >
               <img :src="icon6" alt="icon" />
               For Approval
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link v-if="canAccess('For Approval')" :to="`/mainpage/${currentLogo}/TOD_approval`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/TOD_approval') }">
+          <router-link
+            v-if="canAccess('For Approval')"
+            :to="`/mainpage/${currentLogo}/TOD_approval`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/TOD_approval'),
+              }"
+            >
               <img :src="icon6" alt="icon" />
               For Approval
             </li>
           </router-link>
         </div>
         <div class="menu">
-          <router-link v-if="canAccess('For Approval B')" :to="`/mainpage/${currentLogo}/budget_approval`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/budget_approval') }">
+          <router-link
+            v-if="canAccess('For Approval B')"
+            :to="`/mainpage/${currentLogo}/budget_approval`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive(
+                  '/mainpage/' + currentLogo + '/budget_approval'
+                ),
+              }"
+            >
               <img :src="icon6" alt="icon" />
-              For Approval 
+              For Approval
             </li>
           </router-link>
         </div>
         <!-- Purchase Request, visible to ILCDB -->
-        <li v-if="canAccess('Purchase Request')" @click="toggleSubMenu" :class="{ active: isActive('/mainpage/' + currentLogo + '/prform') }">
+        <li
+          v-if="canAccess('Purchase Request')"
+          @click="toggleSubMenu"
+          :class="{ active: isActive('/mainpage/' + currentLogo + '/prform') }"
+        >
           <img :src="icon1" alt="icon" />
           Purchase Request
         </li>
-        <ul v-if="isSubMenuVisible && canAccess('Purchase Request')" class="sub-menu">
-          <router-link :to="`/mainpage/${currentLogo}/prformsvp`" class="sub-menu-link">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/prformsvp') }">
+        <ul
+          v-if="isSubMenuVisible && canAccess('Purchase Request')"
+          class="sub-menu"
+        >
+          <router-link
+            :to="`/mainpage/${currentLogo}/prformsvp`"
+            class="sub-menu-link"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/prformsvp'),
+              }"
+            >
               Small Value Procurement
             </li>
           </router-link>
-          <router-link :to="`/mainpage/${currentLogo}/prformfb`" class="sub-menu-link">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/prformfb') }">
+          <router-link
+            :to="`/mainpage/${currentLogo}/prformfb`"
+            class="sub-menu-link"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/prformfb'),
+              }"
+            >
               For Bidding
             </li>
           </router-link>
         </ul>
         <!-- Monitoring, visible to all roles -->
         <div class="menu">
-          <router-link v-if="canAccess('Monitoring')" :to="`/mainpage/${currentLogo}/monitoring`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/monitoring') }">
+          <router-link
+            v-if="canAccess('Monitoring')"
+            :to="`/mainpage/${currentLogo}/monitoring`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/monitoring'),
+              }"
+            >
               <img :src="icon2" alt="icon" />
               Monitoring
             </li>
@@ -86,8 +165,18 @@
         </div>
         <!-- Suppliers Database, visible to ILCDB -->
         <div class="menu">
-          <router-link v-if="canAccess('Database')" :to="`/mainpage/${currentLogo}/suppliers-database`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/suppliers-database') }">
+          <router-link
+            v-if="canAccess('Database')"
+            :to="`/mainpage/${currentLogo}/suppliers-database`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive(
+                  '/mainpage/' + currentLogo + '/suppliers-database'
+                ),
+              }"
+            >
               <img :src="icon3" alt="icon" />
               Suppliers Database
             </li>
@@ -95,8 +184,16 @@
         </div>
         <!-- Templates, visible to ILCDB -->
         <div class="menu">
-          <router-link v-if="canAccess('Templates')" :to="`/mainpage/${currentLogo}/templates`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/templates') }">
+          <router-link
+            v-if="canAccess('Templates')"
+            :to="`/mainpage/${currentLogo}/templates`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/templates'),
+              }"
+            >
               <img :src="icon4" alt="icon" />
               Templates
             </li>
@@ -104,8 +201,16 @@
         </div>
         <!-- Request, visible to ILCDB -->
         <div class="menu">
-          <router-link v-if="canAccess('Request')" :to="`/mainpage/${currentLogo}/request`" class="lol">
-            <li :class="{ active: isActive('/mainpage/' + currentLogo + '/request') }">
+          <router-link
+            v-if="canAccess('Request')"
+            :to="`/mainpage/${currentLogo}/request`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/request'),
+              }"
+            >
               <img :src="icon5" alt="icon" />
               Request
             </li>
@@ -125,6 +230,9 @@ import icon3 from "@/assets/database 1.png";
 import icon4 from "@/assets/templates 1.png";
 import icon5 from "@/assets/application 1.png";
 import icon6 from "@/assets/approval.png";
+import icon7 from "@/assets/abstract.png";
+import icon8 from "@/assets/purchase-order.png";
+import icon9 from "@/assets/postatus.png";
 
 export default {
   data() {
@@ -136,6 +244,9 @@ export default {
       icon4,
       icon5,
       icon6,
+      icon7,
+      icon8,
+      icon9,
       isSubMenuVisible: false,
     };
   },
@@ -143,16 +254,27 @@ export default {
     ...mapGetters(["currentLogo"]),
     userRole() {
       return localStorage.getItem("userRole");
-    }
+    },
   },
   methods: {
     canAccess(feature) {
       const roleFeatures = {
-        "ILCDB": ["Purchase Request", "Monitoring", "Database", "Templates", "Request", ],
-        "TOD Head": ["For Approval","Monitoring"],
-        "Budget Division": ["For Approval B","Monitoring"],
-        "RD": ["For Approval C","Monitoring"],
-        "Supply Office": ["Monitoring", "Abstract", "Purchase Order", "PO Status"]
+        ILCDB: [
+          "Purchase Request",
+          "Monitoring",
+          "Database",
+          "Templates",
+          "Request",
+        ],
+        "TOD Head": ["For Approval", "Monitoring"],
+        "Budget Division": ["For Approval B", "Monitoring"],
+        RD: ["For Approval C", "Monitoring"],
+        "Supply Office": [
+          "Monitoring",
+          "Abstract",
+          "Purchase Order",
+          "PO Status",
+        ],
       };
       return roleFeatures[this.userRole].includes(feature);
     },
@@ -166,7 +288,7 @@ export default {
       this.$router.push({ name: "Projects" });
     },
   },
-  watch: { 
+  watch: {
     $route(to) {
       if (!to.path.startsWith(`/mainpage/${this.currentLogo}/prform`)) {
         this.isSubMenuVisible = false;

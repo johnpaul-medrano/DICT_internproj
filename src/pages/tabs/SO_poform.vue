@@ -114,6 +114,9 @@
 import { PDFDocument } from "pdf-lib";
 import templateUrl from "@/assets/po-template.pdf";
 import "@/pages/tabs/SO_poform.css";
+import { PDFDocument } from "pdf-lib";
+import templateUrl from "@/assets/po-template.pdf";
+import "@/pages/tabs/SO_poform.css";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
@@ -147,11 +150,17 @@ export default {
     ...mapState({
       purchaseOrders: (state) => state.purchaseOrders,
     }),
+      purchaseOrders: (state) => state.purchaseOrders,
+    }),
   },
   methods: {
     ...mapActions(["fetchInitialPurchaseOrders", "listenToPurchaseOrders"]),
+    ...mapActions(["fetchInitialPurchaseOrders", "listenToPurchaseOrders"]),
     async generatePDF() {
       const formValues = this.form;
+      const existingPdfBytes = await fetch(templateUrl).then((res) =>
+        res.arrayBuffer()
+      );
       const existingPdfBytes = await fetch(templateUrl).then((res) =>
         res.arrayBuffer()
       );
@@ -190,6 +199,7 @@ export default {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const fileName = `PO-${formValues.poNo}-${new Date().getTime()}.pdf`;
 
       // Upload the PDF to Firebase Storage
@@ -201,6 +211,7 @@ export default {
         await uploadBytes(storageRef, blob);
         const downloadURL = await getDownloadURL(storageRef);
         console.log("PDF uploaded successfully. Download URL:", downloadURL);
+        console.log("PDF uploaded successfully. Download URL:", downloadURL);
 
         // Store the details in Firestore
         await setDoc(doc(db, "purchase_orders", fileName), {
@@ -210,15 +221,21 @@ export default {
           totalAmount: formValues.totalAmount,
           status: "Pending for Supplier's Signature",
           downloadURL: downloadURL,
+          status: "Pending for Supplier's Signature",
+          downloadURL: downloadURL,
         });
 
         alert("PDF uploaded and details saved successfully");
+        alert("PDF uploaded and details saved successfully");
       } catch (error) {
+        console.error("Error uploading PDF:", error);
+        alert("Error uploading PDF");
         console.error("Error uploading PDF:", error);
         alert("Error uploading PDF");
       }
     },
     async updateStatus(po) {
+      console.log("Updating status for PO:", po);
       console.log("Updating status for PO:", po);
       const poDocRef = doc(db, "purchase_orders", po.id);
       await updateDoc(poDocRef, { status: po.status });
@@ -250,6 +267,7 @@ export default {
     },
   },
   async created() {
+    console.log("Component created");
     console.log("Component created");
     await this.fetchInitialPurchaseOrders();
     this.listenToPurchaseOrders();
