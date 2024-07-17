@@ -144,6 +144,7 @@ export default {
 }
 
 .table-container {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   padding: 10px;
