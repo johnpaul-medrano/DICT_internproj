@@ -9,7 +9,7 @@
             <th>Status</th>
             <th>Action</th>
             <th id="remarks">Remarks</th>
-            <th>Upload Time</th> 
+            <th>Upload Time</th>
           </tr>
         </thead>
         <tbody>
@@ -18,7 +18,7 @@
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
-            <td>{{ row.remarks || 'No Remark' }}</td>
+            <td>{{ row.remarks || "No Remark" }}</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
           </tr>
         </tbody>
@@ -27,7 +27,9 @@
     <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="updatePage">
-        <option v-for="page in totalPages" :key="page" :value="page">{{ page }}</option>
+        <option v-for="page in totalPages" :key="page" :value="page">
+          {{ page }}
+        </option>
       </select>
     </div>
   </div>
@@ -43,6 +45,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 15,
       tableData: [],
+      project: this.$route.params.logo,
     };
   },
   computed: {
@@ -63,13 +66,19 @@ export default {
   },
   methods: {
     fetchInitialTableData() {
-      const collections = ["purchase_requests", "TOD_tab", "Budget_tab", "RD_tab"];
-      collections.forEach((collectionName) => {
-        const q = query(collection(db, collectionName), orderBy("timestamp", "desc"));
+      const collectionPaths = [
+        `${this.project}/${this.project}_data/purchase_requests`,
+        `${this.project}/${this.project}_data/TOD_tab`,
+        `${this.project}/${this.project}_data/Budget_tab`,
+        `${this.project}/${this.project}_data/RD_tab`,
+      ];
+
+      collectionPaths.forEach((path) => {
+        const q = query(collection(db, path), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
           const data = [];
-          snapshot.forEach(doc => {
-            data.push({ id: doc.id, collectionName, ...doc.data() });
+          snapshot.forEach((doc) => {
+            data.push({ id: doc.id, collectionName: path, ...doc.data() });
           });
           this.tableData = this.removeDuplicates([...this.tableData, ...data]);
         });
@@ -77,20 +86,20 @@ export default {
     },
     removeDuplicates(array) {
       const seen = new Set();
-      return array.filter(item => {
+      return array.filter((item) => {
         const duplicate = seen.has(item.id);
         seen.add(item.id);
         return !duplicate;
       });
     },
     getStatus(downloadURL) {
-      return downloadURL ? 'Completed' : 'Waiting for Attachment';
+      return downloadURL ? "Completed" : "Waiting for Attachment";
     },
     updatePage() {
       this.currentPage = parseInt(this.currentPage);
     },
     formatTimestamp(timestamp) {
-      if (!timestamp) return 'No Upload';
+      if (!timestamp) return "No Upload";
       const date = timestamp.toDate(); // Convert Firestore timestamp to JS Date
       return date.toLocaleString(); // Customize this format as needed
     },
@@ -98,11 +107,10 @@ export default {
 };
 </script>
 
-<style >
+<style>
 * {
   font-family: "Poppins", "sans-serif";
 }
-
 
 .table-container {
   margin-top: 20px;
@@ -110,7 +118,6 @@ export default {
   display: flex;
   justify-content: center;
   padding: 10px;
-
 }
 
 table {
@@ -170,6 +177,4 @@ table {
 #remarks {
   width: 20%;
 }
-
-
 </style>
