@@ -1,6 +1,5 @@
 * {
     font-family: "Poppins", "sans-serif";
-    color: rgb(37, 37, 90);
   }
 
   label {
@@ -193,8 +192,7 @@
     font-weight: bold;
   }
   
-  #generate,
-  #upload {
+  #generate{
     margin-top: 20px;
     align-self: center;
     padding: 10px;
