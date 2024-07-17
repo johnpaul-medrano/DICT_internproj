@@ -295,7 +295,7 @@ export default {
           subaro: this.form.subaro,
           description: this.form.items.map((item) => item.itemdesc).join(", "),
           status: "Generated",
-          remarks: "Sent To OTD HEAD",
+          remarks: "Sent To TOD HEAD",
           PDF:downloadURL,
           timestamp: serverTimestamp(),
         });

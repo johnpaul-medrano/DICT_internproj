@@ -98,6 +98,13 @@ const routes = [
         props: true,
         meta: { requiresAuth: true },
       },
+      {
+        path: "poform",
+        name: "PoForm",
+        component: () => import("../pages/tabs/SO_poform.vue"),
+        props: true,
+        meta: { requiresAuth: true },
+      },
       
     ],
     props: true,
