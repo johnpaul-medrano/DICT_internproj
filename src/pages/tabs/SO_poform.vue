@@ -11,11 +11,13 @@
 </template>
 
 <script>
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import templateUrl from '@/assets/po-template.pdf';
 import '@/pages/tabs/SO_poform.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/firebaseConfig"; // Ensure the correct path to your firebaseConfig file
+import { db, storage } from "@/firebaseConfig"; // Ensure the correct path to your firebaseConfig file
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -54,7 +56,13 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState({
+      purchaseOrders: state => state.purchaseOrders
+    })
+  },
   methods: {
+    ...mapActions(['fetchInitialPurchaseOrders', 'listenToPurchaseOrders']),
     async generatePDF() {
       const formValues = this.form;
       const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
@@ -84,24 +92,50 @@ export default {
       const fileName = `PO-${formValues.poNo}-${new Date().getTime()}.pdf`;
 
       // Upload the PDF to Firebase Storage
-      await this.uploadPDFToFirebase(blob, fileName);
+      await this.uploadPDFToFirebase(blob, fileName, formValues);
     },
-    async uploadPDFToFirebase(blob, fileName) {
+    async uploadPDFToFirebase(blob, fileName, formValues) {
       try {
         const storageRef = ref(storage, `purchase_orders/${fileName}`);
         await uploadBytes(storageRef, blob);
         const downloadURL = await getDownloadURL(storageRef);
         console.log('PDF uploaded successfully. Download URL:', downloadURL);
-        alert('PDF uploaded successfully');
+
+        // Store the details in Firestore
+        await setDoc(doc(db, "purchase_orders", fileName), {
+          poNo: formValues.poNo,
+          date: formValues.date,
+          supplier: formValues.supplier,
+          totalAmount: formValues.totalAmount,
+          status: 'Pending for Supplier\'s Signature',
+          downloadURL: downloadURL
+        });
+
+        alert('PDF uploaded and details saved successfully');
       } catch (error) {
         console.error('Error uploading PDF:', error);
         alert('Error uploading PDF');
       }
+    },
+    async updateStatus(po) {
+      console.log('Updating status for PO:', po);
+      const poDocRef = doc(db, "purchase_orders", po.id);
+      await updateDoc(poDocRef, { status: po.status });
+    }
+  },
+  async created() {
+    console.log('Component created');
+    await this.fetchInitialPurchaseOrders();
+    this.listenToPurchaseOrders();
+  },
+  watch: {
+    purchaseOrders(newVal) {
+      console.log('Purchase Orders updated:', newVal);
     }
   }
 };
 </script>
 
 <style scoped>
-/* Optional scoped styles can still be added here if needed */
+
 </style>
