@@ -1,3 +1,4 @@
+/* Existing styles */
 * {
   font-family: "Poppins", "sans-serif";
 }
@@ -143,4 +144,42 @@ table {
 
 .doc-table .file-input-container input[type="file"] {
   display: none;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .doc-table {
+    width: 100%;
+  }
+
+  .doc-table th,
+  .doc-table td {
+    padding: 5px;
+  }
+
+  .doc-table input,
+  .doc-table select,
+  .doc-table textarea {
+    height: auto;
+  }
+
+  .table-container {
+    margin-top: 10px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-container {
+    padding: 5px;
+  }
+
+  table {
+    padding: 20px;
+  }
+
+  .pagination-container label,
+  .pagination-container select {
+    font-size: 14px;
+  }
 }

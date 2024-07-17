@@ -41,6 +41,8 @@ h2 {
 #projs {
   display: flex;
   gap: 55px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 img {
@@ -75,4 +77,79 @@ img:focus {
 
 #button-signout:hover {
   background-color: #30357f;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+  #box {
+    width: 90%;
+    height: auto;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 40px;
+    margin-bottom: 30px;
+  }
+
+  #projs {
+    gap: 30px;
+  }
+
+  img {
+    width: 200px;
+  }
+
+  #button-signout {
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  #box {
+    width: 95%;
+    height: auto;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 35px;
+    margin-bottom: 20px;
+  }
+
+  img {
+    width: 180px;
+  }
+
+  #button-signout {
+    width: 140px;
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #box {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+  }
+
+  img {
+    width: 150px;
+  }
+
+  #button-signout {
+    width: 120px;
+    height: 40px;
+    font-size: 14px;
+  }
 }
