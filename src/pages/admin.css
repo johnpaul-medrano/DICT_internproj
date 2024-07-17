@@ -89,6 +89,25 @@ h1 {
   text-align: center;
 }
 
+#signout {
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 120px;
+  color: rgb(215, 215, 225);
+  margin-right: 10px;
+  gap: 10px;
+}
+
+#signout:hover {
+  cursor: pointer;
+  background-color: #103050;
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 1024px) {
   .admin {

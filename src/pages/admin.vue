@@ -30,6 +30,14 @@
       </form>
       <div v-if="error" class="error">{{ error }}</div>
     </div>
+    <button id="signout" @click="showModal = true">
+        <Icon icon="material-symbols:logout" width="25" />SIGN OUT
+      </button>
+      <SignOutModal
+      :isVisible="showModal"
+      @close="showModal = false"
+      @confirm="signOut"
+      />
   </div>
 </template>
 
@@ -38,7 +46,12 @@ import { auth, db } from "@/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "vue3-toastify";
+import { Icon } from "@iconify/vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { logout } from "@/firebaseConfig";
 import "vue3-toastify/dist/index.css";
+import SignOutModal from "@/components/signoutconfirm.vue";
 
 export default {
   data() {
@@ -48,6 +61,25 @@ export default {
       password: "",
       role: "",
       error: null,
+    };
+  },
+  components: {
+    Icon,
+    SignOutModal,
+  },
+  setup() {
+    const router = useRouter();
+    const showModal = ref(false);
+
+    async function signOut() {
+      await logout();
+      router.push("/");
+      showModal.value = false;
+    }
+
+    return {
+      showModal,
+      signOut,
     };
   },
   methods: {
