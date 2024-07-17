@@ -113,7 +113,6 @@ export default {
 }
 
 .table-container {
-  margin-top: 20px;
   overflow-x: auto;
   display: flex;
   justify-content: center;
@@ -125,6 +124,7 @@ table {
 }
 
 .doc-table {
+  border-radius: 20px;
   border-collapse: collapse;
   width: 90%;
 }
