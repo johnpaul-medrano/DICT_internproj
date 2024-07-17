@@ -48,7 +48,7 @@ export default {
   flex: 0.8;
   overflow-y: auto;
   scrollbar-width: none;
-  margin-top: 80px;
+  margin-top: 100px;
 }
 
 .container::-webkit-scrollbar {
