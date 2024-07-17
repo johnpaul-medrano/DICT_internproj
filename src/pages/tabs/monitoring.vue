@@ -114,7 +114,6 @@ export default {
 }
 
 .table-container {
-  overflow-x: auto;
   display: flex;
   justify-content: center;
   padding: 10px;

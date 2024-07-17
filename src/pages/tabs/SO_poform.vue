@@ -1,7 +1,7 @@
 <template>
   <div class="main-content">
     <div class="purchase-request-form">
-      <h2>Create Purchase Order </h2>
+      <h2>PURCHASE ORDER</h2>
       <form @submit.prevent="generatePDF">
         <div class="grid-container">
           <!-- Original fields from SO_poform.vue -->

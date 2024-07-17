@@ -61,14 +61,14 @@ input {
 }
 .prnum3-container{
   display: flex;
-  gap: 10px;
+  gap: 35px;
   margin: 20px;
   margin-bottom: 25px;
   margin-left: 30px;
 }
 .prnum-container {
   display: flex;
-  gap: 50px;
+  gap: 100px;
   margin: 20px;
   margin-bottom: 25px;
   margin-left: 30px;
@@ -93,7 +93,7 @@ input {
   flex-direction: column;
   position: relative;
   border: 2px solid rgb(189, 189, 190);
-  padding-left: 40px;
+  padding-left: 50px;
   padding-top: 30px;
   padding-bottom: 20px;
   border-radius: 15px;
@@ -108,16 +108,20 @@ input {
 
 .first-row {
   display: flex;
-  gap: 40px;
+  gap: 85px;
 }
 
 .third-row {
   display: flex;
-  gap: 40px;
+  gap: 85px;
 }
+#address{
+  width: 730px;
+  height: 60px;
 
-#description0, #address{
-  width: 670px;
+}
+#description0{
+  width: 720px;
   height: 60px;
 }
 
@@ -267,7 +271,7 @@ button img {
   .first-row,
   .third-row {
     flex-direction: column;
-      gap: 30px;
+      gap: 50px;
   }
   
   .cont input,
