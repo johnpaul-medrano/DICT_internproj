@@ -1,9 +1,61 @@
 <template>
   <div>
     <form @submit.prevent="generatePDF" class="purchase-request-form">
-      <div v-for="(label, key) in fields" :key="key" class="grid-item">
-        <label :for="key">{{ label }}:</label>
-        <input type="text" :id="key" v-model="form[key]" />
+      <div class="grid-item">
+        <label for="supplier">Supplier:</label>
+        <input type="text" id="supplier" v-model="form.supplier" />
+      </div>
+      <div class="grid-item">
+        <label for="address">Address:</label>
+        <input type="text" id="address" v-model="form.address" />
+      </div>
+      <div class="grid-item">
+        <label for="tin">TIN:</label>
+        <input type="text" id="tin" v-model="form.tin" />
+      </div>
+      <div class="grid-item">
+        <label for="poNo">P.O No.:</label>
+        <input type="text" id="poNo" v-model="form.poNo" />
+      </div>
+      <div class="grid-item">
+        <label for="date">Date:</label>
+        <input type="text" id="date" v-model="form.date" />
+      </div>
+      <div class="grid-item">
+        <label for="modeOfProcurement">Mode of Procurement:</label>
+        <input type="text" id="modeOfProcurement" v-model="form.modeOfProcurement" />
+      </div>
+      <div class="grid-item">
+        <label for="stockNo">Stock No.:</label>
+        <input type="text" id="stockNo" v-model="form.stockNo" />
+      </div>
+      <div class="grid-item">
+        <label for="unit">Unit:</label>
+        <input type="text" id="unit" v-model="form.unit" />
+      </div>
+      <div class="grid-item">
+        <label for="description">Description:</label>
+        <input type="text" id="description" v-model="form.description" />
+      </div>
+      <div class="grid-item">
+        <label for="quantity">Quantity:</label>
+        <input type="text" id="quantity" v-model="form.quantity" />
+      </div>
+      <div class="grid-item">
+        <label for="unitCost">Unit Cost:</label>
+        <input type="text" id="unitCost" v-model="form.unitCost" />
+      </div>
+      <div class="grid-item">
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" v-model="form.amount" />
+      </div>
+      <div class="grid-item">
+        <label for="totalAmount">Total Amount:</label>
+        <input type="text" id="totalAmount" v-model="form.totalAmount" />
+      </div>
+      <div class="grid-item">
+        <label for="totalAmountinWords">Total Amount in Words:</label>
+        <input type="text" id="totalAmountinWords" v-model="form.totalAmountinWords" />
       </div>
       <button type="submit" id="generate">Generate PDF</button>
     </form>
@@ -85,7 +137,7 @@ export default {
       firstPage.drawText(formValues.amount, { x: 545, y: 510, size: 10 });
       firstPage.drawText(formValues.totalAmount, { x: 539, y: 410, size: 10 });
       firstPage.drawText(formValues.totalAmountinWords, { x: 145, y: 396, size: 10 });
-      firstPage.drawText(formValues.supplier, { x: 105, y: 275, size: 10 });
+      firstPage.drawText(formValues.supplier, { x: 110, y: 275, size: 10 });
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
