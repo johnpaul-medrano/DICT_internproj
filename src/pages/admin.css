@@ -1,3 +1,4 @@
+/* Existing styles */
 * {
   margin: 0;
   padding: 0;
@@ -53,7 +54,8 @@ h1 {
   font-size: 20px;
 }
 
-.admin input, .admin select {
+.admin input,
+.admin select {
   width: 465px;
   height: 80px;
   border-radius: 20px;
@@ -85,4 +87,80 @@ h1 {
 .error {
   color: red;
   text-align: center;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+  .admin {
+    width: 80%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .admin input,
+  .admin select {
+    width: 100%;
+    height: 60px;
+    font-size: 20px;
+    padding: 15px;
+  }
+
+  .admin button {
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin {
+    width: 90%;
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .admin input,
+  .admin select {
+    height: 50px;
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .admin button {
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    height: auto;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .admin input,
+  .admin select {
+    height: 40px;
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .admin button {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  form {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }

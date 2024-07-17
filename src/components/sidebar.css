@@ -1,3 +1,4 @@
+/* Existing styles */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 .sidebarbox {
@@ -138,4 +139,167 @@ li img {
 .lol.router-link-active,
 .sub-menu-link.router-link-active {
   text-decoration: none;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+  .sidebarbox {
+    width: 25%;
+  }
+
+  .main-content {
+    margin-left: 25%;
+    width: 75%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebarbox {
+    width: 30%;
+  }
+
+  .main-content {
+    margin-left: 30%;
+    width: 70%;
+  }
+
+  ul li {
+    font-size: 18px;
+  }
+
+  .sub-menu li {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebarbox {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  ul li {
+    font-size: 16px;
+    padding: 15px 10px 15px 20px;
+  }
+
+  .sub-menu li {
+    font-size: 14px;
+    padding: 15px 10px 15px 40px;
+  }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+  .purchase-request-form {
+    min-width: 700px;
+    max-width: 700px;
+    padding: 15px 20px;
+  }
+
+  .cont input {
+    width: 100%;
+    height: auto;
+  }
+
+  #desc {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .purchase-request-form {
+    min-width: 500px;
+    max-width: 500px;
+    padding: 10px 15px;
+  }
+
+  .prnum-container,
+  .first-row,
+  .third-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cont input {
+    width: 100%;
+    height: auto;
+  }
+
+  #desc {
+    width: 100%;
+  }
+
+  .total-unit-cost,
+  .total-amount {
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .item-buttons {
+    position: static;
+    margin-top: 10px;
+  }
+
+  .item-buttons button {
+    width: 45px;
+    height: 45px;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .purchase-request-form {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 10px 10px;
+  }
+
+  .prnum-container,
+  .first-row,
+  .third-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cont input {
+    width: 100%;
+    height: auto;
+  }
+
+  #desc {
+    width: 100%;
+  }
+
+  .total-unit-cost,
+  .total-amount {
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+  }
+
+  #generate,
+  #upload {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .item-buttons {
+    position: static;
+    margin-top: 10px;
+  }
+
+  .item-buttons button {
+    width: 45px;
+    height: 45px;
+    margin-right: 0;
+  }
 }
