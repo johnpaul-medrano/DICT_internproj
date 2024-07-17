@@ -2,6 +2,7 @@
   <div>
     <div class="table-container">
       <table class="doc-table">
+        <!-- Table headers -->
         <thead>
           <tr>
             <th>PR Number</th>
@@ -10,9 +11,11 @@
             <th>Action</th>
             <th id="remarks">Remarks</th>
             <th>Upload Time</th>
+            <th>Details</th>
           </tr>
         </thead>
         <tbody>
+          <!-- Table rows for paginated data -->
           <tr v-for="(row, index) in paginatedTableData" :key="index">
             <td>{{ row.prnum }}</td>
             <td>{{ row.description }}</td>
@@ -20,10 +23,12 @@
             <td><a :href="row.PDF" target="_blank">View PDF</a></td>
             <td>{{ row.remarks || "No Remark" }}</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
+            <td><button @click="showDetails(row.prnum)">Details</button></td>
           </tr>
         </tbody>
       </table>
     </div>
+    <!-- Pagination controls -->
     <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="updatePage">
@@ -32,25 +37,40 @@
         </option>
       </select>
     </div>
+
+    <!-- Details modal -->
+    <TransactionDetails
+      v-if="detailsModalOpen"
+      :prnum="selectedPRNum"
+      :detailedTableData="detailedTableData"
+      @close="closeDetailsModal"
+    />
   </div>
 </template>
 
 <script>
 import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import TransactionDetails from "../Transaction_details.vue"; // Adjust path as per your project structure
 
 export default {
+  components: {
+    TransactionDetails
+  },
   data() {
     return {
       currentPage: 1,
       itemsPerPage: 15,
-      tableData: [],
+      tableData: {},
+      detailedTableData: [],
       project: this.$route.params.logo,
+      detailsModalOpen: false,
+      selectedPRNum: null
     };
   },
   computed: {
     sortedTableData() {
-      return [...this.tableData].sort((a, b) => b.timestamp - a.timestamp);
+      return Object.values(this.tableData).sort((a, b) => b.timestamp - a.timestamp);
     },
     paginatedTableData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -81,17 +101,21 @@ export default {
           snapshot.forEach((doc) => {
             data.push({ id: doc.id, collectionName: path, ...doc.data() });
           });
-          this.tableData = this.removeDuplicates([...this.tableData, ...data]);
+          this.updateTableData(data);
         });
       });
     },
-    removeDuplicates(array) {
-      const seen = new Set();
-      return array.filter((item) => {
-        const duplicate = seen.has(item.id);
-        seen.add(item.id);
-        return !duplicate;
+    updateTableData(newData) {
+      const detailedData = [...this.detailedTableData];
+
+      newData.forEach((item) => {
+        if (!this.tableData[item.prnum] || item.timestamp > this.tableData[item.prnum].timestamp) {
+          this.tableData[item.prnum] = item;
+        }
+        detailedData.push(item);
       });
+
+      this.detailedTableData = detailedData;
     },
     getStatus(downloadURL) {
       return downloadURL ? "Completed" : "Waiting for Attachment";
@@ -104,10 +128,16 @@ export default {
       const date = timestamp.toDate(); // Convert Firestore timestamp to JS Date
       return date.toLocaleString(); // Customize this format as needed
     },
+    showDetails(prnum) {
+      this.selectedPRNum = prnum;
+      this.detailsModalOpen = true;
+    },
+    closeDetailsModal() {
+      this.detailsModalOpen = false;
+    },
   },
 };
 </script>
-
 <style>
 * {
   font-family: "Poppins", "sans-serif";
