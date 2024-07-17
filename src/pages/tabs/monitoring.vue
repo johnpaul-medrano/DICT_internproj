@@ -67,6 +67,7 @@ export default {
   methods: {
     fetchInitialTableData() {
       const collectionPaths = [
+        `${this.project}/${this.project}_data/generated_forms`,
         `${this.project}/${this.project}_data/purchase_requests`,
         `${this.project}/${this.project}_data/TOD_tab`,
         `${this.project}/${this.project}_data/Budget_tab`,

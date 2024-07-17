@@ -217,7 +217,7 @@ export default {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
-            remarks: "Sent to SO",
+            remarks: "Routed to Supply Office",
             timestamp: timestamp,
           });
 

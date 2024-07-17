@@ -285,6 +285,34 @@ export default {
         const pdfBytes = await this.generatePDF();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
+        const generatedFormsCollectionPath = `${this.project}/${this.project}_data/generated_forms`;
+        const generatedFormsPdfRef = ref(
+          storage,
+          `generated_forms/${this.form.prnum}.pdf`
+        );
+        const generatedFormsUploadTaskSnapshot = await uploadBytes(
+          generatedFormsPdfRef,
+          blob
+        );
+
+        // Get the PDF download URL for the generated form
+        const generatedFormsDownloadURL = await getDownloadURL(
+          generatedFormsUploadTaskSnapshot.ref
+        );
+
+        // Save the download URL to Firestore for the generated form
+        await addDoc(collection(db, generatedFormsCollectionPath), {
+          prnum: this.form.prnum,
+          subaro: this.form.subaro,
+          description: this.form.items
+            .map((item) => item.itemdesc)
+            .join(", "),
+          status: "Generated",
+          remarks: "Generated Form",
+          PDF: generatedFormsDownloadURL,
+          timestamp: serverTimestamp(),
+        });
+
         // Define the correct Firestore collection path
         const collectionPath = `${this.project}/${this.project}_data/purchase_requests`;
         const pdfRef = ref(storage, `purchase_requests/${this.form.prnum}.pdf`);
@@ -299,10 +327,12 @@ export default {
           subaro: this.form.subaro,
           description: this.form.items.map((item) => item.itemdesc).join(", "),
           status: "Generated",
-          remarks: "Sent To TOD HEAD",
+          remarks: "Routed To TOD HEAD",
           PDF: downloadURL,
           timestamp: serverTimestamp(),
         });
+        
+
 
         toast.update(loadingToastId, {
           position: "bottom-right",

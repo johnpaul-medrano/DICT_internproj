@@ -22,7 +22,7 @@
             <option value="ILCDB">ILCDB</option>
             <option value="TOD Head">TOD Head</option>
             <option value="Budget Division">Budget Division</option>
-            <option value="RD">RD</option>
+            <option value="RD">Regional Director</option>
             <option value="Supply Office">Supply Office</option>
           </select>
         </div>
