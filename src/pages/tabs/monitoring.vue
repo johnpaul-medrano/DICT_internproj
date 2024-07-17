@@ -20,10 +20,20 @@
             <td>{{ row.prnum }}</td>
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
-            <td><a :href="row.PDF" target="_blank">View PDF</a></td>
+            <td>
+              <a :href="row.PDF" target="_blank"
+                ><button id="view">
+                  <img :src="view" alt="icon" id="view-icon" /> View PDF
+                </button></a
+              >
+            </td>
             <td>{{ row.remarks || "No Remark" }}</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
-            <td><button @click="showDetails(row.prnum)">Details</button></td>
+            <td>
+              <button id="details" @click="showDetails(row.prnum)">
+                Details
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -52,10 +62,11 @@
 import { onSnapshot, collection, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import TransactionDetails from "../Transaction_details.vue"; // Adjust path as per your project structure
+import view from "@/assets/pdf.png";
 
 export default {
   components: {
-    TransactionDetails
+    TransactionDetails,
   },
   data() {
     return {
@@ -65,12 +76,15 @@ export default {
       detailedTableData: [],
       project: this.$route.params.logo,
       detailsModalOpen: false,
-      selectedPRNum: null
+      selectedPRNum: null,
+      view,
     };
   },
   computed: {
     sortedTableData() {
-      return Object.values(this.tableData).sort((a, b) => b.timestamp - a.timestamp);
+      return Object.values(this.tableData).sort(
+        (a, b) => b.timestamp - a.timestamp
+      );
     },
     paginatedTableData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -109,7 +123,10 @@ export default {
       const detailedData = [...this.detailedTableData];
 
       newData.forEach((item) => {
-        if (!this.tableData[item.prnum] || item.timestamp > this.tableData[item.prnum].timestamp) {
+        if (
+          !this.tableData[item.prnum] ||
+          item.timestamp > this.tableData[item.prnum].timestamp
+        ) {
           this.tableData[item.prnum] = item;
         }
         detailedData.push(item);
@@ -207,5 +224,38 @@ table {
 
 #remarks {
   width: 20%;
+}
+
+#view {
+  width: 100px;
+  height: 35px;
+  background-color: #004387;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+#view:hover {
+  background-color: #003366;
+  cursor: pointer;
+}
+
+#view-icon {
+  width: 15px;
+  margin-right: 5px;
+}
+
+#details {
+  width: 100px;
+  height: 35px;
+  background-color: #004387;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+#details:hover {
+  background-color: #003366;
+  cursor: pointer;
 }
 </style>
