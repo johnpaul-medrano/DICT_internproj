@@ -7,21 +7,6 @@ label {
   margin-bottom: 5px;
 }
 
-.header {
-  background-color: #275598;
-  color: #ffffff;
-  padding: 10px;
-}
-
-.header-content {
-  display: flex;
-  justify-content: center;
-}
-
-.title-logo-container {
-  display: block;
-}
-
 .settings-icon img {
   width: 70px;
   height: 70px;
@@ -36,7 +21,7 @@ label {
 .purchase-request-form {
   min-width: 850px;
   max-width: 850px;
-  margin: 20px auto;  
+  margin: 40px auto;  
   padding: 30px 30px;
   border: 1px solid #ccc;
   border-radius: 40px;
@@ -60,7 +45,7 @@ form {
 input {
   border-radius: 10px;
   border: 0;
-  background-color: #d7d7d7;
+  background-color:  #7390db26;
   padding: 0 15px;
   font-size: 20px;
 }
