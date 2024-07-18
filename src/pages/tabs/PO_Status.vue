@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="table-container">
       <table class="doc-table">
         <thead>
@@ -39,7 +38,6 @@
           </tr>
       </table>
     </div>
-  </div>
 </template>
 
 <script>

@@ -65,14 +65,26 @@
                 />
               </div>
             </div>
-
-            <label :for="'description' + index">Description:</label>
-            <input
+            <div class="second-row">
+              <div class="cont">
+            <label :for="'Description' + index">Description:</label>
+            <input 
+              id="description_input"
               type="text"
               :id="'description' + index"
               v-model="item.description"
               required
-            />
+              
+            /></div>
+            <div class="abstract-item-buttons">
+                  <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
+                    <img :src="remove" alt="" />
+                  </button>
+                  <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
+                    <img :src="add" alt="" />
+                  </button>
+                </div>
+            </div>
             <div class="third-row">
               <div class="cont">
                 <label :for="'quantity' + index">Quantity:</label>
@@ -95,7 +107,6 @@
                 />
               </div>
             </div>
-
             <div class="total-amount">
               <label :for="'amount' + index">Amount:</label>
               <span :id="'amount' + index">{{ item.amount }}</span>
@@ -111,6 +122,8 @@
 </template>
 
 <script>
+import add from "@/assets/add.png";
+import remove from "@/assets/close.png";
 import { PDFDocument } from "pdf-lib";
 import templateUrl from "@/assets/po-template.pdf";
 import "@/pages/tabs/SO_poform.css";
@@ -121,8 +134,12 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
+    
     return {
+      add,
+      remove,
       form: {
+
         supplier: "",
         address: "",
         tin: "",

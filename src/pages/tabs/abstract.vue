@@ -32,7 +32,7 @@
                 </div>
                 <div class="input-cont">
                   <label> Unit:</label>
-                  <input v-model="item.unit" required />
+                  <input placeholder="Pieces / Set" v-model="item.unit" required />
                 </div>
               </div>
 
@@ -121,7 +121,7 @@ export default {
           {
             itemNo: 1,
             qty: 1,
-            unit: "piece",
+            unit: "",
             articleService: "",
             price1: 0,
             price2: 0,
