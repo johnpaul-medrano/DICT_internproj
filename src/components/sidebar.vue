@@ -173,7 +173,9 @@
           >
             <li
               :class="{
-                active: isActive('/mainpage/' + currentLogo + '/abstract_monitoring'),
+                active: isActive(
+                  '/mainpage/' + currentLogo + '/abstract_monitoring'
+                ),
               }"
             >
               <img :src="icon2" alt="icon" />
@@ -238,7 +240,7 @@
         <div v-if="userRole === 'Admin'" class="menu">
           <router-link :to="'/admin/create-account'" class="lol">
             <li :class="{ active: isActive('/admin/create-account') }">
-              <img :src="icon6" alt="Create Account" />
+              <img :src="icon10" alt="Create Account" />
               Create an Account
             </li>
           </router-link>
@@ -246,8 +248,8 @@
         <div v-if="userRole === 'Admin'" class="menu">
           <router-link :to="'/admin/add-template'" class="lol">
             <li :class="{ active: isActive('/admin/add-template') }">
-              <img :src="icon6" alt="Add Template" />
-              Add Template
+              <img :src="icon11" alt="Add Template" />
+              Manage Templates
             </li>
           </router-link>
         </div>
@@ -268,11 +270,10 @@ import icon6 from "@/assets/approval.png";
 import icon7 from "@/assets/abstract.png";
 import icon8 from "@/assets/purchase-order.png";
 import icon9 from "@/assets/postatus.png";
-<<<<<<< Updated upstream
 import Abstract_monitoring from "@/pages/tabs/abstract_monitoring.vue";
-=======
 import admin from "@/assets/admin.png";
->>>>>>> Stashed changes
+import icon10 from "@/assets/add-user.png";
+import icon11 from "@/assets/add-template.png";
 
 export default {
   data() {
@@ -288,6 +289,8 @@ export default {
       icon8,
       icon9,
       admin,
+      icon10,
+      icon11,
       isSubMenuVisible: false,
     };
   },
@@ -316,7 +319,6 @@ export default {
           "Abstract",
           "Purchase Order",
           "PO Status",
-         
         ],
         Admin: ["Create an Account", "Add Template"],
       };

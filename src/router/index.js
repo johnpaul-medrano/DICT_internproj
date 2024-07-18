@@ -46,7 +46,7 @@ const routes = [
         name: "Abstract_monitoring",
         component: () => import("../pages/tabs/abstract_monitoring.vue"),
         props: true,
-        meta: { requiresAuth: true, requiresSO: true  },
+        meta: { requiresAuth: true, requiresSO: true },
       },
       {
         path: "prformSVP",
@@ -159,23 +159,20 @@ router.beforeEach(async (to) => {
     return "/";
   }
 
-<<<<<<< Updated upstream
   // Router guard to prevent users from forgetting to log out
   if (to.path === "/" && (await getCurrentUser())) {
     const userRole = localStorage.getItem("userRole");
-    if (userRole !== "Admin"){
-      return "/projects";
+    if (userRole !== "Admin") {
+      return "/admin";
     }
   }
 
   //Admin Route Guard
-=======
   // Admin Route Guard
->>>>>>> Stashed changes
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "Admin") {
-      return "/projects";
+      return "/admin";
     }
   }
 
