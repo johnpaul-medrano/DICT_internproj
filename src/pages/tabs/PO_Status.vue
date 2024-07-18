@@ -12,7 +12,6 @@
             <th>Download</th>
           </tr>
         </thead>
-        <tbody>
           <tr v-if="!purchaseOrders.length">
             <td colspan="6">No purchase orders available.</td>
           </tr>
@@ -38,7 +37,6 @@
               >
             </td>
           </tr>
-        </tbody>
       </table>
     </div>
   </div>

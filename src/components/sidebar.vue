@@ -146,7 +146,6 @@
             </li>
           </router-link>
         </ul>
-        <!-- Monitoring, visible to all roles -->
         <div class="menu">
           <router-link
             v-if="canAccess('Monitoring')"
@@ -160,6 +159,22 @@
             >
               <img :src="icon2" alt="icon" />
               Monitoring
+            </li>
+          </router-link>
+        </div>
+        <div class="menu">
+          <router-link
+            v-if="canAccess('Abstract_monitoring')"
+            :to="`/mainpage/${currentLogo}/abstract_monitoring`"
+            class="lol"
+          >
+            <li
+              :class="{
+                active: isActive('/mainpage/' + currentLogo + '/abstract_monitoring'),
+              }"
+            >
+              <img :src="icon2" alt="icon" />
+              Abstract Storage
             </li>
           </router-link>
         </div>
@@ -233,6 +248,7 @@ import icon6 from "@/assets/approval.png";
 import icon7 from "@/assets/abstract.png";
 import icon8 from "@/assets/purchase-order.png";
 import icon9 from "@/assets/postatus.png";
+import Abstract_monitoring from "@/pages/tabs/abstract_monitoring.vue";
 
 export default {
   data() {
@@ -271,9 +287,11 @@ export default {
         RD: ["For Approval C", "Monitoring"],
         "Supply Office": [
           "Monitoring",
+          "Abstract_monitoring",
           "Abstract",
           "Purchase Order",
           "PO Status",
+         
         ],
       };
       return roleFeatures[this.userRole].includes(feature);

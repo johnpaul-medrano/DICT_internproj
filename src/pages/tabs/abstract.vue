@@ -2,7 +2,7 @@
   <div>
     <div class="abstract-main-content">
       <div class="abstract-form-container">
-        <form @submit.prevent="generatePdf">
+        <form @submit.prevent="handleAbstractFormSubmit">
           <h2>ABSTRACT FORM</h2>
 
           <div class="abstract-grid-container">
@@ -53,21 +53,21 @@
                 </div>
                 <div class="combi">
                   <div class="input-cont">
-                    <label>Supplier 1:</label>
+                    <label>Supplier 2:</label>
                     <input v-model="item.supplier2" required />
                   </div>
                   <div class="input-cont">
-                    <label>Price 1:</label>
+                    <label>Price 2:</label>
                     <input type="number" v-model="item.price2" required />
                   </div>
                 </div>
                 <div class="combi">
                   <div class="input-cont">
-                    <label>Supplier 1:</label>
+                    <label>Supplier 3:</label>
                     <input v-model="item.supplier3" required />
                   </div>
                   <div class="input-cont">
-                    <label>Price 1:</label>
+                    <label>Price 3:</label>
                     <input type="number" v-model="item.price3" required />
                   </div>
                 </div>
@@ -92,15 +92,18 @@
 <script>
 import { PDFDocument, rgb } from "pdf-lib";
 import pdfTemplate from "@/assets/abstract.pdf"; // Ensure your template is in the assets folder
+import { storage, db } from "@/firebaseConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 export default {
   data() {
     return {
+      particulars: "",
+      controlNo: "",
       form: {
         items: [
           {
-            particulars: "",
-            controlNo: "",
             itemNo: 1,
             qty: 1,
             unit: "piece",
@@ -123,7 +126,7 @@ export default {
       const minPriceIndex = prices.indexOf(Math.min(...prices));
       return suppliers[minPriceIndex];
     },
-    async generatePdf() {
+    async generatePdf(docRef) {
       try {
         console.log("Fetching the PDF template...");
         const response = await fetch(pdfTemplate);
@@ -155,100 +158,23 @@ export default {
           }
 
           // Draw the form data
-          firstPage.drawText(item.particulars, {
-            x: 510,
-            y: 510,
-            size: 20,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.controlNo, {
-            x: 80,
-            y: 502,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.itemNo), {
-            x: 30,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.qty), {
-            x: 60,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unit, {
-            x: 95,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.articleService, {
-            x: 150,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.supplier1, {
-            x: 610,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.supplier2, {
-            x: 750,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.supplier3, {
-            x: 900,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price1), {
-            x: 610,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price2), {
-            x: 750,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price3), {
-            x: 900,
-            y: 435,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price1), {
-            x: 610,
-            y: 335,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price2), {
-            x: 750,
-            y: 335,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price3), {
-            x: 900,
-            y: 335,
-            size: 10,
-            color: rgb(0, 0, 0),
+          firstPage.drawText(this.particulars, {x: 510,y: 510,size: 20,color: rgb(0, 0, 0), });
+          firstPage.drawText(this.controlNo, {x: 80,y: 502,size: 10,color: rgb(0, 0, 0), });
+          firstPage.drawText(String(item.itemNo), {x: 30,y: 435,size: 10,color: rgb(0, 0, 0),});
+          firstPage.drawText(String(item.qty), { x: 60, y: 435, size: 10, color: rgb(0, 0, 0),  });
+          firstPage.drawText(item.unit, {x: 95, y: 435, size: 10, color: rgb(0, 0, 0),  });
+          firstPage.drawText(item.articleService, {x: 150,y: 435,size: 10,color: rgb(0, 0, 0), });
+          firstPage.drawText(item.supplier1, {x: 610,y: 470, size: 10, color: rgb(0, 0, 0),});
+          firstPage.drawText(item.supplier2, { x: 750, y: 470, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(item.supplier3, { x: 900, y: 470, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(String(item.price1), { x: 610, y: 435, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(String(item.price2), {x: 750, y: 435, size: 10, color: rgb(0, 0, 0),  });
+          firstPage.drawText(String(item.price3), {x: 900, y: 435, size: 10, color: rgb(0, 0, 0),
           });
 
           // Draw the lowest price supplier
           const lowestPriceSupplier = this.getLowestPriceSupplier(item);
-          firstPage.drawText(` ${lowestPriceSupplier}`, {
+          firstPage.drawText(`${lowestPriceSupplier}`, {
             x: 50,
             y: 297,
             size: 12,
@@ -263,8 +189,22 @@ export default {
         const pdfBytes = await pdfDoc.save();
         console.log("PDF document saved successfully");
 
+        // Upload PDF to Firebase Storage
+        const storageRef = ref(storage, `abstractForms/${docRef.id}.pdf`);
+        await uploadBytes(storageRef, pdfBytes);
+        console.log("PDF uploaded successfully");
+
+        // Get download URL of uploaded PDF
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log("PDF download URL:", downloadURL);
+
+        // Update database with download URL
+        await updateDoc(docRef, {
+          pdfUrl: downloadURL,
+        });
+        console.log("PDF URL saved to database");
+
         // Create a Blob and open the new PDF in a new window
-        console.log("Creating a Blob from the PDF bytes...");
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
         console.log("Opening the PDF in a new window...");
@@ -273,8 +213,39 @@ export default {
         console.error("Error generating PDF:", error);
       }
     },
+    async handleAbstractFormSubmit() {
+      try {
+        // Save particulars, controlNo
+        const docRef = await addDoc(collection(db, "abstractForms"), {
+          particulars: this.particulars,
+          controlNo: this.controlNo,
+          timestamp: serverTimestamp(),
+        });
+
+        // Generate and upload PDF
+        await this.generatePdf(docRef);
+
+        // Reset form fields if needed
+        this.particulars = "";
+        this.controlNo = "";
+        this.form.items.forEach(item => {
+          item.itemNo = 1;
+          item.qty = 1;
+          item.unit = "piece";
+          item.articleService = "";
+          item.supplier1 = "";
+          item.supplier2 = "";
+          item.supplier3 = "";
+          item.price1 = 0;
+          item.price2 = 0;
+          item.price3 = 0;
+        });
+      } catch (error) {
+        console.error("Error handling form submission:", error);
+      }
+    },
   },
 };
 </script>
 
-<style scoped src="./abstract.css"></style>
+<style scoped src="../tabs/abstract.css"></style>

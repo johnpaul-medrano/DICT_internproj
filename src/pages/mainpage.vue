@@ -38,6 +38,7 @@ export default {
 
 <style scoped>
 .main {
+  width: 100%;
   display: flex;
   height: 100vh;
   background-color: #d9d9d9;

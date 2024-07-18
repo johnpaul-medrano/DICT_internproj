@@ -38,17 +38,6 @@
         </tbody>
       </table>
     </div>
-    <!-- Pagination controls -->
-    <div class="pagination-container">
-      <label for="pageSelect">Choose Page: </label>
-      <select id="pageSelect" v-model="currentPage" @change="updatePage">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Details modal -->
     <TransactionDetails
       v-if="detailsModalOpen"
       :prnum="selectedPRNum"
@@ -56,6 +45,15 @@
       @close="closeDetailsModal"
     />
   </div>
+      <!-- Pagination controls -->
+      <div class="pagination-container">
+      <label for="pageSelect">Choose Page: </label>
+      <select id="pageSelect" v-model="currentPage" @change="updatePage">
+        <option v-for="page in totalPages" :key="page" :value="page">
+          {{ page }}
+        </option>
+      </select>
+    </div>
 </template>
 
 <script>
@@ -229,7 +227,7 @@ table {
 #view {
   width: 100px;
   height: 35px;
-  background-color: #004387;
+  background-color: #a51010;
   color: white;
   border-radius: 5px;
   border: none;

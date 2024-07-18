@@ -16,6 +16,7 @@ const routes = [
     component: () => import("../pages/admin.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
   },
+
   {
     path: "/projects",
     name: "Projects",
@@ -28,6 +29,13 @@ const routes = [
     component: () => import("../pages/mainpage.vue"),
     meta: { requiresAuth: true },
     children: [
+      {
+        path: "abstract_monitoring",
+        name: "Abstract_monitoring",
+        component: () => import("../pages/tabs/abstract_monitoring.vue"),
+        props: true,
+        meta: { requiresAuth: true, requiresSO: true  },
+      },
       {
         path: "prformSVP",
         name: "PrFormSVP",
