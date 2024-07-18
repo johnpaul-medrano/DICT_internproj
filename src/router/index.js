@@ -146,6 +146,14 @@ router.beforeEach(async (to) => {
     return "/";
   }
 
+  // Router guard to prevent users from forgetting to log out
+  if (to.path === "/" && (await getCurrentUser())) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "Admin"){
+      return "/projects";
+    }
+  }
+
   //Admin Route Guard
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
