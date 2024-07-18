@@ -6,66 +6,50 @@
           <h2>ABSTRACT FORM</h2>
 
           <div class="abstract-grid-container">
-            <!-- Static fields for particulars and controlNo -->
             <div class="first-row">
               <div class="input-cont">
-                <label>Particulars:</label>
-                <input id="particulars" v-model="form.particulars" required />
+                <label> Particulars:</label>
+                <input id="particulars" v-model="particulars" required />
               </div>
               <div class="input-cont">
-                <label>Control No.:</label>
-                <input v-model="form.controlNo" required />
+                <label> Control No.:</label>
+                <input v-model="controlNo" required />
               </div>
             </div>
-
-            <!-- Static fields for suppliers -->
-            <div class="suppliers-cont">
-              <div class="combi">
-                <div class="input-cont">
-                  <label>Supplier 1:</label>
-                  <input v-model="form.supplier1" required />
-                </div>
-              </div>
-              <div class="combi">
-                <div class="input-cont">
-                  <label>Supplier 2:</label>
-                  <input v-model="form.supplier2" required />
-                </div>
-              </div>
-              <div class="combi">
-                <div class="input-cont">
-                  <label>Supplier 3:</label>
-                  <input v-model="form.supplier3" required />
-                </div>
-                
-              </div>
-            </div>
-
-            <!-- Dynamic fields for items -->
-            <div v-for="(item, index) in form.items" :key="index" class="abstract-grid-item">
+            <div
+              v-for="(item, index) in form.items"
+              :key="index"
+              class="abstract-grid-item"
+            >
               <div class="third-row">
                 <div class="input-cont">
-                  <label>Item No.:</label>
-                  <input type="number" :value="index + 1" readonly />
+                  <label> Item No.:</label>
+                  <input type="number" v-model="item.itemNo" required />
                 </div>
                 <div class="input-cont">
-                  <label>Quantity:</label>
+                  <label> Quantity:</label>
                   <input type="number" v-model="item.qty" required />
                 </div>
                 <div class="input-cont">
-                  <label>Unit:</label>
+                  <label> Unit:</label>
                   <input v-model="item.unit" required />
                 </div>
               </div>
 
               <div class="input-cont">
-                <label>Article/Service:</label>
+                <label> Article/Service:</label>
                 <input v-model="item.articleService" id="article" required />
               </div>
-              <div class="combi">
-                <div class="input-cont">
-                  <label>Price 1:</label>
-                  <input type="number" v-model="item.price1" required />
+              <div class="suppliers-cont">
+                <div class="combi">
+                  <div class="input-cont">
+                    <label>Supplier 1:</label>
+                    <input v-model="item.supplier1" required />
+                  </div>
+                  <div class="input-cont">
+                    <label>Price 1:</label>
+                    <input type="number" v-model="item.price1" required />
+                  </div>
                 </div>
                 <div class="combi">
                   <div class="input-cont">
@@ -93,16 +77,12 @@
                 <span>{{ getLowestPriceSupplier(item) }}</span>
               </div>
             </div>
-
-            <!-- Add Item button -->
-            <div>
-              <button type="button" @click="addItem">Add Item</button>
-            </div>
           </div>
-
-          <!-- Total Amount and Generate PDF button -->
+          <div class="abstract-total-amount">
+            <label>Total Amount:</label>
+            <span>{{ totalAmount }}</span>
+          </div>
           <button id="generate" type="submit">Generate PDF</button>
-          <button @click="uploadPDF">Upload PDF</button>
         </form>
       </div>
     </div>
@@ -122,17 +102,15 @@ export default {
       particulars: "",
       controlNo: "",
       form: {
-        particulars: "",
-        controlNo: "",
-        supplier1: "",
-        supplier2: "",
-        supplier3: "",
         items: [
           {
             itemNo: 1,
             qty: 1,
             unit: "piece",
             articleService: "",
+            supplier1: "",
+            supplier2: "",
+            supplier3: "",
             price1: 0,
             price2: 0,
             price3: 0,
@@ -141,11 +119,10 @@ export default {
       },
     };
   },
-
   methods: {
     getLowestPriceSupplier(item) {
       const prices = [item.price1, item.price2, item.price3];
-      const suppliers = [this.form.supplier1, this.form.supplier2, this.form.supplier3];
+      const suppliers = [item.supplier1, item.supplier2, item.supplier3];
       const minPriceIndex = prices.indexOf(Math.min(...prices));
       return suppliers[minPriceIndex];
     },
