@@ -59,7 +59,24 @@ input {
   display: flex;
   flex-direction: column;
 }
+#add {
+  background-color: #275598;
+  color: white;
+}
 
+#add:hover {
+  background-color: #204071;
+}
+
+#remove {
+  background-color: white;
+  color: #275598;
+  border: 2px dashed #275598;
+}
+
+#remove:hover {
+  background-color: #e2e2e2;
+}
 .abstract-cont input {
   width: 300px;
   height: 60px;
@@ -107,6 +124,7 @@ input {
   border-radius: 10px;
   gap: 10px;
   border: 1px dashed rgb(47, 47, 87);
+  
 }
 
 .abstract-total-unit-cost label {
@@ -120,7 +138,7 @@ input {
 .abstract-item-buttons {
   position: absolute;
   right: 0;
-  top: 50%;
+  top: 60%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -146,6 +164,10 @@ input {
 
 #add:hover {
   background-color: #204071;
+}
+
+#price{
+  width: 200px;
 }
 
 #remove {

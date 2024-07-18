@@ -9,11 +9,11 @@
             <div class="first-row">
               <div class="input-cont">
                 <label> Particulars:</label>
-                <input id="particulars" v-model="particulars" required />
+                <input id="particulars" v-model="form.particulars" required />
               </div>
               <div class="input-cont">
                 <label> Control No.:</label>
-                <input v-model="controlNo" required />
+                <input v-model="form.controlNo" required />
               </div>
             </div>
             <div
@@ -24,7 +24,7 @@
               <div class="third-row">
                 <div class="input-cont">
                   <label> Item No.:</label>
-                  <input type="number" v-model="item.itemNo" required />
+                  <input type="number" :value="index + 1" readonly />
                 </div>
                 <div class="input-cont">
                   <label> Quantity:</label>
@@ -44,32 +44,40 @@
                 <div class="combi">
                   <div class="input-cont">
                     <label>Supplier 1:</label>
-                    <input v-model="item.supplier1" required />
+                    <input v-model="form.supplier1" required />
                   </div>
                   <div class="input-cont">
                     <label>Price 1:</label>
-                    <input type="number" v-model="item.price1" required />
+                    <input id="price" type="number" v-model="item.price1" required />
                   </div>
                 </div>
                 <div class="combi">
                   <div class="input-cont">
                     <label>Supplier 2:</label>
-                    <input v-model="item.supplier2" required />
+                    <input v-model="form.supplier2" required />
                   </div>
                   <div class="input-cont">
                     <label>Price 2:</label>
-                    <input type="number" v-model="item.price2" required />
+                    <input id="price" type="number" v-model="item.price2" required />
                   </div>
                 </div>
                 <div class="combi">
                   <div class="input-cont">
                     <label>Supplier 3:</label>
-                    <input v-model="item.supplier3" required />
+                    <input v-model="form.supplier3" required />
                   </div>
                   <div class="input-cont">
                     <label>Price 3:</label>
-                    <input type="number" v-model="item.price3" required />
+                    <input id="price" type="number" v-model="item.price3" required />
                   </div>
+                </div>
+                <div class="abstract-item-buttons">
+                  <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
+                    <img :src="remove" alt="" />
+                  </button>
+                  <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
+                    <img :src="add" alt="" />
+                  </button>
                 </div>
               </div>
               <div class="abstract-total-unit-cost">
@@ -90,6 +98,8 @@
 </template>
 
 <script>
+import add from "@/assets/add.png";
+import remove from "@/assets/close.png";
 import { PDFDocument, rgb } from "pdf-lib";
 import pdfTemplate from "@/assets/abstract.pdf"; // Ensure your template is in the assets folder
 import { storage, db } from "@/firebaseConfig";
@@ -99,18 +109,20 @@ import { collection, addDoc, serverTimestamp, updateDoc } from "firebase/firesto
 export default {
   data() {
     return {
-      particulars: "",
-      controlNo: "",
+      add,
+      remove,
       form: {
+        particulars: "",
+        controlNo: "",
+        supplier1: "",
+        supplier2: "",
+        supplier3: "",
         items: [
           {
             itemNo: 1,
             qty: 1,
             unit: "piece",
             articleService: "",
-            supplier1: "",
-            supplier2: "",
-            supplier3: "",
             price1: 0,
             price2: 0,
             price3: 0,
@@ -122,7 +134,7 @@ export default {
   methods: {
     getLowestPriceSupplier(item) {
       const prices = [item.price1, item.price2, item.price3];
-      const suppliers = [item.supplier1, item.supplier2, item.supplier3];
+      const suppliers = [this.form.supplier1, this.form.supplier2, this.form.supplier3];
       const minPriceIndex = prices.indexOf(Math.min(...prices));
       return suppliers[minPriceIndex];
     },
@@ -144,45 +156,133 @@ export default {
         console.log(`Page size: width=${width}, height=${height}`);
 
         // Initial y-coordinate and step size for each row
-        let yOffset = 400;
-        const yOffsetStep = 20;
+        let yOffset = 430; // Base y-coordinate for the first item
+        const yOffsetStep = 30; // Reduced vertical spacing between items
+        let total1 = 0;
+        let total2 = 0;
+        let total3 = 0;
 
-        // Draw the form data onto the PDF
         this.form.items.forEach((item, index) => {
-          console.log(`Processing item ${index + 1}`);
           if (yOffset < 0) {
-            console.warn(
-              `yOffset=${yOffset} is out of bounds, skipping item ${index + 1}`
-            );
             return;
           }
-
-          // Draw the form data
-          firstPage.drawText(this.particulars, {x: 510,y: 510,size: 20,color: rgb(0, 0, 0), });
-          firstPage.drawText(this.controlNo, {x: 80,y: 502,size: 10,color: rgb(0, 0, 0), });
-          firstPage.drawText(String(item.itemNo), {x: 30,y: 435,size: 10,color: rgb(0, 0, 0),});
-          firstPage.drawText(String(item.qty), { x: 60, y: 435, size: 10, color: rgb(0, 0, 0),  });
-          firstPage.drawText(item.unit, {x: 95, y: 435, size: 10, color: rgb(0, 0, 0),  });
-          firstPage.drawText(item.articleService, {x: 150,y: 435,size: 10,color: rgb(0, 0, 0), });
-          firstPage.drawText(item.supplier1, {x: 610,y: 470, size: 10, color: rgb(0, 0, 0),});
-          firstPage.drawText(item.supplier2, { x: 750, y: 470, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(item.supplier3, { x: 900, y: 470, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(String(item.price1), { x: 610, y: 435, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(String(item.price2), {x: 750, y: 435, size: 10, color: rgb(0, 0, 0),  });
-          firstPage.drawText(String(item.price3), {x: 900, y: 435, size: 10, color: rgb(0, 0, 0),
+          // Draw item details
+          firstPage.drawText(this.form.particulars, {
+            x: 510,
+            y: 510,
+            size: 20,
+            color: rgb(0, 0, 0),
           });
-
-          // Draw the lowest price supplier
-          const lowestPriceSupplier = this.getLowestPriceSupplier(item);
-          firstPage.drawText(`${lowestPriceSupplier}`, {
-            x: 50,
-            y: 297,
-            size: 12,
+          firstPage.drawText(this.form.controlNo, {
+            x: 80,
+            y: 502,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(this.form.supplier1, {
+            x: 610,
+            y: 470,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(this.form.supplier2, {
+            x: 750,
+            y: 470,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(this.form.supplier3, {
+            x: 900,
+            y: 470,
+            size: 10,
             color: rgb(0, 0, 0),
           });
 
+          firstPage.drawText(String(index + 1), {
+            x: 30,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.qty), {
+            x: 60,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.unit, {
+            x: 95,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(item.articleService, {
+            x: 150,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price1), {
+            x: 610,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price2), {
+            x: 750,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+          firstPage.drawText(String(item.price3), {
+            x: 900,
+            y: yOffset,
+            size: 10,
+            color: rgb(0, 0, 0),
+          });
+
+          total1 += item.price1;
+          total2 += item.price2;
+          total3 += item.price3;
+
           yOffset -= yOffsetStep; // Move to the next row
-          console.log(`Item ${index + 1} drawn at y=${yOffset}`);
+        });
+
+        // Calculate lowest total and corresponding supplier
+        let lowestTotal = Math.min(total1, total2, total3);
+        let lowestPriceSupplier = "";
+        if (lowestTotal === total1) {
+          lowestPriceSupplier = this.form.supplier1;
+        } else if (lowestTotal === total2) {
+          lowestPriceSupplier = this.form.supplier2;
+        } else if (lowestTotal === total3) {
+          lowestPriceSupplier = this.form.supplier3;
+        }
+
+        // Draw totals
+        firstPage.drawText(`${total1}`, {
+          x: 610,
+          y: 335,
+          size: 12,
+          color: rgb(0, 0, 0),
+        });
+        firstPage.drawText(`${total2}`, {
+          x: 750,
+          y: 335,
+          size: 12,
+          color: rgb(0, 0, 0),
+        });
+        firstPage.drawText(`${total3}`, {
+          x: 900,
+          y: 335,
+          size: 12,
+          color: rgb(0, 0, 0),
+        });
+        firstPage.drawText(`${lowestPriceSupplier}`, {
+          x: 50,
+          y: 297,
+          size: 12,
+          color: rgb(0, 0, 0),
         });
 
         console.log("Saving the modified PDF...");
@@ -204,11 +304,17 @@ export default {
         });
         console.log("PDF URL saved to database");
 
-        // Create a Blob and open the new PDF in a new window
+        // Create a Blob and trigger a download
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
-        console.log("Opening the PDF in a new window...");
-        window.open(url);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `abstractForm_${docRef.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); // Clean up the URL object
+
       } catch (error) {
         console.error("Error generating PDF:", error);
       }
@@ -217,8 +323,8 @@ export default {
       try {
         // Save particulars, controlNo
         const docRef = await addDoc(collection(db, "abstractForms"), {
-          particulars: this.particulars,
-          controlNo: this.controlNo,
+          particulars: this.form.particulars,
+          controlNo: this.form.controlNo,
           timestamp: serverTimestamp(),
         });
 
@@ -226,23 +332,42 @@ export default {
         await this.generatePdf(docRef);
 
         // Reset form fields if needed
-        this.particulars = "";
-        this.controlNo = "";
-        this.form.items.forEach(item => {
-          item.itemNo = 1;
-          item.qty = 1;
-          item.unit = "piece";
-          item.articleService = "";
-          item.supplier1 = "";
-          item.supplier2 = "";
-          item.supplier3 = "";
-          item.price1 = 0;
-          item.price2 = 0;
-          item.price3 = 0;
-        });
+        this.resetForm();
       } catch (error) {
         console.error("Error handling form submission:", error);
       }
+    },
+    resetForm() {
+      this.form.particulars = "";
+      this.form.controlNo = "";
+      this.form.items = [
+        {
+          itemNo: 1,
+          qty: 1,
+          unit: "piece",
+          articleService: "",
+          price1: 0,
+          price2: 0,
+          price3: 0,
+        },
+      ];
+      this.form.supplier1 = "";
+      this.form.supplier2 = "";
+      this.form.supplier3 = "";
+    },
+    addItem() {
+      this.form.items.push({
+        itemNo: this.form.items.length + 1,
+        qty: null,
+        unit: "",
+        articleService: "",
+        price1: 0,
+        price2: 0,
+        price3: 0,
+      });
+    },
+    removeItem(index) {
+      this.form.items.splice(index, 1);
     },
   },
 };
