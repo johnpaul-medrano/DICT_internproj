@@ -217,7 +217,7 @@ export default {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
-            remarks: "Sent to Budget Division",
+            remarks: "Routed to Budget Division",
             timestamp: timestamp,
           });
 

@@ -3,7 +3,7 @@
     <div class="abstract-main-content">
       <div class="abstract-form-container">
         <form @submit.prevent="generatePdf">
-          <h2>Abstract</h2>
+          <h2>ABSTRACT FORM</h2>
 
           <div class="abstract-grid-container">
             <!-- Static fields for particulars and controlNo -->
