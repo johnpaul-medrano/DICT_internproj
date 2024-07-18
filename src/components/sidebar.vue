@@ -1,12 +1,15 @@
 <template>
   <div class="sidebarbox">
-    <div class="logocontainer">
+    <div class="logocontainer" v-if="userRole !== 'Admin'">
       <img
         :src="'/src/assets/' + currentLogo + 'y.png'"
         alt="ILCDB logo"
         class="logo"
         @click="navigateToProjects"
       />
+    </div>
+    <div class="logocont" v-if="userRole == 'Admin'">
+      <img :src="admin" alt="icon" id="adminlogo" />
     </div>
     <div class="bottom">
       <ul>
@@ -231,6 +234,23 @@
             </li>
           </router-link>
         </div>
+        <!-- admin -->
+        <div v-if="userRole === 'Admin'" class="menu">
+          <router-link :to="'/admin/create-account'" class="lol">
+            <li :class="{ active: isActive('/admin/create-account') }">
+              <img :src="icon6" alt="Create Account" />
+              Create an Account
+            </li>
+          </router-link>
+        </div>
+        <div v-if="userRole === 'Admin'" class="menu">
+          <router-link :to="'/admin/add-template'" class="lol">
+            <li :class="{ active: isActive('/admin/add-template') }">
+              <img :src="icon6" alt="Add Template" />
+              Add Template
+            </li>
+          </router-link>
+        </div>
       </ul>
     </div>
   </div>
@@ -248,7 +268,11 @@ import icon6 from "@/assets/approval.png";
 import icon7 from "@/assets/abstract.png";
 import icon8 from "@/assets/purchase-order.png";
 import icon9 from "@/assets/postatus.png";
+<<<<<<< Updated upstream
 import Abstract_monitoring from "@/pages/tabs/abstract_monitoring.vue";
+=======
+import admin from "@/assets/admin.png";
+>>>>>>> Stashed changes
 
 export default {
   data() {
@@ -263,6 +287,7 @@ export default {
       icon7,
       icon8,
       icon9,
+      admin,
       isSubMenuVisible: false,
     };
   },
@@ -293,6 +318,7 @@ export default {
           "PO Status",
          
         ],
+        Admin: ["Create an Account", "Add Template"],
       };
       return roleFeatures[this.userRole].includes(feature);
     },

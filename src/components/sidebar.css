@@ -26,6 +26,17 @@
   width: 300px;
 }
 
+.logocont {
+  display: flex;
+  border-radius: 15px;
+  justify-content: center;
+  margin: 0px 20px 80px 20px;
+}
+
+#adminlogo {
+  width: 200px;
+}
+
 .logocontainer {
   display: flex;
   border-radius: 15px;

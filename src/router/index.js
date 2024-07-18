@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-
-import Login from "../pages/login.vue"; // Adjust the path relative to router/index.js
+import Login from "../pages/login.vue";
 import { getCurrentUser } from "@/firebaseConfig";
 
-// Vue Router
 const routes = [
   {
     path: "/",
@@ -15,6 +13,20 @@ const routes = [
     name: "Admin",
     component: () => import("../pages/admin.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      {
+        path: "create-account",
+        name: "CreateAccount",
+        component: () => import("../pages/tabs/admin-create.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
+      {
+        path: "add-template",
+        name: "AddTemplate",
+        component: () => import("../pages/tabs/admin-add.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
+    ],
   },
 
   {
@@ -101,7 +113,7 @@ const routes = [
       },
       {
         path: "abstract",
-        name: "Abstarct",
+        name: "Abstract",
         component: () => import("../pages/tabs/abstract.vue"),
         props: true,
         meta: { requiresAuth: true, requiresSO: true },
@@ -115,12 +127,11 @@ const routes = [
       },
       {
         path: "postatus",
-        name: "postatus",
+        name: "PoStatus",
         component: () => import("../pages/tabs/PO_Status.vue"),
         props: true,
         meta: { requiresAuth: true, requiresSO: true },
       },
-      
     ],
     props: true,
   },
@@ -137,15 +148,18 @@ router.beforeEach(async (to) => {
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
   const requiresILCDB = to.matched.some((record) => record.meta.requiresILCDB);
   const requiresTOD = to.matched.some((record) => record.meta.requiresTOD);
-  const requiresBUDGET = to.matched.some((record) => record.meta.requiresBUDGET);
+  const requiresBUDGET = to.matched.some(
+    (record) => record.meta.requiresBUDGET
+  );
   const requiresRD = to.matched.some((record) => record.meta.requiresRD);
   const requiresSO = to.matched.some((record) => record.meta.requiresSO);
 
-  //Login Route Guard
+  // Login Route Guard
   if (requiresAuth && !(await getCurrentUser())) {
     return "/";
   }
 
+<<<<<<< Updated upstream
   // Router guard to prevent users from forgetting to log out
   if (to.path === "/" && (await getCurrentUser())) {
     const userRole = localStorage.getItem("userRole");
@@ -155,6 +169,9 @@ router.beforeEach(async (to) => {
   }
 
   //Admin Route Guard
+=======
+  // Admin Route Guard
+>>>>>>> Stashed changes
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "Admin") {
@@ -162,7 +179,7 @@ router.beforeEach(async (to) => {
     }
   }
 
-  //Role Route Guards
+  // Role Route Guards
   if (requiresILCDB) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "ILCDB") {

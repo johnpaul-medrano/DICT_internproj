@@ -44,7 +44,6 @@ export default {
   background-color: #d9d9d9;
   overflow-y: auto;
 }
-
 .container {
   flex: 0.8;
   overflow-y: auto;
