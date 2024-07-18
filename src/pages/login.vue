@@ -96,6 +96,8 @@ export default {
 
           // Redirect based on role
           this.redirectUser(userRole);
+          this.$router.replace({ path: '/projects' });
+          // window.history.pushState(null, "", "/projects");
         } else {
           toast.update(loaderToastId, {
             render: "User role not found",
