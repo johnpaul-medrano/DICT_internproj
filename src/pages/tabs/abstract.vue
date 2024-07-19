@@ -167,79 +167,18 @@ export default {
             return;
           }
           // Draw item details
-          firstPage.drawText(this.form.particulars, {
-            x: 510,
-            y: 510,
-            size: 20,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(this.form.controlNo, {
-            x: 80,
-            y: 502,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(this.form.supplier1, {
-            x: 610,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(this.form.supplier2, {
-            x: 750,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(this.form.supplier3, {
-            x: 900,
-            y: 470,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-
-          firstPage.drawText(String(index + 1), {
-            x: 30,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.qty), {
-            x: 60,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unit, {
-            x: 95,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.articleService, {
-            x: 150,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price1), {
-            x: 610,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price2), {
-            x: 750,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(String(item.price3), {
-            x: 900,
-            y: yOffset,
-            size: 10,
-            color: rgb(0, 0, 0),
-          });
+          firstPage.drawText(this.form.particulars, {x: 510,y: 510,size: 20,color: rgb(0, 0, 0),});
+          firstPage.drawText(this.form.controlNo, {x: 80,y: 502,size: 10,color: rgb(0, 0, 0), });
+          firstPage.drawText(this.form.supplier1, { x: 610, y: 470, size: 10,color: rgb(0, 0, 0), });
+          firstPage.drawText(this.form.supplier2, { x: 750,y: 470, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(this.form.supplier3, { x: 900, y: 470, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(String(index + 1), { x: 30,y: yOffset,size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(String(item.qty), { x: 60, y: yOffset, size: 10, color: rgb(0, 0, 0), });
+          firstPage.drawText(item.unit, {x: 95,y: yOffset,size: 10,color: rgb(0, 0, 0),});
+          firstPage.drawText(item.articleService, { x: 150, y: yOffset, size: 10, color: rgb(0, 0, 0),  });
+          firstPage.drawText(String(item.price1), { x: 610, y: yOffset, size: 10,color: rgb(0, 0, 0), });
+          firstPage.drawText(String(item.price2), { x: 750, y: yOffset, size: 10,color: rgb(0, 0, 0),});
+          firstPage.drawText(String(item.price3), { x: 900, y: yOffset, size: 10,color: rgb(0, 0, 0), });
 
           total1 += item.price1;
           total2 += item.price2;
@@ -260,30 +199,10 @@ export default {
         }
 
         // Draw totals
-        firstPage.drawText(`${total1}`, {
-          x: 610,
-          y: 335,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
-        firstPage.drawText(`${total2}`, {
-          x: 750,
-          y: 335,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
-        firstPage.drawText(`${total3}`, {
-          x: 900,
-          y: 335,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
-        firstPage.drawText(`${lowestPriceSupplier}`, {
-          x: 50,
-          y: 297,
-          size: 12,
-          color: rgb(0, 0, 0),
-        });
+        firstPage.drawText(`${total1}`, { x: 610,y: 335,size: 12,color: rgb(0, 0, 0),});
+        firstPage.drawText(`${total2}`, { x: 750,y: 335,size: 12,color: rgb(0, 0, 0), });
+        firstPage.drawText(`${total3}`, {x: 900,y: 335,size: 12,color: rgb(0, 0, 0), });
+        firstPage.drawText(`${lowestPriceSupplier}`, { x: 50,y: 297,size: 12,color: rgb(0, 0, 0),});
 
         console.log("Saving the modified PDF...");
         const pdfBytes = await pdfDoc.save();

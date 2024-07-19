@@ -308,7 +308,6 @@ export default {
           "Monitoring",
           "Database",
           "Templates",
-          "Request",
         ],
         "TOD Head": ["For Approval", "Monitoring"],
         "Budget Division": ["For Approval B", "Monitoring"],
