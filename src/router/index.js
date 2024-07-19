@@ -189,13 +189,6 @@ router.beforeEach(async (to, from) => {
     return true;
   }
 
-  // // Router guard to prevent user from going to a blank page or unknown path
-  // if (!matchedRoutes.includes(to.path)) {
-  //   await logout();
-  //   return { path: previousRoute.value };
-  // }
-
-  //Admin Route Guard
   // Admin Route Guard
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
