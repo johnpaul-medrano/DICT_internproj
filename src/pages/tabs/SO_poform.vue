@@ -69,6 +69,7 @@
               <div class="cont">
                 <label :for="'description' + index">Description:</label>
                 <input 
+                id="description_input"
                   type="text"
                   :id="'description' + index"
                   v-model="item.description"
