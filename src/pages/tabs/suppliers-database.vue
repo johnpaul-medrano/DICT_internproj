@@ -130,7 +130,7 @@ export default {
 };
 </script>
 
-<style src="./suppliers-database.css"></style>
+<style scoped src="./suppliers-database.css"></style>
 
 
 
