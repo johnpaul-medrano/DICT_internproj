@@ -2,7 +2,7 @@
   <div class="main-content">
     <div class="purchase-request-form">
       <h2>PURCHASE ORDER</h2>
-      <form @submit.prevent="handlePOFORMSubmit">
+      <form @submit.prevent="generatePDF">
         <div class="grid-container">
           <!-- Original fields from SO_poform.vue -->
           <div class="left">
@@ -13,7 +13,7 @@
               </div>
               <div class="cont">
                 <label for="date">Date:</label>
-                <DatePicker v-model="form.date" format="YYYY-MM-DD" />
+                <input type="text" id="date" v-model="form.date" required />
               </div>
             </div>
             <div class="prnum-container">
@@ -27,7 +27,7 @@
                 <label for="tin">TIN:</label>
                 <input type="text" id="tin" v-model="form.tin" required />
               </div>
-              <div class="cont">
+              <div class="cont">  
                 <label for="poNo">P.O. No.:</label>
                 <input type="text" id="poNo" v-model="form.poNo" required />
               </div>
@@ -58,7 +58,6 @@
               <div class="cont">
                 <label :for="'unit' + index">Unit:</label>
                 <input
-                  placeholder="Pieces / Set"
                   type="text"
                   :id="'unit' + index"
                   v-model="item.unit"
@@ -69,8 +68,7 @@
             <div class="second-row">
               <div class="cont">
                 <label :for="'description' + index">Description:</label>
-                <input
-                  id="description_input"
+                <input 
                   type="text"
                   :id="'description' + index"
                   v-model="item.description"
@@ -78,20 +76,10 @@
                 />
               </div>
               <div class="abstract-item-buttons">
-                <button
-                  id="remove"
-                  type="button"
-                  @click="removeItem(index)"
-                  v-if="form.items.length > 1"
-                >
+                <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
                   <img :src="remove" alt="Remove" />
                 </button>
-                <button
-                  id="add"
-                  type="button"
-                  @click="addItem"
-                  v-if="index === form.items.length - 1"
-                >
+                <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
                   <img :src="add" alt="Add" />
                 </button>
               </div>
@@ -118,6 +106,7 @@
                 />
               </div>
             </div>
+
             <div class="total-amount">
               <label :for="'amount' + index">Amount:</label>
               <span :id="'amount' + index">{{ item.amount }}</span>
@@ -132,31 +121,27 @@
 </template>
 
 <script>
-import DatePicker from 'vue3-datepicker';
 import add from "@/assets/add.png";
 import remove from "@/assets/close.png";
-import { PDFDocument, rgb } from "pdf-lib";
-import pdfTemplate from "@/assets/abstract.pdf";
+import { PDFDocument } from "pdf-lib";
+import templateUrl from "@/assets/po-template.pdf";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebaseConfig";
-import { collection, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { mapState, mapActions } from "vuex";
-import "@/pages/tabs/SO_poform.css";
+
 
 export default {
-  components: {
-    DatePicker,
-  },
   data() {
     return {
       add,
       remove,
       form: {
-        date: '',
         supplier: "",
         address: "",
         tin: "",
         poNo: "",
+        date: "",
         modeOfProcurement: "",
         items: [
           {
@@ -178,27 +163,16 @@ export default {
     }),
   },
   methods: {
-    updateTotalAmount() {
-      this.form.totalAmount = this.form.items.reduce(
-        (total, item) => total + item.amount,
-        0
+    ...mapActions(["fetchInitialPurchaseOrders", "listenToPurchaseOrders"]),
+    async generatePDF() {
+      const formValues = this.form;
+      const existingPdfBytes = await fetch(templateUrl).then((res) =>
+        res.arrayBuffer()
       );
-    },
-    async generatePDF(docRef) {
-      try{
-        console.log("Fetching the PDF template...");
-        const response = await fetch(pdfTemplate);
-        if (!response.ok) throw new Error("Failed to fetch PDF template");
-        const existingPdfBytes = await response.arrayBuffer();
-        console.log("PDF template fetched successfully");
-        console.log("Loading the existing PDF...");
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        console.log("PDF document loaded successfully");
-        const pages = pdfDoc.getPages();
-        const firstPage = pages[0];
-        const { width, height } = firstPage.getSize();
-        console.log(`Page size: width=${width}, height=${height}`);
 
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const pages = pdfDoc.getPages();
+      const firstPage = pages[0];
 
       // Adjust text placement as per your PDF template
       firstPage.drawText(formValues.supplier, { x: 65, y: 670, size: 10 });
@@ -228,80 +202,40 @@ export default {
 
       firstPage.drawText(formValues.totalAmount.toString(), { x: 539, y: 410, size: 10 });
 
-        console.log("Saving the modified PDF...");
-        const pdfBytes = await pdfDoc.save();
-        console.log("PDF document saved successfully");
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const fileName = `PO-${formValues.poNo}-${new Date().getTime()}.pdf`;
 
-        // Upload PDF to Firebase Storage
-        const storageRef = ref(storage, `purchase_orders/${docRef.id}.pdf`);
-        await uploadBytes(storageRef, pdfBytes);
-        console.log("PDF uploaded successfully");
-
-        // Get download URL of uploaded PDF
-        const downloadURL = await getDownloadURL(storageRef);
-        console.log("PDF download URL:", downloadURL);
-
-        // Update database with download URL
-        await updateDoc(docRef, {
-          pdfUrl: downloadURL,
-        });
-        console.log("PDF URL saved to database");
-
-        // Create a Blob and trigger a download
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `purchase_orders_${docRef.id}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url); // Clean up the URL object
-
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-      }
+      // Upload the PDF to Firebase Storage
+      await this.uploadPDFToFirebase(blob, fileName, formValues);
     },
-    async handlePOFORMSubmit() {
+    async uploadPDFToFirebase(blob, fileName, formValues) {
       try {
-        // Save particulars, controlNo
-        const docRef = await addDoc(collection(db, "purchase_orders"), {
-          poNo: this.form.poNo,
-          date: this.form.date,
-          supplier: this.form.supplier,
-          totalAmount: this.form.totalAmount,
+        const storageRef = ref(storage, `purchase_orders/${fileName}`);
+        await uploadBytes(storageRef, blob);
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log("PDF uploaded successfully. Download URL:", downloadURL);
+
+        // Store the details in Firestore
+        await setDoc(doc(db, "purchase_orders", fileName), {
+          poNo: formValues.poNo,
+          date: formValues.date,
+          supplier: formValues.supplier,
+          totalAmount: formValues.totalAmount,
           status: "Pending for Supplier's Signature",
+          downloadURL: downloadURL,
         });
 
-        // Generate and upload PDF
-        await this.generatePDF(docRef);
-
-        // Reset form fields if needed
-        this.resetForm();
+        alert("PDF uploaded and details saved successfully");
       } catch (error) {
-        console.error("Error handling form submission:", error);
+        console.error("Error uploading PDF:", error);
+        alert("Error uploading PDF");
       }
     },
-    resetForm() {
-      this.form = {
-        date: '',
-        supplier: "",
-        address: "",
-        tin: "",
-        poNo: "",
-        modeOfProcurement: "",
-        items: [
-          {
-            stockNo: "",
-            unit: "",
-            description: "",
-            quantity: 0,
-            unitCost: 0,
-            amount: 0,
-          },
-        ],
-        totalAmount: 0,
-      };
+    async updateStatus(po) {
+      console.log("Updating status for PO:", po);
+      const poDocRef = doc(db, "purchase_orders", po.id);
+      await updateDoc(poDocRef, { status: po.status });
     },
     addItem() {
       this.form.items.push({
@@ -315,16 +249,19 @@ export default {
     },
     removeItem(index) {
       this.form.items.splice(index, 1);
-      this.updateTotalAmount();
     },
     updateAmount(index) {
       const item = this.form.items[index];
       item.amount = item.quantity * item.unitCost;
-      this.updateTotalAmount();
+      this.form.totalAmount = this.form.items.reduce((total, i) => total + i.amount, 0);
     },
-
+  },
+  mounted() {
+    this.fetchInitialPurchaseOrders();
+    this.listenToPurchaseOrders();
   },
 };
 </script>
 
-<style scoped src="./SO_poform.css"></style>
+<style scoped src="./SO_poform.css">
+</style>

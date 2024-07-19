@@ -202,7 +202,7 @@ export default {
         firstPage.drawText(`${total1}`, { x: 610,y: 335,size: 12,color: rgb(0, 0, 0),});
         firstPage.drawText(`${total2}`, { x: 750,y: 335,size: 12,color: rgb(0, 0, 0), });
         firstPage.drawText(`${total3}`, {x: 900,y: 335,size: 12,color: rgb(0, 0, 0), });
-        firstPage.drawText(`${lowestPriceSupplier}`, { x: 50,y: 297,size: 12,color: rgb(0, 0, 0),});
+        firstPage.drawText(`${lowestPriceSupplier}`, { x: 50,y: 297, size: 12,color: rgb(0, 0, 0),});
 
         console.log("Saving the modified PDF...");
         const pdfBytes = await pdfDoc.save();
