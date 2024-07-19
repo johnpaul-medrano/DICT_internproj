@@ -12,6 +12,17 @@
         </tr>
       </thead>
       <tbody>
+        <!-- Input Row for Adding New Supplier -->
+        <tr>
+          <td><input v-model="newSupplier.name" placeholder="Name of Supplier" /></td>
+          <td><input v-model="newSupplier.address" placeholder="Address" /></td>
+          <td><input v-model="newSupplier.contactNumber" placeholder="Contact Number" /></td>
+          <td><input v-model="newSupplier.email" placeholder="Email" /></td>
+          <td><input v-model="newSupplier.product" placeholder="Product" /></td>
+          <td><button id="add-row" @click="addRow">Add</button></td>
+        </tr>
+
+        <!-- Existing Rows -->
         <tr v-for="(item, index) in tableData" :key="item.id">
           <td>
             <input v-if="item.editing" v-model="item.name" />
@@ -41,14 +52,6 @@
             <button class="delete-button" @click="confirmDelete(index)">Delete</button>
           </td>
         </tr>
-        <tr>
-          <td><input v-model="newSupplier.name" placeholder="Name of Supplier" /></td>
-          <td><input v-model="newSupplier.address" placeholder="Address" /></td>
-          <td><input v-model="newSupplier.contactNumber" placeholder="Contact Number" /></td>
-          <td><input v-model="newSupplier.email" placeholder="Email" /></td>
-          <td><input v-model="newSupplier.product" placeholder="Product" /></td>
-          <td><button id="add-row" @click="addRow">Add</button></td>
-        </tr>
       </tbody>
     </table>
   </div>
@@ -77,7 +80,7 @@ export default {
       if (this.newSupplier.name && this.newSupplier.address && this.newSupplier.contactNumber && this.newSupplier.email && this.newSupplier.product) {
         this.newSupplier.id = this.tableData.length + 1;
         this.newSupplier.editing = false;
-        this.tableData.push({ ...this.newSupplier });
+        this.tableData.unshift({ ...this.newSupplier }); // Add new supplier at the top
         this.resetNewSupplier();
         toast.success("Supplier added successfully!", { 
           position: "bottom-right",
@@ -93,7 +96,7 @@ export default {
     editRow(item) {
       if (item.editing) {
         item.editing = false;
-        toast.success("Supplier details saved successfully!", { 
+        toast.success("Supplier details edited successfully!", { 
           position: "bottom-right",
           autoClose: 1000
          });
