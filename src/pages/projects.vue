@@ -53,6 +53,8 @@ export default {
     const router = useRouter();
     const showModal = ref(false);
 
+    router.replace({ path: '/projects' });
+
     async function signOut() {
       await logout();
       router.push("/");

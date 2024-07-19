@@ -38,6 +38,7 @@ import logo from "@/assets/logo.png";
 import { auth, db } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { saveMessagingDeviceToken } from "@/messaging";
 
 export default {
   name: "Login",
@@ -74,6 +75,7 @@ export default {
           this.password
         );
         console.log("Logged in user:", userCredential.user);
+        console.log("uid: ", userCredential.user.uid);
         this.errorMessage = "";
 
         // Fetch user role and username from Firestore
@@ -96,7 +98,8 @@ export default {
 
           // Redirect based on role
           this.redirectUser(userRole);
-          this.$router.replace({ path: '/projects' });
+
+          saveMessagingDeviceToken(userCredential.user.uid);
           // window.history.pushState(null, "", "/projects");
         } else {
           toast.update(loaderToastId, {
@@ -119,17 +122,9 @@ export default {
     redirectUser(role) {
       switch (role) {
         case "ILCDB":
-          this.$router.push({ path: "/projects" });
-          break;
         case "TOD Head":
-          this.$router.push({ path: "/projects" });
-          break;
         case "Budget Division":
-          this.$router.push({ path: "/projects" });
-          break;
         case "RD":
-          this.$router.push({ path: "/projects" });
-          break;
         case "Supply Office":
           this.$router.push({ path: "/projects" });
           break;

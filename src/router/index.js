@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/login.vue";
 import { getCurrentUser } from "@/firebaseConfig";
+import { ref } from 'vue';
+import { logout } from "@/firebaseConfig";
 
 const routes = [
   {
@@ -135,6 +137,10 @@ const routes = [
     ],
     props: true,
   },
+  { 
+    path: '/:pathMatch(.*)*',
+    component: () => import("../pages/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -142,8 +148,10 @@ const router = createRouter({
   routes,
 });
 
+const previousRoute = ref("/projects");
+
 // Router config for RouteGuard in Login to disable change of URL for unauthorized access
-router.beforeEach(async (to) => {
+router.beforeEach(async (to, from) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
   const requiresILCDB = to.matched.some((record) => record.meta.requiresILCDB);
@@ -153,6 +161,10 @@ router.beforeEach(async (to) => {
   );
   const requiresRD = to.matched.some((record) => record.meta.requiresRD);
   const requiresSO = to.matched.some((record) => record.meta.requiresSO);
+  const matchedRoutes = router.getRoutes().map(route => route.path);
+
+  // Store the current route as the previous route before making a change
+  // previousRoute.value = from.path;
 
   // Login Route Guard
   if (requiresAuth && !(await getCurrentUser())) {
@@ -163,16 +175,32 @@ router.beforeEach(async (to) => {
   if (to.path === "/" && (await getCurrentUser())) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "Admin") {
-      return "/admin";
+      return false || "/projects";
     }
+    return true;
   }
+
+  // Router guard to prevent admin from forgetting to log out
+  if (to.path === "/" && (await getCurrentUser())) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "Repo") {
+      return false || "/admin";
+    }
+    return true;
+  }
+
+  // // Router guard to prevent user from going to a blank page or unknown path
+  // if (!matchedRoutes.includes(to.path)) {
+  //   await logout();
+  //   return { path: previousRoute.value };
+  // }
 
   //Admin Route Guard
   // Admin Route Guard
   if (requiresAdmin) {
     const userRole = localStorage.getItem("userRole");
     if (userRole !== "Admin") {
-      return "/admin";
+      return "/projects";
     }
   }
 

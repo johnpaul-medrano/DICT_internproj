@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getMessaging, isSupported} from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB49eQ4TrCod9HyTAcNJqCFido3Sb9WPHI",
@@ -18,8 +19,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const messaging = async () => await isSupported() && getMessaging(app);
 
-export { auth, db, storage };
+export { auth, db, storage, messaging };
 
 export function getCurrentUser() {
   return new Promise((resolve, reject) => {
