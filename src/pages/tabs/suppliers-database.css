@@ -1,0 +1,116 @@
+* {
+    font-family: "Poppins", "sans-serif";
+  }
+  
+  .table-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  table {
+    padding: 50px;
+  }
+  
+  .doc-table {
+    border-radius: 20px;
+    border-collapse: collapse;
+    width: 90%;
+  }
+  
+  .doc-table th,
+  .doc-table td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .doc-table th {
+    background-color: #003366;
+    color: white;
+    font-weight: 400;
+  }
+  
+  .doc-table td {
+    padding-left: 20px;
+    background-color: #dedede;
+  }
+  
+  .doc-table input,
+  .doc-table select,
+  .doc-table textarea {
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 0.5px solid rgb(186, 185, 185);
+  }
+  
+  .add-button-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  #add-row,
+  .action-button,
+  .edit-button,
+  .save-button,
+  .cancel-button,
+  .delete-button {
+    width: 80px;
+    height: 30px;
+    border-radius: 15px;
+    border: none;
+    color: white;
+  }
+  
+  #add-row:hover,
+  .action-button:hover,
+  .edit-button:hover,
+  .save-button:hover,
+  .cancel-button:hover,
+  .delete-button:hover {
+    cursor: pointer;
+  }
+  
+  #add-row,
+  .edit-button {
+    background-color: #004387;
+  }
+  
+  #add-row:hover,
+  .edit-button:hover {
+    background-color: #003366;
+  }
+  
+  .save-button {
+    background-color: green;
+  }
+  
+  .save-button:hover {
+    background-color: #00cc00;
+  }
+  
+  .cancel-button {
+    background-color: red;
+  }
+  
+  .cancel-button:hover {
+    background-color: darkred;
+  }
+  
+  .delete-button {
+    background-color: red;
+  }
+  
+  .delete-button:hover {
+    background-color: darkred;
+  }
+  
+  button {
+    margin: 0 5px;
+  }
+  
