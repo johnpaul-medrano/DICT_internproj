@@ -8,14 +8,11 @@
   </div>
 </template>
 
+
 <script>
 export default {
   props: {
     title: {
-      type: String,
-      required: true,
-    },
-    description: {
       type: String,
       required: true,
     },
@@ -30,16 +27,18 @@ export default {
   },
   methods: {
     downloadPdf() {
+      window.open(this.pdfPath, '_blank');
       const link = document.createElement("a");
-      link.href = this.pdfPath;
       link.download = this.downloadName;
       document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    },
+      link.click(); 
+      document.body.removeChild(link); 
+
+  },
   },
 };
 </script>
+
 
 <style scoped>
 * {

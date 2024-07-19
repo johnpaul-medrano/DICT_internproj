@@ -18,7 +18,13 @@
             <td>{{ row.prnum }}</td>
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
-            <td><a :href="row.PDF" target="_blank">View PDF</a></td>
+            <td>
+              <a :href="row.PDF" target="_blank"
+                ><button id="view">
+                  <img :src="view" alt="icon" id="view-icon" /> View PDF
+                </button></a
+              >
+            </td>
             <td>Purchase Request Received</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
             <!-- Display Upload Time -->
@@ -107,6 +113,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import check from "@/assets/check.png";
 import cross from "@/assets/cross.png";
+import view from "@/assets/pdf.png";
 
 export default {
   components: {
@@ -122,6 +129,7 @@ export default {
       chosenFiles: [], // Track chosen files for each row\
       check,
       cross,
+      view,
     };
   },
 

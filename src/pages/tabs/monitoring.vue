@@ -32,7 +32,7 @@
             <td>
               <a :href="row.additionalFile" target="_blank">
                 <button id="view">
-                <img :src="view" alt="icon" id="view-icon" />QUATAION
+                <img :src="view" alt="icon" id="view-icon" />Quatation
               </button>
               </a>
             </td>
@@ -54,8 +54,9 @@
       :detailedTableData="detailedTableData"
       @close="closeDetailsModal"
     />
-    <!-- Pagination controls -->
-    <div class="pagination-container">
+  </div>
+      <!-- Pagination controls -->
+      <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="updatePage">
         <option v-for="page in totalPages" :key="page" :value="page">
@@ -63,7 +64,6 @@
         </option>
       </select>
     </div>
-  </div>
 </template>
 
 <script>
@@ -248,7 +248,7 @@ table {
 }
 
 #view:hover {
-  background-color: #003366;
+  background-color: #542424;
   cursor: pointer;
 }
 
