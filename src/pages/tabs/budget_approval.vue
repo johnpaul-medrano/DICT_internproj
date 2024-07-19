@@ -217,7 +217,7 @@ export default {
             prnum: row.prnum,
             description: row.description,
             PDF: downloadURL,
-            remarks: "Sent to RD",
+            remarks: "Routed to Regional Director",
             timestamp: timestamp,
           });
 

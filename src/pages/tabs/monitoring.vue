@@ -9,6 +9,7 @@
             <th>Description</th>
             <th>Status</th>
             <th>Action</th>
+            <th>Quotation</th> <!-- Added Quotation column -->
             <th id="remarks">Remarks</th>
             <th>Upload Time</th>
             <th>Details</th>
@@ -21,12 +22,21 @@
             <td>{{ row.description }}</td>
             <td>{{ getStatus(row.PDF) }}</td>
             <td>
-              <a :href="row.PDF" target="_blank"
-                ><button id="view">
+              <a :href="row.PDF" target="_blank">
+                <button id="view">
                   <img :src="view" alt="icon" id="view-icon" /> View PDF
-                </button></a
-              >
+                </button>
+              </a>
             </td>
+
+            <td>
+              <a :href="row.additionalFile" target="_blank">
+                <button id="view">
+                <img :src="view" alt="icon" id="view-icon" />QUATAION
+              </button>
+              </a>
+            </td>
+
             <td>{{ row.remarks || "No Remark" }}</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
             <td>
@@ -44,9 +54,8 @@
       :detailedTableData="detailedTableData"
       @close="closeDetailsModal"
     />
-  </div>
-      <!-- Pagination controls -->
-      <div class="pagination-container">
+    <!-- Pagination controls -->
+    <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="updatePage">
         <option v-for="page in totalPages" :key="page" :value="page">
@@ -54,6 +63,7 @@
         </option>
       </select>
     </div>
+  </div>
 </template>
 
 <script>
@@ -125,7 +135,10 @@ export default {
           !this.tableData[item.prnum] ||
           item.timestamp > this.tableData[item.prnum].timestamp
         ) {
-          this.tableData[item.prnum] = item;
+          this.tableData[item.prnum] = {
+            ...item,
+            additionalFile: this.tableData[item.prnum]?.additionalFile || item.additionalFile,
+          };
         }
         detailedData.push(item);
       });
@@ -153,6 +166,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 * {
   font-family: "Poppins", "sans-serif";

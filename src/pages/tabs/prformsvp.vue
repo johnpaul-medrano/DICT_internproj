@@ -105,7 +105,13 @@
           <label for="totalAmount">Total Amount:</label>
           <span id="totalAmount">{{ totalAmount }}</span>
         </div>
-        <button id="upload" type="submit">UPLOAD</button>
+        
+        <div class="file-input">
+          <label for="additionalFile">Choose File:</label Required>
+          <input type="file" id="additionalFile" @change="handleFileChange" Required/>
+        </div>
+
+        <button id="upload" type="submit">GENERATE</button>
       </form>
     </div>
   </div>
@@ -140,6 +146,7 @@ export default {
           },
         ],
       },
+      additionalFile: null, // Add this line
     };
   },
   computed: {
@@ -154,6 +161,9 @@ export default {
     },
   },
   methods: {
+    handleFileChange(event) {
+      this.additionalFile = event.target.files[0];
+    },
     addItem() {
       this.form.items.push({
         stock: "",
@@ -189,82 +199,24 @@ export default {
         const pages = pdfDoc.getPages();
         const firstPage = pages[0];
 
-        firstPage.drawText(this.form.prnum, {
-          x: 305,
-          y: 673,
-          size: 11,
-          font: timesRomanFont,
-          color: rgb(0, 0, 0),
-        });
-
-        firstPage.drawText(this.form.subaro, {
-          x: 205,
-          y: 407,
-          size: 11,
-          font: timesRomanFont,
-          color: rgb(0, 0, 0),
-        });
+        firstPage.drawText(this.form.prnum, {x: 305,y: 673,size: 11,font: timesRomanFont,color: rgb(0, 0, 0),});
+        firstPage.drawText(this.form.subaro, {x: 205,y: 407,size: 11,font: timesRomanFont,color: rgb(0, 0, 0),});
 
         let yOffset = 615;
         const rowHeight = 12;
-
         this.form.items.forEach((item) => {
-          if (yOffset < 100) {
-            yOffset = 615;
-          }
+          if (yOffset < 100) { yOffset = 615;}
 
-          firstPage.drawText(item.stock, {
-            x: 60,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unit, {
-            x: 115,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.itemdesc, {
-            x: 152,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.quantity.toString(), {
-            x: 378,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText(item.unitcost.toString(), {
-            x: 430,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-          firstPage.drawText((item.quantity * item.unitcost).toString(), {
-            x: 485,
-            y: yOffset,
-            size: 10,
-            font: timesRomanFont,
-            color: rgb(0, 0, 0),
-          });
-
+          firstPage.drawText(item.stock, {x: 60,y: yOffset,size: 10,font: timesRomanFont,color: rgb(0, 0, 0),});
+          firstPage.drawText(item.unit, { x: 115, y: yOffset, size: 10, font: timesRomanFont, color: rgb(0, 0, 0), });
+          firstPage.drawText(item.itemdesc, { x: 152, y: yOffset, size: 10, font: timesRomanFont, color: rgb(0, 0, 0), });
+          firstPage.drawText(item.quantity.toString(), {x: 378,y: yOffset,size: 10, font: timesRomanFont, color: rgb(0, 0, 0),});
+          firstPage.drawText(item.unitcost.toString(), { x: 430, y: yOffset, size: 10, font: timesRomanFont, color: rgb(0, 0, 0),});
+          firstPage.drawText((item.quantity * item.unitcost).toString(), {x: 485,y: yOffset,size: 10,font: timesRomanFont,color: rgb(0, 0, 0), });
           yOffset -= rowHeight;
         });
 
-        firstPage.drawText(`${this.totalAmount}`, {
-          x: 482,
-          y: 286,
-          size: 11,
-          font: timesRomanFont,
-          color: rgb(0, 0, 0),
+        firstPage.drawText(`${this.totalAmount}`, {x: 482,y: 286,size: 11,font: timesRomanFont,color: rgb(0, 0, 0),
         });
 
         const pdfBytes = await pdfDoc.save();
@@ -275,13 +227,30 @@ export default {
       }
     },
     async handleUpload() {
-      const loadingToastId = toast.loading("Uploading PDF...", {
+      const loadingToastId = toast.loading("Uploading PDF and file...", {
         position: "bottom-right",
         transition: "flip",
         hideProgressBar: true,
       });
 
       try {
+        // Upload the additional file if it exists
+        let additionalFileDownloadURL = null;
+        if (this.additionalFile) {
+          const additionalFileRef = ref(
+            storage,
+            `additional_files/${this.form.prnum}_${this.additionalFile.name}`
+          );
+          const additionalFileSnapshot = await uploadBytes(
+            additionalFileRef,
+            this.additionalFile
+          );
+          additionalFileDownloadURL = await getDownloadURL(
+            additionalFileSnapshot.ref
+          );
+        }
+
+        // Generate and upload the PDF
         const pdfBytes = await this.generatePDF();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
@@ -311,6 +280,7 @@ export default {
           remarks: "Generated Form",
           PDF: generatedFormsDownloadURL,
           timestamp: serverTimestamp(),
+          additionalFile: additionalFileDownloadURL, // Save the additional file URL if exists
         });
 
         // Define the correct Firestore collection path
@@ -330,13 +300,12 @@ export default {
           remarks: "Routed To TOD HEAD",
           PDF: downloadURL,
           timestamp: serverTimestamp(),
+          additionalFile: additionalFileDownloadURL, // Save the additional file URL if exists
         });
-        
-
 
         toast.update(loadingToastId, {
           position: "bottom-right",
-          render: "PDF uploaded successfully",
+          render: "PDF and file uploaded successfully",
           type: toast.TYPE.SUCCESS,
           autoClose: 2000,
           isLoading: false,
@@ -344,11 +313,11 @@ export default {
 
         this.resetForm();
       } catch (error) {
-        console.error("Error uploading PDF:", error);
+        console.error("Error uploading PDF and file:", error);
 
         toast.update(loadingToastId, {
           position: "bottom-right",
-          render: "Error uploading PDF",
+          render: "Error uploading PDF and file",
           type: toast.TYPE.ERROR,
           autoClose: 2000,
           isLoading: false,
@@ -369,9 +338,12 @@ export default {
           },
         ],
       };
+      this.additionalFile = null; // Reset additional file
     },
   },
 };
 </script>
+
+
 
 <style scoped src="./prform.css"></style>
