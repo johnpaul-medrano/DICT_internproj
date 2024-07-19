@@ -1,8 +1,15 @@
 <template>
   <div class="add-container">
     <div class="uploadbox">
-      <div class="uploadcont">
+      <div
+        class="uploadcont"
+        @dragover.prevent="handleDragOver"
+        @dragleave="handleDragLeave"
+        @drop.prevent="handleDrop"
+        :class="{ 'drag-over': isDragOver }"
+      >
         <img :src="upload" alt="Upload Icon" />
+        <p>Drag & Drop your file here or</p>
         <input
           type="file"
           ref="fileInput"
@@ -68,6 +75,7 @@ export default {
       templateName: "",
       templates: [],
       loading: false, // Track loading state for remove operation
+      isDragOver: false,
     };
   },
   computed: {
@@ -202,6 +210,21 @@ export default {
         toast.clear(loadingToast);
       }
     },
+    handleDragOver(event) {
+      event.preventDefault();
+      this.isDragOver = true;
+    },
+    handleDragLeave() {
+      this.isDragOver = false;
+    },
+    handleDrop(event) {
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        this.file = file;
+        this.fileName = file.name;
+      }
+      this.isDragOver = false;
+    },
   },
 };
 </script>
@@ -276,8 +299,13 @@ export default {
   padding: 20px;
   min-width: 350px;
   max-width: 3500px;
-  height: 220px;
+  height: 240px;
   border-radius: 20px;
+}
+
+.uploadcont.drag-over {
+  border-color: #30357f;
+  background-color: rgba(66, 73, 140, 0.1);
 }
 
 .uploadcont button {
@@ -294,6 +322,7 @@ export default {
   background-color: aliceblue;
   padding: 30px;
   border-radius: 20px;
+  margin-bottom: 20px;
 }
 
 .template-table h2 {
