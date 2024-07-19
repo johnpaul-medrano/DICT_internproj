@@ -268,4 +268,4 @@ export default {
 };
 </script>
 
-<style src="./TOD_approval.css"></style>
+<style scoped src="./TOD_approval.css"></style>
