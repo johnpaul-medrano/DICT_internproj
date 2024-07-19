@@ -106,13 +106,13 @@ const routes = [
         props: true,
         meta: { requiresAuth: true, requiresILCDB: true },
       },
-      {
-        path: "request",
-        name: "Request",
-        component: () => import("../pages/tabs/request.vue"),
-        props: true,
-        meta: { requiresAuth: true, requiresILCDB: true },
-      },
+      // {
+      //   path: "request",
+      //   name: "Request",
+      //   component: () => import("../pages/tabs/request.vue"),
+      //   props: true,
+      //   meta: { requiresAuth: true, requiresILCDB: true },
+      // },
       {
         path: "abstract",
         name: "Abstract",

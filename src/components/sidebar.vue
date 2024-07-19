@@ -219,8 +219,8 @@
             </li>
           </router-link>
         </div>
-        <!-- Request, visible to ILCDB -->
-        <div class="menu">
+        <!-- Request, visible to ILCDB for future devs -->
+        <!-- <div class="menu">
           <router-link
             v-if="canAccess('Request')"
             :to="`/mainpage/${currentLogo}/request`"
@@ -235,7 +235,7 @@
               Request
             </li>
           </router-link>
-        </div>
+        </div> -->
         <!-- admin -->
         <div v-if="userRole === 'Admin'" class="menu">
           <router-link :to="'/admin/create-account'" class="lol">
@@ -308,7 +308,7 @@ export default {
           "Monitoring",
           "Database",
           "Templates",
-          "Request",
+          // "Request",
         ],
         "TOD Head": ["For Approval", "Monitoring"],
         "Budget Division": ["For Approval B", "Monitoring"],
