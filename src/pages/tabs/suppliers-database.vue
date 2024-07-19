@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import { db } from "@/firebaseConfig";
+import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
@@ -76,16 +78,24 @@ export default {
     };
   },
   methods: {
-    addRow() {
+    async addRow() {
       if (this.newSupplier.name && this.newSupplier.address && this.newSupplier.contactNumber && this.newSupplier.email && this.newSupplier.product) {
-        this.newSupplier.id = this.tableData.length + 1;
-        this.newSupplier.editing = false;
-        this.tableData.unshift({ ...this.newSupplier }); // Add new supplier at the top
-        this.resetNewSupplier();
-        toast.success("Supplier added successfully!", { 
-          position: "bottom-right",
-          autoClose: 1000 
-        });
+        try {
+          const docRef = await addDoc(collection(db, "suppliers"), this.newSupplier);
+          console.log("Document written with ID: ", docRef.id);
+          this.fetchSuppliers();
+          this.resetNewSupplier();
+          toast.success("Supplier added successfully!", { 
+            position: "bottom-right",
+            autoClose: 1000 
+          });
+        } catch (e) {
+          console.error("Error adding document: ", e);
+          toast.error("Error adding supplier.", { 
+            position: "bottom-right",
+            autoClose: 1000 
+          });
+        }
       } else {
         toast.error("Please fill in all fields.", { 
           position: "bottom-right",
@@ -93,13 +103,29 @@ export default {
         });
       }
     },
-    editRow(item) {
+    async editRow(item) {
       if (item.editing) {
-        item.editing = false;
-        toast.success("Supplier details edited successfully!", { 
-          position: "bottom-right",
-          autoClose: 1000
-         });
+        // Save the edited item to Firestore
+        try {
+          await updateDoc(doc(db, "suppliers", item.id), {
+            name: item.name,
+            address: item.address,
+            contactNumber: item.contactNumber,
+            email: item.email,
+            product: item.product
+          });
+          item.editing = false;
+          toast.success("Supplier details edited successfully!", { 
+            position: "bottom-right",
+            autoClose: 1000 
+          });
+        } catch (e) {
+          console.error("Error editing document: ", e);
+          toast.error("Error editing supplier details.", { 
+            position: "bottom-right",
+            autoClose: 1000 
+          });
+        }
       } else {
         item.editing = true;
       }
@@ -107,17 +133,27 @@ export default {
     cancelEdit(item) {
       item.editing = false;
     },
-    confirmDelete(index) {
+    async confirmDelete(index) {
       if (confirm("Are you sure you want to delete this row?")) {
-        this.deleteRow(index);
+        await this.deleteRow(index);
       }
     },
-    deleteRow(index) {
-      this.tableData.splice(index, 1);
-      toast.success("Supplier details deleted successfully!", { 
-        position: "bottom-right",
-        autoClose: 1000
-      });
+    async deleteRow(index) {
+      const item = this.tableData[index];
+      try {
+        await deleteDoc(doc(db, "suppliers", item.id));
+        this.tableData.splice(index, 1);
+        toast.success("Supplier details deleted successfully!", { 
+          position: "bottom-right",
+          autoClose: 1000 
+        });
+      } catch (e) {
+        console.error("Error deleting document: ", e);
+        toast.error("Error deleting supplier.", { 
+          position: "bottom-right",
+          autoClose: 1000 
+        });
+      }
     },
     resetNewSupplier() {
       this.newSupplier = {
@@ -128,7 +164,14 @@ export default {
         email: '',
         product: ''
       };
+    },
+    async fetchSuppliers() {
+      const querySnapshot = await getDocs(collection(db, "suppliers"));
+      this.tableData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), editing: false }));
     }
+  },
+  async mounted() {
+    await this.fetchSuppliers();
   }
 };
 </script>
