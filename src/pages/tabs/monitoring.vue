@@ -45,15 +45,15 @@
       @close="closeDetailsModal"
     />
   </div>
-      <!-- Pagination controls -->
-      <div class="pagination-container">
-      <label for="pageSelect">Choose Page: </label>
-      <select id="pageSelect" v-model="currentPage" @change="updatePage">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
-    </div>
+  <!-- Pagination controls -->
+  <div class="pagination-container">
+    <label for="pageSelect">Choose Page: </label>
+    <select id="pageSelect" v-model="currentPage" @change="updatePage">
+      <option v-for="page in totalPages" :key="page" :value="page">
+        {{ page }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -234,7 +234,7 @@ table {
 }
 
 #view:hover {
-  background-color: #003366;
+  background-color: #542424;
   cursor: pointer;
 }
 
