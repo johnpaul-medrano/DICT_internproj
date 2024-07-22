@@ -2,82 +2,78 @@
   <div>
     <div class="abstract-main-content">
       <div class="abstract-form-container">
-        <form @submit.prevent="handleAbstractFormSubmit">
-          <h2>ABSTRACT FORM</h2>
+        <form @submit.prevent="generatePdf">
+          <h2>Abstract</h2>
 
           <div class="abstract-grid-container">
+            <!-- Static fields for particulars and controlNo -->
             <div class="first-row">
               <div class="input-cont">
-                <label> Particulars:</label>
+                <label>Particulars:</label>
                 <input id="particulars" v-model="form.particulars" required />
               </div>
               <div class="input-cont">
-                <label> Control No.:</label>
+                <label>Control No.:</label>
                 <input v-model="form.controlNo" required />
               </div>
             </div>
-            <div
-              v-for="(item, index) in form.items"
-              :key="index"
-              class="abstract-grid-item"
-            >
+
+            <!-- Static fields for suppliers -->
+            <div class="suppliers-cont">
+              <div class="combi">
+                <div class="input-cont">
+                  <label>Supplier 1:</label>
+                  <input v-model="form.supplier1" required />
+                </div>
+              </div>
+              <div class="combi">
+                <div class="input-cont">
+                  <label>Supplier 2:</label>
+                  <input v-model="form.supplier2" required />
+                </div>
+              </div>
+              <div class="combi">
+                <div class="input-cont">
+                  <label>Supplier 3:</label>
+                  <input v-model="form.supplier3" required />
+                </div>
+                
+              </div>
+            </div>
+
+            <!-- Dynamic fields for items -->
+            <div v-for="(item, index) in form.items" :key="index" class="abstract-grid-item">
               <div class="third-row">
                 <div class="input-cont">
-                  <label> Item No.:</label>
+                  <label>Item No.:</label>
                   <input type="number" :value="index + 1" readonly />
                 </div>
                 <div class="input-cont">
-                  <label> Quantity:</label>
+                  <label>Quantity:</label>
                   <input type="number" v-model="item.qty" required />
                 </div>
                 <div class="input-cont">
-                  <label> Unit:</label>
-                  <input placeholder="Pieces / Set" v-model="item.unit" required />
+                  <label>Unit:</label>
+                  <input v-model="item.unit" required />
                 </div>
               </div>
 
               <div class="input-cont">
-                <label> Article/Service:</label>
+                <label>Article/Service:</label>
                 <input v-model="item.articleService" id="article" required />
               </div>
-              <div class="suppliers-cont">
-                <div class="combi">
-                  <div class="input-cont">
-                    <label>Supplier 1:</label>
-                    <input v-model="form.supplier1" required />
-                  </div>
-                  <div class="input-cont">
-                    <label>Price 1:</label>
-                    <input id="price" type="number" v-model="item.price1" required />
-                  </div>
+              <div class="combi">
+                <div class="input-cont">
+                  <label>Price 1:</label>
+                  <input type="number" v-model="item.price1" required />
                 </div>
-                <div class="combi">
-                  <div class="input-cont">
-                    <label>Supplier 2:</label>
-                    <input v-model="form.supplier2" required />
-                  </div>
-                  <div class="input-cont">
-                    <label>Price 2:</label>
-                    <input id="price" type="number" v-model="item.price2" required />
-                  </div>
+                <div class="input-cont">
+                  <label>Price 2:</label>
+                  <input type="number" v-model="item.price2" required />
                 </div>
-                <div class="combi">
-                  <div class="input-cont">
-                    <label>Supplier 3:</label>
-                    <input v-model="form.supplier3" required />
-                  </div>
-                  <div class="input-cont">
-                    <label>Price 3:</label>
-                    <input id="price" type="number" v-model="item.price3" required />
-                  </div>
-                </div>
-                <div class="abstract-item-buttons">
-                  <button id="remove" type="button" @click="removeItem(index)" v-if="form.items.length > 1">
-                    <img :src="remove" alt="" />
-                  </button>
-                  <button id="add" v-if="index === form.items.length - 1" type="button" @click="addItem">
-                    <img :src="add" alt="" />
-                  </button>
+                <div class="input-cont">
+                  <label>Price 3:</label>
+                  <input type="number" v-model="item.price3" required />
                 </div>
               </div>
               <div class="abstract-total-unit-cost">
@@ -85,12 +81,16 @@
                 <span>{{ getLowestPriceSupplier(item) }}</span>
               </div>
             </div>
+
+            <!-- Add Item button -->
+            <div>
+              <button type="button" @click="addItem">Add Item</button>
+            </div>
           </div>
-          <div class="abstract-total-amount">
-            <label>Total Amount:</label>
-            <span>{{ totalAmount }}</span>
-          </div>
+
+          <!-- Total Amount and Generate PDF button -->
           <button id="generate" type="submit">Generate PDF</button>
+          <button @click="uploadPDF">Upload PDF</button>
         </form>
       </div>
     </div>
@@ -98,19 +98,14 @@
 </template>
 
 <script>
-import add from "@/assets/add.png";
-import remove from "@/assets/close.png";
 import { PDFDocument, rgb } from "pdf-lib";
-import pdfTemplate from "@/assets/abstract.pdf"; // Ensure your template is in the assets folder
-import { storage, db } from "@/firebaseConfig";
+import pdfTemplate from "@/assets/abstract.pdf";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { storage } from "@/firebaseConfig"; // Adjust path as per your setup
 
 export default {
   data() {
     return {
-      add,
-      remove,
       form: {
         particulars: "",
         controlNo: "",
@@ -119,9 +114,8 @@ export default {
         supplier3: "",
         items: [
           {
-            itemNo: 1,
             qty: 1,
-            unit: "",
+            unit: "piece",
             articleService: "",
             price1: 0,
             price2: 0,
@@ -131,6 +125,7 @@ export default {
       },
     };
   },
+
   methods: {
     getLowestPriceSupplier(item) {
       const prices = [item.price1, item.price2, item.price3];
@@ -138,145 +133,181 @@ export default {
       const minPriceIndex = prices.indexOf(Math.min(...prices));
       return suppliers[minPriceIndex];
     },
-    async generatePdf(docRef) {
-      try {
-        console.log("Fetching the PDF template...");
-        const response = await fetch(pdfTemplate);
-        if (!response.ok) throw new Error("Failed to fetch PDF template");
-        const existingPdfBytes = await response.arrayBuffer();
-        console.log("PDF template fetched successfully");
+    async generatePdf() {
+  try {
+    const response = await fetch(pdfTemplate);
+    if (!response.ok) throw new Error("Failed to fetch PDF template");
+    const existingPdfBytes = await response.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    const pages = pdfDoc.getPages();
+    const firstPage = pages[0];
 
-        console.log("Loading the existing PDF...");
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        console.log("PDF document loaded successfully");
+    // Draw the form data onto the PDF
+    firstPage.drawText(this.form.particulars, {
+      x: 510,
+      y: 510,
+      size: 20,
+      color: rgb(0, 0, 0),
+    });
+    firstPage.drawText(this.form.controlNo, {
+      x: 80,
+      y: 502,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
 
-        const pages = pdfDoc.getPages();
-        const firstPage = pages[0];
-        const { width, height } = firstPage.getSize();
-        console.log(`Page size: width=${width}, height=${height}`);
+    // Draw suppliers' information once
+    firstPage.drawText(this.form.supplier1, {
+      x: 610,
+      y: 470,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
+    firstPage.drawText(this.form.supplier2, {
+      x: 750,
+      y: 470,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
+    firstPage.drawText(this.form.supplier3, {
+      x: 900,
+      y: 470,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
 
-        // Initial y-coordinate and step size for each row
-        let yOffset = 430; // Base y-coordinate for the first item
-        const yOffsetStep = 30; // Reduced vertical spacing between items
-        let total1 = 0;
-        let total2 = 0;
-        let total3 = 0;
+    let yOffset = 430; // Base y-coordinate for the first item
+    const yOffsetStep = 30; // Reduced vertical spacing between items
 
-        this.form.items.forEach((item, index) => {
-          if (yOffset < 0) {
-            return;
-          }
-          // Draw item details
-          firstPage.drawText(this.form.particulars, {x: 510,y: 510,size: 20,color: rgb(0, 0, 0),});
-          firstPage.drawText(this.form.controlNo, {x: 80,y: 502,size: 10,color: rgb(0, 0, 0), });
-          firstPage.drawText(this.form.supplier1, { x: 610, y: 470, size: 10,color: rgb(0, 0, 0), });
-          firstPage.drawText(this.form.supplier2, { x: 750,y: 470, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(this.form.supplier3, { x: 900, y: 470, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(String(index + 1), { x: 30,y: yOffset,size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(String(item.qty), { x: 60, y: yOffset, size: 10, color: rgb(0, 0, 0), });
-          firstPage.drawText(item.unit, {x: 95,y: yOffset,size: 10,color: rgb(0, 0, 0),});
-          firstPage.drawText(item.articleService, { x: 150, y: yOffset, size: 10, color: rgb(0, 0, 0),  });
-          firstPage.drawText(String(item.price1), { x: 610, y: yOffset, size: 10,color: rgb(0, 0, 0), });
-          firstPage.drawText(String(item.price2), { x: 750, y: yOffset, size: 10,color: rgb(0, 0, 0),});
-          firstPage.drawText(String(item.price3), { x: 900, y: yOffset, size: 10,color: rgb(0, 0, 0), });
+    let total1 = 0;
+    let total2 = 0;
+    let total3 = 0;
 
-          total1 += item.price1;
-          total2 += item.price2;
-          total3 += item.price3;
+    this.form.items.forEach((item, index) => {
+      if (yOffset < 0) {
+        return;
+      }
+      
+      // Draw item details
+      firstPage.drawText(String(index + 1), {
+        x: 30,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(String(item.qty), {
+        x: 60,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.unit, {
+        x: 95,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(item.articleService, {
+        x: 150,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(String(item.price1), {
+        x: 610,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(String(item.price2), {
+        x: 750,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      firstPage.drawText(String(item.price3), {
+        x: 900,
+        y: yOffset,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
 
-          yOffset -= yOffsetStep; // Move to the next row
-        });
+      // Calculate totals
+      total1 += item.price1;
+      total2 += item.price2;
+      total3 += item.price3;
 
-        // Calculate lowest total and corresponding supplier
-        let lowestTotal = Math.min(total1, total2, total3);
-        let lowestPriceSupplier = "";
-        if (lowestTotal === total1) {
-          lowestPriceSupplier = this.form.supplier1;
-        } else if (lowestTotal === total2) {
-          lowestPriceSupplier = this.form.supplier2;
-        } else if (lowestTotal === total3) {
-          lowestPriceSupplier = this.form.supplier3;
-        }
+      yOffset -= yOffsetStep; // Move to the next item
+    });
 
-        // Draw totals
-        firstPage.drawText(`${total1}`, { x: 610,y: 335,size: 12,color: rgb(0, 0, 0),});
-        firstPage.drawText(`${total2}`, { x: 750,y: 335,size: 12,color: rgb(0, 0, 0), });
-        firstPage.drawText(`${total3}`, {x: 900,y: 335,size: 12,color: rgb(0, 0, 0), });
-        firstPage.drawText(`${lowestPriceSupplier}`, { x: 50,y: 297, size: 12,color: rgb(0, 0, 0),});
+    // Calculate lowest total and corresponding supplier
+    let lowestTotal = Math.min(total1, total2, total3);
+    let lowestPriceSupplier = '';
+    if (lowestTotal === total1) {
+      lowestPriceSupplier = this.form.supplier1;
+    } else if (lowestTotal === total2) {
+      lowestPriceSupplier = this.form.supplier2;
+    } else if (lowestTotal === total3) {
+      lowestPriceSupplier = this.form.supplier3;
+    }
 
-        console.log("Saving the modified PDF...");
-        const pdfBytes = await pdfDoc.save();
-        console.log("PDF document saved successfully");
+    // Draw totals
+    firstPage.drawText(`${total1}`, {
+      x: 610,
+      y: 335, // Adjust y-coordinate as needed
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    firstPage.drawText(`${total2}`, {
+      x: 750,
+      y: 335, // Adjust y-coordinate as needed
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    firstPage.drawText(`${total3}`, {
+      x: 900,
+      y: 335, // Adjust y-coordinate as needed
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
+    // Draw lowest price supplier
+    firstPage.drawText(`${lowestPriceSupplier}`, {
+      x: 50,
+      y: 297, // Adjusted for lowest price supplier below totals
+      size: 12,
+      color: rgb(0, 0, 0),
+    });
 
-        // Upload PDF to Firebase Storage
-        const storageRef = ref(storage, `abstractForms/${docRef.id}.pdf`);
-        await uploadBytes(storageRef, pdfBytes);
-        console.log("PDF uploaded successfully");
+    const pdfBytes = await pdfDoc.save();
+        this.pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
+        this.fileName = `Abstract-${this.form.controlNo}-${Date.now()}.pdf`;
 
-        // Get download URL of uploaded PDF
-        const downloadURL = await getDownloadURL(storageRef);
-        console.log("PDF download URL:", downloadURL);
-
-        // Update database with download URL
-        await updateDoc(docRef, {
-          pdfUrl: downloadURL,
-        });
-        console.log("PDF URL saved to database");
-
-        // Create a Blob and trigger a download
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `abstractForm_${docRef.id}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url); // Clean up the URL object
-
+        alert("PDF generated successfully!");
       } catch (error) {
         console.error("Error generating PDF:", error);
+        alert("Error generating PDF");
       }
-    },
-    async handleAbstractFormSubmit() {
+},
+
+async uploadPDF() {
+      if (!this.pdfBlob || !this.fileName) {
+        alert("Please generate the PDF first.");
+        return;
+      }
+
       try {
-        // Save particulars, controlNo
-        const docRef = await addDoc(collection(db, "abstractForms"), {
-          particulars: this.form.particulars,
-          controlNo: this.form.controlNo,
-          timestamp: serverTimestamp(),
-        });
-
-        // Generate and upload PDF
-        await this.generatePdf(docRef);
-
-        // Reset form fields if needed
-        this.resetForm();
+        const storageRef = ref(storage, `abstracts/${this.fileName}`);
+        await uploadBytes(storageRef, this.pdfBlob);
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log("PDF uploaded successfully. Download URL:", downloadURL);
+        alert("PDF uploaded successfully!");
       } catch (error) {
-        console.error("Error handling form submission:", error);
+        console.error("Error uploading PDF:", error);
+        alert("Error uploading PDF");
       }
-    },
-    resetForm() {
-      this.form.particulars = "";
-      this.form.controlNo = "";
-      this.form.items = [
-        {
-          itemNo: 1,
-          qty: 1,
-          unit: "piece",
-          articleService: "",
-          price1: 0,
-          price2: 0,
-          price3: 0,
-        },
-      ];
-      this.form.supplier1 = "";
-      this.form.supplier2 = "";
-      this.form.supplier3 = "";
     },
     addItem() {
       this.form.items.push({
-        itemNo: this.form.items.length + 1,
         qty: null,
         unit: "",
         articleService: "",
@@ -285,11 +316,8 @@ export default {
         price3: 0,
       });
     },
-    removeItem(index) {
-      this.form.items.splice(index, 1);
-    },
   },
 };
 </script>
 
-<style scoped src="../tabs/abstract.css"></style>
+<style scoped src="./abstract.css"></style>
