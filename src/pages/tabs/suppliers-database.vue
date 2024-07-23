@@ -21,8 +21,8 @@
           <td><input v-model="newSupplier.contactNumber" placeholder="Contact Number" required /></td>
           <td><input v-model="newSupplier.email" placeholder="Email" required /></td>
           <td><input v-model="newSupplier.product" placeholder="Product" required /></td>
-          <td><input type="file" @change="handleFileUpload($event, 'bir')" /></td>
-          <td><input type="file" @change="handleFileUpload($event, 'philgeps')" /></td>
+          <td><input type="file" @change="handleFileUpload($event, 'bir')" required /></td>
+          <td><input type="file" @change="handleFileUpload($event, 'philgeps')" required /></td>
           <td><button id="add-row" @click="addRow" class="add-button">Add</button></td>
         </tr>
 
@@ -63,7 +63,7 @@
             </span>
           </td>
           <td>
-            <button  :class="[item.editing ? 'save-button' : 'edit-button']" @click="editRow(item)">
+            <button :class="[item.editing ? 'save-button' : 'edit-button']" @click="editRow(item)">
               {{ item.editing ? 'Save' : 'Edit' }}
             </button>
             <button v-if="item.editing" class="cancel-button" @click="cancelEdit(item)">Cancel</button>
@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     async addRow() {
-      if (this.newSupplier.name && this.newSupplier.address && this.newSupplier.contactNumber && this.newSupplier.email && this.newSupplier.product) {
+      if (this.newSupplier.name && this.newSupplier.address && this.newSupplier.contactNumber && this.newSupplier.email && this.newSupplier.product && this.newSupplier.birFile && this.newSupplier.philgepsFile) {
         try {
           // Upload files and get URLs
           const birFileUrl = this.newSupplier.birFile ? await this.uploadFile(this.newSupplier.birFile, 'bir') : '';
@@ -136,7 +136,7 @@ export default {
           });
         }
       } else {
-        toast.error("Please fill in all fields.", { 
+        toast.error("Please fill in all fields and upload BIR and PHILGEPS files.", { 
           position: "bottom-right",
           autoClose: 1000
         });
