@@ -35,7 +35,7 @@
             <td>
               <a :href="row.additionalFile" target="_blank">
                 <button id="view">
-                  <img :src="view" alt="icon" id="view-icon" /> Quotation
+                  <img :src="view" alt="icon" id="view-icon" /> View PDF
                 </button>
               </a>
             </td>
