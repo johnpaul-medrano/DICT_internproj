@@ -16,6 +16,10 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Check if there is data to display -->
+          <tr v-if="paginatedTableData.length === 0">
+            <td colspan="8">No information to see here</td>
+          </tr>
           <!-- Table rows for paginated data -->
           <tr v-for="(row, index) in paginatedTableData" :key="index">
             <td>{{ row.prnum }}</td>
@@ -28,15 +32,13 @@
                 </button>
               </a>
             </td>
-
             <td>
               <a :href="row.additionalFile" target="_blank">
                 <button id="view">
-                <img :src="view" alt="icon" id="view-icon" />Quatation
-              </button>
+                  <img :src="view" alt="icon" id="view-icon" /> Quotation
+                </button>
               </a>
             </td>
-
             <td>{{ row.remarks || "No Remark" }}</td>
             <td>{{ formatTimestamp(row.timestamp) }}</td>
             <td>
@@ -54,9 +56,8 @@
       :detailedTableData="detailedTableData"
       @close="closeDetailsModal"
     />
-  </div>
-      <!-- Pagination controls -->
-      <div class="pagination-container">
+    <!-- Pagination controls -->
+    <div class="pagination-container">
       <label for="pageSelect">Choose Page: </label>
       <select id="pageSelect" v-model="currentPage" @change="updatePage">
         <option v-for="page in totalPages" :key="page" :value="page">
@@ -64,6 +65,7 @@
         </option>
       </select>
     </div>
+  </div>
 </template>
 
 <script>
