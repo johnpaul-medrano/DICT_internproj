@@ -23,7 +23,7 @@
           <td><input v-model="newSupplier.product" placeholder="Product" required /></td>
           <td><input type="file" @change="handleFileUpload($event, 'bir')" /></td>
           <td><input type="file" @change="handleFileUpload($event, 'philgeps')" /></td>
-          <td><button id="add-row" @click="addRow">Add</button></td>
+          <td><button id="add-row" @click="addRow" class="add-button">Add</button></td>
         </tr>
 
         <!-- Existing Rows -->
@@ -51,19 +51,19 @@
           <td>
             <input v-if="item.editing" type="file" @change="handleFileUpload($event, 'bir', item)" />
             <span v-else>
-              <button v-if="item.birFileUrl" @click="viewPDF(item.birFileUrl)">View BIR</button>
+              <button id="button_BIR" v-if="item.birFileUrl" @click="viewPDF(item.birFileUrl)" class="action-button view-button">View BIR</button>
               <span v-else>No File</span>
             </span>
           </td>
           <td>
             <input v-if="item.editing" type="file" @change="handleFileUpload($event, 'philgeps', item)" />
             <span v-else>
-              <button v-if="item.philgepsFileUrl" @click="viewPDF(item.philgepsFileUrl)">View PHILGEPS</button>
+              <button id="button_BIR" v-if="item.philgepsFileUrl" @click="viewPDF(item.philgepsFileUrl)" class="action-button view-button">View PHILGEPS</button>
               <span v-else>No File</span>
             </span>
           </td>
           <td>
-            <button :class="['action-button', item.editing ? 'save-button' : 'edit-button']" @click="editRow(item)">
+            <button  :class="[item.editing ? 'save-button' : 'edit-button']" @click="editRow(item)">
               {{ item.editing ? 'Save' : 'Edit' }}
             </button>
             <button v-if="item.editing" class="cancel-button" @click="cancelEdit(item)">Cancel</button>
@@ -74,6 +74,7 @@
     </table>
   </div>
 </template>
+
 
 <script>
 import { db, storage } from "@/firebaseConfig";

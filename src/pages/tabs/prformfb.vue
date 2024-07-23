@@ -107,7 +107,7 @@
         </div>
         
         <div class="file-input">
-          <label for="additionalFile">Choose File:</label Required>
+          <label for="additionalFile">Quatation File:</label Required>
           <input type="file" id="additionalFile" @change="handleFileChange" Required/>
         </div>
 
