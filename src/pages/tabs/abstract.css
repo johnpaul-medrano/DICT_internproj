@@ -14,7 +14,7 @@ label {
 }
 
 .abstract-form-container {
-  max-width: 70%;
+  width: 60%;
   margin: 20px auto;
   padding: 15px 30px;
   border: 1px solid #ccc;
@@ -39,7 +39,7 @@ form {
 input {
   border-radius: 10px;
   border: 0;
-  background-color:  #7390db26;
+  background-color: #7390db26;
   padding: 0 15px;
   font-size: 20px;
 }
@@ -59,6 +59,28 @@ input {
   display: flex;
   flex-direction: column;
 }
+.item-buttons {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-buttons button {
+  width: 55px;
+  height: 55px;
+  border-radius: 30px;
+  margin-right: 40px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 #add {
   background-color: #275598;
   color: white;
@@ -76,6 +98,10 @@ input {
 
 #remove:hover {
   background-color: #e2e2e2;
+}
+
+button img {
+  width: 15px;
 }
 .abstract-cont input {
   width: 300px;
@@ -124,7 +150,6 @@ input {
   border-radius: 10px;
   gap: 10px;
   border: 1px dashed rgb(47, 47, 87);
-  
 }
 
 .abstract-total-unit-cost label {
@@ -166,7 +191,7 @@ input {
   background-color: #204071;
 }
 
-#price{
+#price {
   width: 200px;
 }
 
@@ -205,6 +230,12 @@ button img {
   font-weight: bold;
 }
 
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 #generate {
   margin-top: 20px;
   align-self: center;
@@ -220,6 +251,24 @@ button img {
 }
 
 #generate:hover,
+#upload:hover {
+  background-color: #224b89;
+}
+
+#upload {
+  margin-top: 20px;
+  align-self: center;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #275598;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 20%;
+  font-size: 20px;
+}
+
 #upload:hover {
   background-color: #224b89;
 }
@@ -260,8 +309,8 @@ button img {
   /* justify-content: space-between; */
   gap: 20px;
   margin-left: 20px;
-  margin-bottom: 20px;
   margin-right: 20px;
+  margin-bottom: 10px;
 }
 
 .third-row {
@@ -271,11 +320,19 @@ button img {
 
 #article {
   height: 80px;
+  width: 710px;
 }
 
 .suppliers-cont {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.suppliers-cont .input-cont input {
+  width: 250px;
 }
 
 .combi {
@@ -284,10 +341,24 @@ button img {
   gap: 20px;
 }
 
-.combi input {
-  width: 330px;
+.combi .input-cont input {
+  width: 250px;
+}
+
+.combi1 {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.combi1 .input-cont input {
+  width: 202px;
 }
 
 #particulars {
-  width: 460px;
+  width: 550px;
+}
+
+#control {
+  width: 250px;
 }
